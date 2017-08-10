@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+
+<tiles-definitions>  
+    <!-- Base Definition -->
+    <definition name="default_layout" template="/WEB-INF/views/tiles/layouts/default_layout.jsp"> 
+        <put-attribute name="shortcut_icon" value="/resources/img/favicon.jpg" cascade="true"/>
+        <put-attribute name="head" value="/WEB-INF/views/tiles/template/default_head.jsp"/>
+        <put-attribute name="title" value="Document management system" cascade="true"/>  
+        <put-attribute name="site_name" value="dms" cascade="true" />  
+        <put-attribute name="header" value="/WEB-INF/views/tiles/template/default_header.jsp" />  
+        <put-attribute name="left_side_menu" value="/WEB-INF/views/tiles/template/default_left_side_menu.jsp" />  
+        <put-attribute name="modal_question" value="/WEB-INF/views/pages/modal_question.jsp" />  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/dashboard.jsp" />  
+        <put-attribute name="action_logout_url" value="logout" cascade="true" />
+        <put-attribute name="message" value="/WEB-INF/views/pages/message.jsp" cascade="true"/>  
+        <put-list-attribute name="cssList" cascade="true">
+            <add-attribute value="/resources/css/bootstrap.min.css" />
+            <add-attribute value="/resources/css/bootstrap-theme.css" />
+            <add-attribute value="/resources/css/elegant-icons-style.css" />
+            <add-attribute value="/resources/css/font-awesome.css" />
+            <add-attribute value="/resources/css/style.css" />
+            <add-attribute value="/resources/css/style-responsive.css" />
+            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+            <add-attribute value="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        </put-list-attribute> 
+        <put-list-attribute name="jsList" cascade="true">
+            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js" />
+            <add-attribute value="/resources/js/bootstrap.min.js" />
+            <add-attribute value="/resources/js/jquery.scrollTo.min.js" />
+            <add-attribute value="/resources/js/scripts.js" />
+            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js" />
+            <add-attribute value="/resources/js/jquery.validate.min.js" />
+            <add-attribute value="/resources/js/form-validation-script.js" />
+        </put-list-attribute>
+    </definition>  
+    <!-- Login Page -->
+    <definition name="login" template="/WEB-INF/views/tiles/layouts/login_layout.jsp"> 
+        <put-attribute name="shortcut_icon" value="/resources/img/favicon.jpg" cascade="true" />
+        <put-attribute name="head" value="/WEB-INF/views/tiles/template/default_head.jsp"/>       
+        <put-attribute name="title" value="Login" cascade="true"/>
+        <put-attribute name="action_login_url" value="login" />
+        <put-list-attribute name="cssList" cascade="true">
+            <add-attribute value="/resources/css/bootstrap.min.css" />
+            <add-attribute value="/resources/css/bootstrap-theme.css" />
+            <add-attribute value="/resources/css/elegant-icons-style.css" />
+            <add-attribute value="/resources/css/font-awesome.css" />
+            <add-attribute value="/resources/css/style.css" />
+            <add-attribute value="/resources/css/style-responsive.css" />
+        </put-list-attribute> 
+        <put-list-attribute name="jsList" cascade="true">
+            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js" />
+            <add-attribute value="/resources/js/bootstrap.min.js" />
+            <add-attribute value="/resources/js/jquery.scrollTo.min.js" />
+            <add-attribute value="/resources/js/scripts.js" />
+            <add-attribute value="/resources/js/jquery.validate.min.js" />
+            <add-attribute value="/resources/js/form-validation-script.js" />
+        </put-list-attribute> 
+    </definition>  
+    
+    <definition name="error" template="/WEB-INF/views/tiles/layouts/error_layout.jsp">  
+        <put-attribute name="title" value="Error" />
+    </definition>  
+    
+    <!-- Home Page Admin-->
+    <definition name="admin_home" extends="default_layout"> 
+        <put-attribute name="active_role" value="ADMIN" cascade="true" />  
+        <put-attribute name="action_url_search_companies" value="companies/search" cascade="true" />  
+        <put-attribute name="action_url_search_companies_api" value="api/companies/search" cascade="true" />  
+        <put-attribute name="action_url_add_company" value="companies/add" cascade="true" />  
+        <put-attribute name="action_url_edit_company_api" value="api/companies/edit" cascade="true" />  
+        <put-attribute name="action_url_add_user" value="users/add" cascade="true" />  
+        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/admin_left_side_menu.jsp" />  
+    </definition>  
+    
+    <!-- Home Page User -->
+    <definition name="user_home" extends="default_layout">  
+        <put-attribute name="active_role" value="USER" cascade="true" />  
+        <put-attribute name="action_url_add_process" value="processes/add" cascade="true"/>  
+        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/user_left_side_menu.jsp" />  
+    </definition>  
+    
+    <!-- Home Page Uploader -->
+    <definition name="uploader_home" extends="default_layout">  
+        <put-attribute name="active_role" value="UPLOADER" cascade="true" />  
+        <put-attribute name="action_url_add_document" value="documents/add" cascade="true" />  
+        <put-attribute name="search_documents" value="/WEB-INF/views/pages/search_documents.jsp" cascade="true"/>  
+        <put-attribute name="action_url_search_documents" value="documents/search" cascade="true" />  
+        <put-attribute name="action_url_search_documents_api" value="api/documents/search" cascade="true" />  
+        <put-attribute name="action_url_download_document" value="documents/document/download" cascade="true" />  
+        <put-attribute name="action_url_display_document" value="documents/document" cascade="true" />  
+        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/uploader_left_side_menu.jsp" />  
+    </definition>  
+    
+    <definition name="add_company" extends="admin_home">  
+        <put-attribute name="title" value="Add company" />  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/add_company.jsp" />  
+    </definition>  
+    
+    <definition name="search_companies" extends="admin_home">  
+        <put-attribute name="title" value="Search companies" />  
+        <put-attribute name="action_url_show_company" value="companies/company" cascade="true"/>  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/search_companies.jsp" />  
+    </definition>  
+    
+    <definition name="add_user" extends="admin_home">  
+        <put-attribute name="title" value="Add user" />  
+        <put-attribute name="search_companies" value="/WEB-INF/views/pages/search_companies_set_user.jsp" cascade="true"/>  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/add_user.jsp" />  
+    </definition>  
+  
+    <definition name="add_process" extends="user_home">  
+        <put-attribute name="title" value="Add process" />  
+        <put-attribute name="label_name" value="Parent" cascade="true" />  
+        <put-attribute name="input_name" value="parent" cascade="true" />  
+        <put-attribute name="action_url_processes_api" value="api/processes" cascade="true" />  
+        <put-attribute name="action_url_show_process_api" value="api/processes/process" cascade="true" />  
+        <put-attribute name="action_url_show_activity_api" value="api/activities/activity" cascade="true" />  
+        <put-attribute name="action_url_edit_process_api" value="api/processes/edit" cascade="true" />  
+        <put-attribute name="action_url_edit_activity_api" value="api/activities/edit" cascade="true" />  
+        <put-attribute name="process_tree" value="/WEB-INF/views/pages/process_tree.jsp" cascade="true"/>  
+        <put-attribute name="process_activity_form" value="/WEB-INF/views/pages/process_activity_form.jsp" cascade="true"/>  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/add_process.jsp" />  
+    </definition>  
+    
+    <definition name="add_document" extends="uploader_home">  
+        <put-attribute name="title" value="Add document" />  
+        <put-attribute name="label_name" value="Process" cascade="true" />  
+        <put-attribute name="input_name" value="processId" cascade="true" />  
+        <put-attribute name="action_url_processes_api" value="api/processes" cascade="true" />  
+        <put-attribute name="action_url_show_activity_api" value="api/activities/activity" cascade="true" />  
+        <put-attribute name="action_url_document_validation_api" value="api/documents/validation" cascade="true" />  
+        <put-attribute name="action_url_document_type_api" value="api/document-type" cascade="true" />  
+        <put-attribute name="process_tree" value="/WEB-INF/views/pages/process_tree.jsp" cascade="true"/>  
+        <put-attribute name="document" value="/WEB-INF/views/pages/document.jsp" cascade="true"/>  
+        <put-attribute name="activity_info" value="/WEB-INF/views/pages/activity_info.jsp" cascade="true"/>  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/add_document.jsp" />  
+    </definition>  
+    
+    <definition name="company" extends="admin_home">  
+        <put-attribute name="title" value="Company" />  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/company.jsp" />  
+    </definition>  
+    
+    <definition name="search_documents" extends="uploader_home">  
+        <put-attribute name="title" value="Search documents" />  
+        <put-attribute name="site_content" value="/WEB-INF/views/pages/search_documents.jsp" />  
+    </definition>  
+    
+</tiles-definitions>
