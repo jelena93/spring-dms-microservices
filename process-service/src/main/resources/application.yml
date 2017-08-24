@@ -1,12 +1,23 @@
 spring:
-  aop:
-    proxyTargetClass: true
   application:
-    name: api-gateway
-
-# Define the port where the API gateway server would be running
+    name: process-service
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true  
+        hbm2ddl:
+          auto: update
+    # disable open EntityManager in View
+    open-in-view: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/dms_process?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 
+    driver-class-name: com.mysql.jdbc.Driver  
+# Define the port where the Widget Foundry server would be running
 server:
-  port: 8080
+  port: 8872
 
 # Define the Eureka server that handles service registration
 eureka:
@@ -17,27 +28,11 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 
-zuul:
-  routes:
-    company-service: /api/companies/**
-    uaa-service:
-      sensitiveHeaders:
-      path: /uaa/**
-      stripPrefix: false
-  add-proxy-headers: true
-
+# Disable spring basic authentication security
 security:
-  # Disable Spring Boot basic authentication
   basic:
     enabled: false
   oauth2:
-    sso:
-      loginPath: /login
-    client:
-      accessTokenUri: http://uaa-service/uaa/oauth/token
-      userAuthorizationUri: /uaa/oauth/authorize
-      clientId: acme
-      clientSecret: acmesecret
     resource:
       jwt:
         keyValue: |
@@ -46,9 +41,6 @@ security:
           -----END PUBLIC KEY-----
       id: openid
       serviceId: ${PREFIX:}resource
-
-logging:
-  level.org.springframework.security: DEBUG
 
 ---
 

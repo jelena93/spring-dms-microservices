@@ -13,6 +13,7 @@
         <tiles:insertAttribute name="head" />
         <tiles:importAttribute name="title" scope="request"/>
         <sec:authentication var="user" property="principal" scope="request"/>
+        <sec:authentication var="authorities" property="userAuthentication.authorities" scope="request"/>
         <title>${title}</title>
     </head>
     <body>

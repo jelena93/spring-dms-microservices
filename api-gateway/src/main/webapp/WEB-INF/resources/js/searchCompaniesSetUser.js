@@ -56,11 +56,6 @@ $('#roles').change(function () {
     }
 });
 function onSubmitForm() {
-    if (selectedCompanyId === null) {
-        $("#company").val(null);
-        search("");
-        return false;
-    }
     var roles = $('#roles').val();
     if (roles === null) {
         return false;
@@ -68,5 +63,11 @@ function onSubmitForm() {
     if (roles.length === 1 && roles[0] === "ADMIN") {
         return true;
     }
+    if (selectedCompanyId === null) {
+        $("#company").val(null);
+        search("");
+        return false;
+    }
+
     return true;
 }

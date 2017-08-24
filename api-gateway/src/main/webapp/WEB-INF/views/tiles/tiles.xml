@@ -62,54 +62,35 @@
         <put-attribute name="title" value="Error" />
     </definition>  
     
-    <!-- Home Page Admin-->
-    <definition name="admin_home" extends="default_layout"> 
+    <definition name="home" extends="default_layout"> 
         <put-attribute name="active_role" value="ADMIN" cascade="true" />  
-        <put-attribute name="action_url_search_companies" value="companies/search" cascade="true" />  
         <put-attribute name="action_url_search_companies_api" value="api/companies/search" cascade="true" />  
-        <put-attribute name="action_url_add_company" value="companies/add" cascade="true" />  
         <put-attribute name="action_url_edit_company_api" value="api/companies/edit" cascade="true" />  
-        <put-attribute name="action_url_add_user" value="users/add" cascade="true" />  
-        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/admin_left_side_menu.jsp" />  
-    </definition>  
-    
-    <!-- Home Page User -->
-    <definition name="user_home" extends="default_layout">  
-        <put-attribute name="active_role" value="USER" cascade="true" />  
-        <put-attribute name="action_url_add_process" value="processes/add" cascade="true"/>  
-        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/user_left_side_menu.jsp" />  
-    </definition>  
-    
-    <!-- Home Page Uploader -->
-    <definition name="uploader_home" extends="default_layout">  
-        <put-attribute name="active_role" value="UPLOADER" cascade="true" />  
-        <put-attribute name="action_url_add_document" value="documents/add" cascade="true" />  
         <put-attribute name="search_documents" value="/WEB-INF/views/pages/search_documents.jsp" cascade="true"/>  
         <put-attribute name="action_url_search_documents" value="documents/search" cascade="true" />  
         <put-attribute name="action_url_search_documents_api" value="api/documents/search" cascade="true" />  
         <put-attribute name="action_url_download_document" value="documents/document/download" cascade="true" />  
         <put-attribute name="action_url_display_document" value="documents/document" cascade="true" />  
-        <put-attribute name="left_side_menu" value="/WEB-INF/views/pages/uploader_left_side_menu.jsp" />  
     </definition>  
     
-    <definition name="add_company" extends="admin_home">  
+    <definition name="add_company" extends="home">  
         <put-attribute name="title" value="Add company" />  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/add_company.jsp" />  
     </definition>  
     
-    <definition name="search_companies" extends="admin_home">  
+    <definition name="search_companies" extends="home">  
         <put-attribute name="title" value="Search companies" />  
         <put-attribute name="action_url_show_company" value="companies/company" cascade="true"/>  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/search_companies.jsp" />  
     </definition>  
     
-    <definition name="add_user" extends="admin_home">  
+    <definition name="add_user" extends="home">  
         <put-attribute name="title" value="Add user" />  
         <put-attribute name="search_companies" value="/WEB-INF/views/pages/search_companies_set_user.jsp" cascade="true"/>  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/add_user.jsp" />  
     </definition>  
   
-    <definition name="add_process" extends="user_home">  
+    <definition name="add_process" extends="home">  
         <put-attribute name="title" value="Add process" />  
         <put-attribute name="label_name" value="Parent" cascade="true" />  
         <put-attribute name="input_name" value="parent" cascade="true" />  
@@ -123,7 +104,7 @@
         <put-attribute name="site_content" value="/WEB-INF/views/pages/add_process.jsp" />  
     </definition>  
     
-    <definition name="add_document" extends="uploader_home">  
+    <definition name="add_document" extends="home">  
         <put-attribute name="title" value="Add document" />  
         <put-attribute name="label_name" value="Process" cascade="true" />  
         <put-attribute name="input_name" value="processId" cascade="true" />  
@@ -137,12 +118,12 @@
         <put-attribute name="site_content" value="/WEB-INF/views/pages/add_document.jsp" />  
     </definition>  
     
-    <definition name="company" extends="admin_home">  
+    <definition name="company" extends="home">  
         <put-attribute name="title" value="Company" />  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/company.jsp" />  
     </definition>  
     
-    <definition name="search_documents" extends="uploader_home">  
+    <definition name="search_documents" extends="home">  
         <put-attribute name="title" value="Search documents" />  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/search_documents.jsp" />  
     </definition>  

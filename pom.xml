@@ -18,8 +18,10 @@
     <modules>
         <module>api-gateway</module>
         <module>service-registry</module>
-        <module>company-service</module>
         <module>auth-service</module>
+        <module>company-service</module>
+        <module>process-service</module>
+        <module>user-service</module>
     </modules>
 
     <properties>

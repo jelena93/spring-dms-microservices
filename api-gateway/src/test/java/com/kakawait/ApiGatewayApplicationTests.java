@@ -1,5 +1,6 @@
 package com.kakawait;
 
+import gateway.ApiGatewayApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.web.ServerProperties;

@@ -12,17 +12,12 @@
     <ul class="nav pull-right top-menu">
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <span class="username">Logged in as ${user.username} - ${active_role}</span>
+                <span class="username">Logged in as ${user}</span>
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu extended logout">
                 <div class="log-arrow-up"></div>
                 <li class="eborder-top">
-                    <c:forEach var="role" items="${user.roles}">   
-                        <c:if test="${active_role != role}">
-                            <a href="${pageContext.request.contextPath}/role/${role}"><i class="icon_profile"></i> Change role to ${role}</a>
-                        </c:if>
-                    </c:forEach>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/${action_logout_url}"><i class="icon_key_alt"></i> Log Out</a>

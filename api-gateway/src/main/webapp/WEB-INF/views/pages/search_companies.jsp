@@ -4,12 +4,11 @@
 <tiles:importAttribute name="action_url_show_company" ignore="true"/>
 <tiles:importAttribute name="action_url_search_companies_api" ignore="true"/>
 <script src="<c:url value="/resources/js/jquery.twbsPagination.js" />"></script>
-<input class="form-control" name="company" id="company" type="text" onkeyup="search(this.value, 1)" placeholder="Search companies" />
+<input class="form-control" name="company" id="company" type="text" onkeyup="search(this.value)" placeholder="Search companies" />
 <br/>
 <script language=javascript>
     var action_url_show_company = "${pageContext.request.contextPath}/${action_url_show_company}";
         var action_url_search_companies_api = "${pageContext.request.contextPath}/${action_url_search_companies_api}";
-            var total = ${total};
 </script>
 <section class="panel">
     <table class="table table-striped table-advance table-hover" id="table-companies">
@@ -40,8 +39,5 @@
             </c:forEach>
         </tbody>
     </table>
-    <div class="text-center">
-        <ul id="pagination-demo" class="pagination-sm"></ul>
-    </div>
 </section>
 <script src="<c:url value="/resources/js/searchCompanies.js" />"></script>

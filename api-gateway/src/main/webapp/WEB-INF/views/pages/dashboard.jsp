@@ -1,1 +1,1 @@
-<h2>Welcome ${user.name} ${user.surname}</h2>
+<h2>Welcome ${user}</h2>
