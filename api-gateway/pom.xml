@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>com.kakawait</groupId>
-        <artifactId>uaa-behind-zuul</artifactId>
+        <artifactId>spring-dms-microservices</artifactId>
         <version>0.0.4-SNAPSHOT</version>
     </parent>
 
@@ -82,7 +82,7 @@
             <artifactId>tiles-extras</artifactId>
             <version>${org.apache.tiles-version}</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
         </dependency>

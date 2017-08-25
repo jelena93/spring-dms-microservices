@@ -17,18 +17,18 @@ public class User {
     private String password;
     private String name;
     private String surname;
-    private Long company;
+    private Long companyId;
     private List<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String password, String name, String surname, Long company, List<Role> roles) {
+    public User(String username, String password, String name, String surname, Long companyId, List<Role> roles) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
-        this.company = company;
+        this.companyId = companyId;
         this.roles = roles;
     }
 
@@ -64,12 +64,12 @@ public class User {
         this.surname = surname;
     }
 
-    public Long getCompany() {
-        return company;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany(Long company) {
-        this.company = company;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public List<Role> getRoles() {
@@ -78,6 +78,11 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "username=" + username + ", password=" + password + ", name=" + name + ", surname=" + surname + ", companyId=" + companyId + ", roles=" + roles + '}';
     }
 
 }

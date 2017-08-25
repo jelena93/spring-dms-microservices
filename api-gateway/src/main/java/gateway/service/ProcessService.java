@@ -21,13 +21,14 @@ public class ProcessService {
     private OAuth2RestTemplate oAuth2RestTemplate;
 
     public Process findOne(Long id) {
-        Process process = oAuth2RestTemplate.getForObject("http://process-service/" + id, Process.class);
+        System.out.println("findOneProcess: " + id);
+        Process process = oAuth2RestTemplate.getForObject("http://process-service/process/" + id, Process.class);
         return process;
     }
 
     public Process save(Process process) {
-        process = oAuth2RestTemplate.postForObject("http://process-service/add",
-                process, Process.class);
+        System.out.println("saveProcess: " + process);
+        process = oAuth2RestTemplate.postForObject("http://process-service/add", process, Process.class);
         return process;
     }
 }

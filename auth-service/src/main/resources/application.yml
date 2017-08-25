@@ -10,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 # Define the port where the UAA server would be running
 server:
   port: 8769

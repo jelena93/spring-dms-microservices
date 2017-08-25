@@ -24,10 +24,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- *
- * @author Hachiko
- */
 @Controller
 @RequestMapping("/processes")
 public class ProcessController {
@@ -43,7 +39,8 @@ public class ProcessController {
     public ModelAndView addProcess(Principal principal) {
         ModelAndView mv = new ModelAndView("add_process");
         User loggedUser = userService.findOne(principal.getName());
-        mv.addObject("company", loggedUser.getCompany());
+        Company company = companyService.findOne(loggedUser.getCompanyId());
+        mv.addObject("company", company);
         return mv;
     }
 
@@ -67,17 +64,20 @@ public class ProcessController {
         } else {
             if (parent != null) {
                 Process parentProcess = processService.findOne(parent);
+                System.out.println("@@@parent:" + parentProcess);
                 if (parentProcess.isPrimitive()) {
                     throw new Exception("Can't add process to a primitive process");
                 }
-                process = new Process(name, parentProcess, primitive);
+                process = new Process(name, parentProcess, primitive, principal.getName());
             } else {
-                process = new Process(name, null, primitive);
+                process = new Process(name, null, primitive, principal.getName());
             }
-            User loggedUser = userService.findOne(principal.getName());
-            Company company = companyService.findOne(loggedUser.getCompany());
+//            User loggedUser = userService.findOne(principal.getName());
+//            Company company = companyService.findOne(loggedUser.getCompanyId());
 //            company.getProcesses().add(process);
 //            companyService.save(company);
+            System.out.println("saving process: " + process);
+            processService.save(process);
         }
         return new ModelAndView("add_process", "message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, successMessage));
     }

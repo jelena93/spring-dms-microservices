@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -18,6 +17,7 @@ import javax.validation.constraints.NotNull;
 public class Process implements Serializable {
 
     private Long id;
+    private String user;
     private String name;
     private Process parent;
     private boolean primitive;
@@ -27,11 +27,11 @@ public class Process implements Serializable {
         this.activityList = new ArrayList<>();
     }
 
-    public Process(String name, Process parent, boolean primitive) {
+    public Process(String name, Process parent, boolean primitive, String user) {
+        this.user = user;
         this.name = name;
         this.parent = parent;
         this.primitive = primitive;
-        this.activityList = new ArrayList<>();
     }
 
     public Long getId() {
@@ -74,6 +74,14 @@ public class Process implements Serializable {
         this.activityList = activityList;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -101,6 +109,7 @@ public class Process implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "Process{" + "id=" + id + ", user=" + user + ", name=" + name + ", parent=" + parent + ", primitive=" + primitive + ", activityList=" + activityList + '}';
     }
+
 }

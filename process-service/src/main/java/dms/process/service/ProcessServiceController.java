@@ -5,7 +5,6 @@
  */
 package dms.process.service;
 
-import company.dto.MessageDto;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +28,8 @@ public class ProcessServiceController {
     @Autowired
     ProcessRepository processRepository;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<TreeDto>> getProcesses(String user) {
+    @RequestMapping(path = "/{user}", method = RequestMethod.GET)
+    public ResponseEntity<List<TreeDto>> getProcesses(@PathVariable("user") String user) {
         List<Process> processes = processRepository.findByUser(user);
         List<TreeDto> data = new ArrayList<>();
         for (Process process : processes) {
@@ -62,6 +62,12 @@ public class ProcessServiceController {
         return new ResponseEntity<>(process, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/add", method = RequestMethod.POST)
+    public Process addProcess(@RequestBody Process process) {
+        System.out.println("saving " + process);
+        return processRepository.save(process);
+    }
+
     @RequestMapping(path = "/edit", method = RequestMethod.POST)
     public ResponseEntity<String> editProcess(Long id, String name, boolean primitive) {
         Process process = processRepository.findOne(id);
@@ -86,7 +92,6 @@ public class ProcessServiceController {
 //        deleteChildren(process, processes, true);
 //        companyService.save(company);
 //    }
-
     private void deleteChildren(Process process, List<Process> processes, boolean root) {
         List<Process> children = getChildren(process, processes);
         for (Process child : children) {

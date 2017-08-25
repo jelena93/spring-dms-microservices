@@ -22,6 +22,7 @@
         <module>company-service</module>
         <module>process-service</module>
         <module>user-service</module>
+        <module>document-service</module>
     </modules>
 
     <properties>

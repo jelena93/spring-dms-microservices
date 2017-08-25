@@ -56,11 +56,12 @@ public class Process implements Serializable {
         this.activityList = new ArrayList<>();
     }
 
-    public Process(String name, Process parent, boolean primitive) {
+    public Process(Long id, String name, String user, Process parent, boolean primitive) {
+        this.id = id;
         this.name = name;
+        this.user = user;
         this.parent = parent;
         this.primitive = primitive;
-        this.activityList = new ArrayList<>();
     }
 
     public Long getId() {
@@ -103,6 +104,14 @@ public class Process implements Serializable {
         this.activityList = activityList;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -130,6 +139,7 @@ public class Process implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "Process{" + "id=" + id + ", name=" + name + ", user=" + user + ", parent=" + parent + ", primitive=" + primitive + ", activityList=" + activityList + '}';
     }
+
 }

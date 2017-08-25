@@ -7,14 +7,13 @@
 <script src="<c:url value="/resources/js/jquery.twbsPagination.js" />"></script>
 <div class="input-group">
     <div class="input-group-addon">
-        <input type="text" class="form-control" id="input-search-docs" onkeyup="search(this.value, 1)" placeholder="Search documents..." >
+        <input type="text" class="form-control" id="input-search-docs" onkeyup="search(this.value)" placeholder="Search documents..." >
     </div>
 </div>
 <script language=javascript>
     var action_url_search_documents_api = "${pageContext.request.contextPath}/${action_url_search_documents_api}";
         var action_url_display_document = "${pageContext.request.contextPath}/${action_url_display_document}";
             var action_url_download_document = "${pageContext.request.contextPath}/${action_url_download_document}";
-                var total = ${total};
 </script>
 <section class="panel">
     <div class="panel panel-default">
@@ -35,9 +34,6 @@
                         </li> 
                     </ul>
                 </c:forEach>
-            </div>
-            <div class="text-center">
-                <ul id="pagination-demo" class="pagination-sm"></ul>
             </div>
         </div>
     </div>

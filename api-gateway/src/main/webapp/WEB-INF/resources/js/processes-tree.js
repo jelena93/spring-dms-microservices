@@ -7,13 +7,13 @@ var modeAdd = "add";
 var mode = modeEdit;
 var isSure = false;
 var action_url_processes_api, action_url_show_process_api, action_url_show_activity_api, action_url_edit_process_api, action_url_edit_activity_api;
-function getProcessesForAddProcess() {
+function getProcessesForAddProcess(user) {
     $('#processes').bind('ready.jstree', function (e, data) {
         $("#btn-add").show();
     }).jstree({
         'core': {
             'data': {
-                'url': action_url_processes_api,
+                'url': action_url_processes_api + "/" + user,
                 'data': function (node) {
                     return {'id': node.id};
                 }
@@ -130,7 +130,7 @@ function checkData() {
         }
     } else if (mode === modeAdd) {
         $("#isActivity").val(selectedNode !== null ? selectedNode.primitive : false);
-        $("#parent").val(selectedNode.id);
+        $("#parent").val(selectedNode !== null ? selectedNode.id : null);
         $("#register_form").submit();
     }
 }
