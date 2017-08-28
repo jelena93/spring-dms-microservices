@@ -97,7 +97,7 @@ function checkData() {
             $('#primitive').prop("disabled", false);
             $("#input_document_types").prop("disabled", true);
             $("#output_document_types").prop("disabled", true);
-            $("#primitive").prop("disabled", true);
+//            $("#primitive").prop("disabled", true);
             canEdit = true;
             $("#btn-edit").text("Save");
         } else {

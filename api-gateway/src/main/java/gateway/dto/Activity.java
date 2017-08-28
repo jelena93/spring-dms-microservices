@@ -109,7 +109,7 @@ public class Activity implements Serializable {
 
     @Override
     public String toString() {
-        return "Activity{" + "id=" + id + ", name=" + name + ", inputList=" + inputList;
+        return "Activity{" + "id=" + id + ", name=" + name + ", inputList=" + inputList + ", outputList=" + outputList + ", inputListDocumentTypes=" + inputListDocumentTypes + ", outputListDocumentTypes=" + outputListDocumentTypes + '}';
     }
 
 }

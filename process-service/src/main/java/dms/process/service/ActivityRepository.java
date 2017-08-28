@@ -5,14 +5,12 @@
  */
 package dms.process.service;
 
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProcessRepository extends JpaRepository<Proces, Long> {
+/**
+ *
+ * @author jelenas
+ */
+public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    List<Proces> findByParentIsNull();
-
-    Process findByParent(Long parent);
-
-    List<Proces> findByUser(String user);
 }

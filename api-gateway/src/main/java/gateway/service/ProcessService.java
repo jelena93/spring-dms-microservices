@@ -37,6 +37,7 @@ public class ProcessService {
     public Process save(Process process) {
         System.out.println("saveProcess: " + process);
         process = oAuth2RestTemplate.postForObject(PROCESS_SERVICE + "/add", process, Process.class);
+        System.out.println("response: " + process);
         return process;
     }
 

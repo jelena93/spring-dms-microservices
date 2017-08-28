@@ -27,12 +27,14 @@ public class ProcessServiceController {
 
     @Autowired
     ProcessRepository processRepository;
+    @Autowired
+    ActivityRepository activityRepository;
 
     @RequestMapping(path = "/{user}", method = RequestMethod.GET)
     public ResponseEntity<List<TreeDto>> getProcesses(@PathVariable("user") String user) {
-        List<Process> processes = processRepository.findByUser(user);
+        List<Proces> processes = processRepository.findByUser(user);
         List<TreeDto> data = new ArrayList<>();
-        for (Process process : processes) {
+        for (Proces process : processes) {
             TreeDto p;
             String icon;
             icon = TreeDto.PROCESS_ICON;
@@ -54,29 +56,38 @@ public class ProcessServiceController {
     }
 
     @RequestMapping(path = "/process/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Process> showProcess(@PathVariable("id") long id) throws Exception {
-        Process process = processRepository.findOne(id);
+    public ResponseEntity<Proces> showProcess(@PathVariable("id") long id) throws Exception {
+        Proces process = processRepository.findOne(id);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
         return new ResponseEntity<>(process, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/activity/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Activity> showActivity(@PathVariable("id") long id) throws Exception {
+        Activity activity = activityRepository.findOne(id);
+        if (activity == null) {
+            throw new Exception("There is no activity with id " + id);
+        }
+        return new ResponseEntity<>(activity, HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public Process addProcess(@RequestBody Process process) {
+    public Proces addProcess(@RequestBody Proces process) {
         System.out.println("saving " + process);
         return processRepository.save(process);
     }
 
     @RequestMapping(path = "/edit", method = RequestMethod.POST)
     public ResponseEntity<String> editProcess(Long id, String name, boolean primitive) {
-        Process process = processRepository.findOne(id);
+        Proces process = processRepository.findOne(id);
         if (process == null) {
             return new ResponseEntity<>("Process is null", HttpStatus.NOT_FOUND);
         }
         process.setName(name);
         if (process.isPrimitive() != primitive && primitive) {
-//            deleteProcessFromCompany(authentication, process);
+            deleteProcessFromCompany(process);
         }
         if (process.isPrimitive() != primitive && !primitive) {
             process.getActivityList().clear();
@@ -86,15 +97,16 @@ public class ProcessServiceController {
         return new ResponseEntity<>("Process successfully edited", HttpStatus.OK);
     }
 
-//    private void deleteProcessFromCompany(Process process) {
+    private void deleteProcessFromCompany(Proces process) {
 //        Company company = userService.findOne(user.getUsername()).getCompany();
 //        List<Process> processes = company.getProcesses();
 //        deleteChildren(process, processes, true);
 //        companyService.save(company);
-//    }
-    private void deleteChildren(Process process, List<Process> processes, boolean root) {
-        List<Process> children = getChildren(process, processes);
-        for (Process child : children) {
+    }
+
+    private void deleteChildren(Proces process, List<Proces> processes, boolean root) {
+        List<Proces> children = getChildren(process, processes);
+        for (Proces child : children) {
             deleteChildren(child, processes, false);
         }
         if (!root) {
@@ -102,9 +114,9 @@ public class ProcessServiceController {
         }
     }
 
-    private List<Process> getChildren(Process p, List<Process> lista) {
-        List<Process> children = new ArrayList<>();
-        for (Process process : lista) {
+    private List<Proces> getChildren(Proces p, List<Proces> lista) {
+        List<Proces> children = new ArrayList<>();
+        for (Proces process : lista) {
             if (p != null && p.equals(process.getParent())) {
                 children.add(process);
             }

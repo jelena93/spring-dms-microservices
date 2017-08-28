@@ -79,14 +79,16 @@ public class ProcessController {
             } else {
                 process = new Process(name, null, primitive, principal.getName());
             }
-//            User loggedUser = userService.findOne(principal.getName());
-//            Company company = companyService.findOne(loggedUser.getCompanyId());
-//            company.getProcesses().add(process);
-//            companyService.save(company);
-            System.out.println("saving process: " + process);
             processService.save(process);
         }
-        return new ModelAndView("add_process", "message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, successMessage));
+        ModelAndView mv = new ModelAndView("add_process");
+        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        mv.addObject("documentTypes", documentTypes);
+        User loggedUser = userService.findOne(principal.getName());
+        Company company = companyService.findOne(loggedUser.getCompanyId());
+        mv.addObject("company", company);
+        mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, successMessage));
+        return mv;
     }
 
     @InitBinder
