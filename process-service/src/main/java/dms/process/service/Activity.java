@@ -6,13 +6,20 @@
 package dms.process.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
@@ -38,15 +45,26 @@ public class Activity implements Serializable {
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JoinTable(name = "activity_outputs", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document"))
 //    private List<Document> outputList;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "activity_input_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
+    private List<DocumentType> inputListDocumentTypes;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "activity_output_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
+    private List<DocumentType> outputListDocumentTypes;
 
-//    public Activity() {
+    public Activity() {
 //        this.inputList = new ArrayList<>();
 //        this.outputList = new ArrayList<>();
-//    }
+        this.inputListDocumentTypes = new ArrayList<>();
+        this.outputListDocumentTypes = new ArrayList<>();
+    }
+
     public Activity(String name) {
         this.name = name;
 //        this.inputList = new ArrayList<>();
 //        this.outputList = new ArrayList<>();
+        this.inputListDocumentTypes = new ArrayList<>();
+        this.outputListDocumentTypes = new ArrayList<>();
     }
 
     public Long getId() {
@@ -80,6 +98,22 @@ public class Activity implements Serializable {
 //    public void setOutputList(List<Document> outputList) {
 //        this.outputList = outputList;
 //    }
+    public List<DocumentType> getInputListDocumentTypes() {
+        return inputListDocumentTypes;
+    }
+
+    public void setInputListDocumentTypes(List<DocumentType> inputListDocumentTypes) {
+        this.inputListDocumentTypes = inputListDocumentTypes;
+    }
+
+    public List<DocumentType> getOutputListDocumentTypes() {
+        return outputListDocumentTypes;
+    }
+
+    public void setOutputListDocumentTypes(List<DocumentType> outputListDocumentTypes) {
+        this.outputListDocumentTypes = outputListDocumentTypes;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -107,6 +141,7 @@ public class Activity implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "Activity{" + "id=" + id + ", name=" + name + ", inputListDocumentTypes=" + inputListDocumentTypes + ", outputListDocumentTypes=" + outputListDocumentTypes + '}';
     }
+
 }

@@ -30,7 +30,7 @@ public class CompanyService {
 
     public Company edit(Long id, String name, String pib, String identificationNumber, String headquarters) {
         Company company = oAuth2RestTemplate.postForObject("http://company-service/edit",
-                new Company(name, pib, identificationNumber, headquarters), Company.class);
+                new Company(id, name, pib, identificationNumber, headquarters), Company.class);
         return company;
     }
 

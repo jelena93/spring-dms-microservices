@@ -34,15 +34,6 @@ public class CompanyServiceController {
         return company;
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public Company showCompany(@PathVariable("id") long id) throws Exception {
-        Company company = companyRepository.findOne(id);
-        if (company == null) {
-            throw new Exception("There is no company with id " + id);
-        }
-        return company;
-    }
-
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<List<Company>> search(String query) {
         if (query == null || query.isEmpty()) {
@@ -53,6 +44,16 @@ public class CompanyServiceController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public Company editCompany(@RequestBody Company company) {
+        System.out.println("edit " + company);
         return companyRepository.save(company);
+    }
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public Company showCompany(@PathVariable("id") long id) throws Exception {
+        Company company = companyRepository.findOne(id);
+        if (company == null) {
+            throw new Exception("There is no company with id " + id);
+        }
+        return company;
     }
 }

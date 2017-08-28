@@ -10,7 +10,7 @@
         <header class="panel-heading"> ${title}</header>
         <div class="panel-body">
             <div class="form">
-                <form class="form-validate form-horizontal" onsubmit="return enableFormForEditing();" id="register_form">
+                <form class="form-validate form-horizontal" onsubmit="return enableFormForEditing();" id="register_form" method="POST">
                     <div class="form-group ">
                         <label for="id" class="control-label col-lg-2">Id <span class="required">*</span></label>
                         <div class="col-lg-10">
@@ -41,6 +41,7 @@
                             <input class="form-control " id="headquarters" value="${company.headquarters}" name="headquarters" type="text" disabled />
                         </div>
                     </div>
+                    <input type="hidden"  name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group">
                         <div class="col-lg-offset-10 col-lg-2">
                             <button class="btn btn-primary" type="submit" id="btn-edit" >Edit</button>

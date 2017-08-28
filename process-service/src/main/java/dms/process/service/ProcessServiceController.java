@@ -72,7 +72,7 @@ public class ProcessServiceController {
     public ResponseEntity<String> editProcess(Long id, String name, boolean primitive) {
         Process process = processRepository.findOne(id);
         if (process == null) {
-            return new ResponseEntity<>("Process is null", HttpStatus.OK);
+            return new ResponseEntity<>("Process is null", HttpStatus.NOT_FOUND);
         }
         process.setName(name);
         if (process.isPrimitive() != primitive && primitive) {
@@ -82,7 +82,7 @@ public class ProcessServiceController {
             process.getActivityList().clear();
         }
         process.setPrimitive(primitive);
-//        processService.save(process);
+        processRepository.save(process);
         return new ResponseEntity<>("Process successfully edited", HttpStatus.OK);
     }
 

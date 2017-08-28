@@ -52,7 +52,7 @@
                     </a>
                     <ul class="sub">
                         <li><a class="" href="${pageContext.request.contextPath}/documents/add">Add document</a></li>                          
-                        <li><a class="" href="${pageContext.request.contextPath}/${action_url_search_documents}">Search documents</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/documents/search">Search documents</a></li>                          
                     </ul>
                 </li> 
             </c:if>

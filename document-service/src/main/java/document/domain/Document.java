@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document;
+package document.domain;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import javax.management.Descriptor;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,10 +19,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ *
+ * @author Hachiko
+ */
 @Entity
 @Table(name = "document")
 public class Document implements Serializable {
@@ -31,10 +33,12 @@ public class Document implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "document_id")
-    @SequenceGenerator(name = "DocumentGen", sequenceName = "DOCUMENT_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(generator = "DocumentGen", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private Long id;
+    @Column(name = "company_id")
+    @NotNull
+    private Long companyId;
     @Column(name = "file_type")
     @NotNull
     private String fileType;
@@ -57,6 +61,14 @@ public class Document implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getFileType() {
@@ -118,7 +130,7 @@ public class Document implements Serializable {
 
     @Override
     public String toString() {
-        return "Document{" + "id=" + id + ", fileType=" + fileType + ", fileName=" + fileName + ", descriptors=" + descriptors + '}';
+        return "Document{" + "id=" + id + ", companyId=" + companyId + ", fileType=" + fileType + ", fileName=" + fileName + ", fileContent=" + fileContent + ", descriptors=" + descriptors + '}';
     }
 
 }

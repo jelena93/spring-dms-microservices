@@ -58,6 +58,16 @@ public class CompanyController {
         return mv;
     }
 
+    @RequestMapping(path = "/company/{id}", method = RequestMethod.POST)
+    public String editCompany(@PathVariable("id") long id, String name, String pib, String identificationNumber, String headquarters) {
+        companyService.edit(id, name, pib, identificationNumber, headquarters);
+//        List<User> usersOfCompany = userService.findByCompanyId(id);
+//        ModelAndView mv = new ModelAndView("company");
+//        mv.addObject("company", company);
+//        mv.addObject("users", usersOfCompany);
+        return "redirect:/companies/company/" + id;
+    }
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));

@@ -7,13 +7,16 @@ package gateway.controller;
 
 import gateway.dto.Activity;
 import gateway.dto.Company;
+import gateway.dto.DocumentType;
 import gateway.dto.Process;
 import gateway.dto.MessageDto;
 import gateway.dto.User;
 import gateway.service.CompanyService;
+import gateway.service.DocumentService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.security.Principal;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +37,8 @@ public class ProcessController {
     private UserService userService;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private DocumentService documentService;
 
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView addProcess(Principal principal) {
@@ -41,6 +46,8 @@ public class ProcessController {
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
         mv.addObject("company", company);
+        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        mv.addObject("documentTypes", documentTypes);
         return mv;
     }
 

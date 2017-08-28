@@ -55,11 +55,11 @@ function setDescriptors(docType) {
         }
     });
 }
-function getProcessesForAddDocument() {
+function getProcessesForAddDocument(user) {
     $('#processes').jstree({
         'core': {
             'data': {
-                'url': action_url_processes_api,
+                'url': action_url_processes_api + "/" + user,
                 'data': function (node) {
                     return {'id': node.id};
                 }

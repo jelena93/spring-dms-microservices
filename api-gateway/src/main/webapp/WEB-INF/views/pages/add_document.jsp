@@ -34,4 +34,4 @@
     </div>
 </div>
 <script src="<c:url value="/resources/js/processes-tree-add-documents.js" />"></script>
-<script>getProcessesForAddDocument();</script>
+<script>getProcessesForAddDocument("${user}");</script>

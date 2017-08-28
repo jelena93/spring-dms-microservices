@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document;
+package document.repository;
 
+import document.domain.Document;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,7 +17,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     List<Document> findByDescriptorsDescriptorKey(String descriptorKey);
 
-    List<Document> findByCompanyId(String fileName);
+    List<Document> findByCompanyId(Long companyId);
 
     List<Document> findByFileName(String fileName);
 }

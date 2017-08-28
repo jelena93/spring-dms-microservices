@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- *
- * @author Hachiko
- */
 public class Process implements Serializable {
 
     private Long id;
@@ -32,6 +28,7 @@ public class Process implements Serializable {
         this.name = name;
         this.parent = parent;
         this.primitive = primitive;
+        this.activityList = new ArrayList<>();
     }
 
     public Long getId() {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document;
+package document.domain;
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -14,13 +14,16 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author ana
+ */
 @Entity
 @Table(name = "descriptor_type")
 public class DescriptorType {
 
     @Id
-    @SequenceGenerator(name = "ParamTypeGen", sequenceName = "PARAM_TYPE_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(generator = "ParamTypeGen", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
     @Column(name = "PARAM_CLASS")
@@ -59,5 +62,4 @@ public class DescriptorType {
         }
         return "N/A";
     }
-
 }

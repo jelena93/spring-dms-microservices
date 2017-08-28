@@ -21,11 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    private final String USER_SERVICE = "http://user-service/";
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
 
     public User findOne(String username) {
-        User user = oAuth2RestTemplate.getForObject("http://user-service/" + username, User.class);
+        User user = oAuth2RestTemplate.getForObject(USER_SERVICE + username, User.class);
         return user;
     }
 

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document;
+package document.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,13 +20,15 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+/**
+ *
+ * @author Hachiko
+ */
 @Entity
 @Table(name = "descriptor", indexes = {
     @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value")
@@ -43,8 +44,7 @@ public class Descriptor implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "descriptor_id")
-    @SequenceGenerator(name = "DescriptorGen", sequenceName = "DESCRIPTOR_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(generator = "DescriptorGen", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private Long id;
     @Column(name = "document_type")
@@ -69,8 +69,7 @@ public class Descriptor implements Serializable {
 
     @Column(name = "STRING_VALUE")
     private String stringValue;
-    @Transient
-    @JsonInclude
+
     private final String DATE_FORMAT = "dd.MM.yyyy";
 
     public Descriptor() {
@@ -125,14 +124,6 @@ public class Descriptor implements Serializable {
         this.descriptorType = descriptorType;
     }
 
-    public String convertValueToString() {
-        if (Date.class.equals(descriptorType.getParamClass())) {
-            return new SimpleDateFormat(DATE_FORMAT).format(getValue());
-        } else {
-            return getValue() + "";
-        }
-    }
-
     @Override
     public int hashCode() {
         int hash = 5;
@@ -152,12 +143,15 @@ public class Descriptor implements Serializable {
             return false;
         }
         final Descriptor other = (Descriptor) obj;
-        return !(!Objects.equals(this.descriptorKey, other.descriptorKey) || !Objects.equals(this.getValue(), other.getValue()));
+        if (!Objects.equals(this.descriptorKey, other.descriptorKey) || !Objects.equals(this.getValue(), other.getValue())) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "Descriptor{" + "id=" + id + ", documentType=" + documentType + ", descriptorKey=" + descriptorKey + ", descriptorType=" + descriptorType + ", longValue=" + longValue + ", doubleValue=" + doubleValue + ", dateValue=" + dateValue + ", stringValue=" + stringValue + ", DATE_FORMAT=" + DATE_FORMAT + '}';
+        return descriptorKey + ": " + getValue();
     }
 
     public Object getValue() {

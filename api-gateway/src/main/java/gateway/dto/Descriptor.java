@@ -18,13 +18,9 @@ public class Descriptor implements Serializable {
     private Long documentType;
     private String descriptorKey;
     private DescriptorType descriptorType;
-
     private Long longValue;
-
     private Double doubleValue;
-
     private Date dateValue;
-
     private String stringValue;
     @JsonInclude
     private final String DATE_FORMAT = "dd.MM.yyyy";

@@ -1,14 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>           
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
-<tiles:importAttribute name="action_url_add_user"/>
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
             <header class="panel-heading"> ${title}</header>
             <div class="panel-body">
                 <div class="form">
-                    <form class="form-validate form-horizontal " id="register_form" onsubmit="return onSubmitForm()" method="POST" action="${pageContext.request.contextPath}/${action_url_add_user}">
+                    <form class="form-validate form-horizontal " id="register_form" onsubmit="return onSubmitForm()" method="POST" action="">
                         <div class="form-group ">
                             <label for="name" class="control-label col-lg-2">Name <span class="required">*</span></label>
                             <div class="col-lg-10">

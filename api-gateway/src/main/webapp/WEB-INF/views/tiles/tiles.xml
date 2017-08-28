@@ -67,7 +67,6 @@
         <put-attribute name="action_url_search_companies_api" value="api/companies/search" cascade="true" />  
         <put-attribute name="action_url_edit_company_api" value="api/companies/edit" cascade="true" />  
         <put-attribute name="search_documents" value="/WEB-INF/views/pages/search_documents.jsp" cascade="true"/>  
-        <put-attribute name="action_url_search_documents" value="documents/search" cascade="true" />  
         <put-attribute name="action_url_search_documents_api" value="api/documents/search" cascade="true" />  
         <put-attribute name="action_url_download_document" value="documents/document/download" cascade="true" />  
         <put-attribute name="action_url_display_document" value="documents/document" cascade="true" />  
