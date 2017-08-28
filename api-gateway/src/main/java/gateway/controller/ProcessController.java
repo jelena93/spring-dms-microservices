@@ -13,10 +13,13 @@ import gateway.dto.MessageDto;
 import gateway.dto.User;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
+import gateway.service.DocumentTypeService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +42,8 @@ public class ProcessController {
     private CompanyService companyService;
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private DocumentTypeService documentTypeService;
 
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView addProcess(Principal principal) {
@@ -46,14 +51,14 @@ public class ProcessController {
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
         mv.addObject("company", company);
-        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        List<DocumentType> documentTypes = documentTypeService.findAll();
         mv.addObject("documentTypes", documentTypes);
         return mv;
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public ModelAndView save(Principal principal, String name, @RequestParam(name = "parent", required = false) Long parent,
-            @RequestParam(name = "primitive", required = false) boolean primitive, boolean isActivity) throws Exception {
+            @RequestParam(name = "primitive", required = false) boolean primitive, boolean isActivity, HttpServletRequest hsr) throws Exception {
         Process process = null;
         String successMessage = "Process successfully added";
         if (parent == null && isActivity) {
@@ -65,13 +70,16 @@ public class ProcessController {
                 throw new Exception("Can't add activity to a non primitive process");
             }
             Activity activity = new Activity(name);
+            System.out.println("inputActivityDocumentTypes " + hsr.getParameter("inputActivityDocumentTypes"));
+            System.out.println("inputActivityDocumentTypes " + hsr.getParameter("outputActivityDocumentTypes"));
+//            activity.setInputListDocumentTypes(Arrays.asList(inputActivityDocumentTypes));
+//            activity.setOutputListDocumentTypes(Arrays.asList(outputActivityDocumentTypes));
             process.getActivityList().add(activity);
             processService.save(process);
             successMessage = "Activity successfully added";
         } else {
             if (parent != null) {
                 Process parentProcess = processService.findOne(parent);
-                System.out.println("@@@parent:" + parentProcess);
                 if (parentProcess.isPrimitive()) {
                     throw new Exception("Can't add process to a primitive process");
                 }
@@ -82,7 +90,7 @@ public class ProcessController {
             processService.save(process);
         }
         ModelAndView mv = new ModelAndView("add_process");
-        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        List<DocumentType> documentTypes = documentTypeService.findAll();
         mv.addObject("documentTypes", documentTypes);
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());

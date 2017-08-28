@@ -139,6 +139,7 @@ public class Proces implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "Proces{" + "id=" + id + ", name=" + name + ", user=" + user + ", primitive=" + primitive + ", activityList=" + activityList + '}';
     }
+
 }

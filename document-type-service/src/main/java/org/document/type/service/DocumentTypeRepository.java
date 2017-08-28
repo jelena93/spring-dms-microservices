@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document.repository;
+package org.document.type.service;
 
-import document.domain.Descriptor;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DescriptorRepository extends JpaRepository<Descriptor, Long> {
+/**
+ *
+ * @author jelena
+ */
+public interface DocumentTypeRepository extends JpaRepository<DocumentType, Long> {
 
-    List<Descriptor> findByDocumentType(Long documentType);
 }

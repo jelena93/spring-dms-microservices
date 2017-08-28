@@ -97,7 +97,7 @@
         <put-attribute name="action_url_show_process_api" value="api/processes/process" cascade="true" />  
         <put-attribute name="action_url_show_activity_api" value="api/processes/activity" cascade="true" />  
         <put-attribute name="action_url_edit_process_api" value="api/processes/edit" cascade="true" />  
-        <put-attribute name="action_url_edit_activity_api" value="api/activities/edit" cascade="true" />  
+        <put-attribute name="action_url_edit_activity_api" value="api/processes/activity/edit" cascade="true" />  
         <put-attribute name="process_tree" value="/WEB-INF/views/pages/process_tree.jsp" cascade="true"/>  
         <put-attribute name="process_activity_form" value="/WEB-INF/views/pages/process_activity_form.jsp" cascade="true"/>  
         <put-attribute name="site_content" value="/WEB-INF/views/pages/add_process.jsp" />  

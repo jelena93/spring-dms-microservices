@@ -36,16 +36,4 @@ public class DocumentService {
         return document;
     }
 
-    public List<DocumentType> findAllDocumentTypes() {
-        DocumentType[] documentTypes = oAuth2RestTemplate.
-                getForObject(DOCUMENT_SERVICE + "/document-types", DocumentType[].class);
-        System.out.println("document-types " + Arrays.toString(documentTypes));
-        return Arrays.asList(documentTypes);
-    }
-
-    public DocumentType findOneDocumentType(long documentTypeId) {
-        DocumentType documentType = oAuth2RestTemplate.
-                getForObject(DOCUMENT_SERVICE + "document-types/" + documentTypeId, DocumentType.class);
-        return documentType;
-    }
 }

@@ -10,28 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-/**
- *
- * @author Hachiko
- */
 @Entity
 @Table(name = "activity")
 public class Activity implements Serializable {
@@ -47,36 +39,46 @@ public class Activity implements Serializable {
     @NotNull
     @Column(name = "name")
     private String name;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "activity_input_document_types")
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Long> inputListDocumentTypes = new ArrayList<Long>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @CollectionTable(name = "activity_output_document_types")
+    private List<Long> outputListDocumentTypes = new ArrayList<Long>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "activity_inputs")
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Long> inputList = new ArrayList<Long>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @CollectionTable(name = "activity_outputs")
+    private List<Long> outputList = new ArrayList<Long>();
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JoinTable(name = "activity_input", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document"))
+//    @Fetch(value = FetchMode.SUBSELECT)
 //    private List<Document> inputList;
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(value = FetchMode.SUBSELECT)
 //    @JoinTable(name = "activity_outputs", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document"))
 //    private List<Document> outputList;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @LazyCollection(LazyCollectionOption.FALSE)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinTable(name = "activity_input_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
-    private List<DocumentType> inputListDocumentTypes;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @LazyCollection(LazyCollectionOption.FALSE)
-    @Fetch(value = FetchMode.SUBSELECT)
-
-    @JoinTable(name = "activity_output_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
-    private List<DocumentType> outputListDocumentTypes;
+////    @LazyCollection(LazyCollectionOption.FALSE)
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(value = FetchMode.SUBSELECT)
+//    @JoinTable(name = "activity_input_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
+//    private List<DocumentType> inputListDocumentTypes;
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(value = FetchMode.SUBSELECT)
+//    @JoinTable(name = "activity_output_document_types", joinColumns = @JoinColumn(name = "activity"), inverseJoinColumns = @JoinColumn(name = "document_type"))
+//    private List<DocumentType> outputListDocumentTypes;
 
     public Activity() {
-//        this.inputList = new ArrayList<>();
-//        this.outputList = new ArrayList<>();
-        this.inputListDocumentTypes = new ArrayList<>();
-        this.outputListDocumentTypes = new ArrayList<>();
     }
 
     public Activity(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.inputListDocumentTypes = new ArrayList<>();
-        this.outputListDocumentTypes = new ArrayList<>();
     }
 
     public Long getId() {
@@ -94,38 +96,37 @@ public class Activity implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-//
-//    public List<Document> getInputList() {
-//        return inputList;
-//    }
-//
-//    public void setInputList(List<Document> inputList) {
-//        this.inputList = inputList;
-//    }
-//
-//    public List<Document> getOutputList() {
-//        return outputList;
-//    }
-//
-//    public void setOutputList(List<Document> outputList) {
-//        this.outputList = outputList;
-//    }
-//
 
-    public List<DocumentType> getInputListDocumentTypes() {
+    public List<Long> getInputListDocumentTypes() {
         return inputListDocumentTypes;
     }
 
-    public void setInputListDocumentTypes(List<DocumentType> inputListDocumentTypes) {
+    public void setInputListDocumentTypes(List<Long> inputListDocumentTypes) {
         this.inputListDocumentTypes = inputListDocumentTypes;
     }
 
-    public List<DocumentType> getOutputListDocumentTypes() {
+    public List<Long> getOutputListDocumentTypes() {
         return outputListDocumentTypes;
     }
 
-    public void setOutputListDocumentTypes(List<DocumentType> outputListDocumentTypes) {
+    public void setOutputListDocumentTypes(List<Long> outputListDocumentTypes) {
         this.outputListDocumentTypes = outputListDocumentTypes;
+    }
+
+    public List<Long> getInputList() {
+        return inputList;
+    }
+
+    public void setInputList(List<Long> inputList) {
+        this.inputList = inputList;
+    }
+
+    public List<Long> getOutputList() {
+        return outputList;
+    }
+
+    public void setOutputList(List<Long> outputList) {
+        this.outputList = outputList;
     }
 
     @Override
@@ -155,7 +156,7 @@ public class Activity implements Serializable {
 
     @Override
     public String toString() {
-        return "Activity{" + "id=" + id + ", name=" + name + '}';
+        return "Activity{" + "id=" + id + ", name=" + name + ", inputListDocumentTypes=" + inputListDocumentTypes + ", outputListDocumentTypes=" + outputListDocumentTypes + ", inputList=" + inputList + ", outputList=" + outputList + '}';
     }
 
 }

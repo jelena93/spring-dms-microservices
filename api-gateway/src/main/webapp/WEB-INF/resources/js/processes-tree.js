@@ -95,8 +95,8 @@ function checkData() {
         if (!canEdit) {
             $('#name').prop("disabled", false);
             $('#primitive').prop("disabled", false);
-            $("#input_document_types").prop("disabled", true);
-            $("#output_document_types").prop("disabled", true);
+            $("#input_document_types").prop("disabled", false);
+            $("#output_document_types").prop("disabled", false);
 //            $("#primitive").prop("disabled", true);
             canEdit = true;
             $("#btn-edit").text("Save");

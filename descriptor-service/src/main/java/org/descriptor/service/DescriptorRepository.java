@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dms.process.service;
+package org.descriptor.service;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProcessRepository extends JpaRepository<Proces, Long> {
+/**
+ *
+ * @author jelena
+ */
+public interface DescriptorRepository extends JpaRepository<Descriptor, Long> {
 
-    List<Proces> findByParentIsNull();
+    List<Descriptor> findByDocumentType(Long documentType);
 
-    Proces findByParent(Proces parent);
-
-    List<Proces> findByUser(String user);
 }

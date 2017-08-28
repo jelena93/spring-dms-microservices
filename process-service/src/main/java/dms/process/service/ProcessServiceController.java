@@ -6,6 +6,7 @@
 package dms.process.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -79,6 +80,16 @@ public class ProcessServiceController {
         return processRepository.save(process);
     }
 
+    @RequestMapping(path = "/activity/edit", method = RequestMethod.POST)
+    public ResponseEntity<String> editActivity(Long id, String name, Long[] inputListDocumentTypes, Long[] outputListDocumentTypes) {
+        Activity activity = activityRepository.findOne(id);
+        activity.setName(name);
+        activity.setInputListDocumentTypes(Arrays.asList(inputListDocumentTypes));
+        activity.setOutputListDocumentTypes(Arrays.asList(outputListDocumentTypes));
+        activityRepository.save(activity);
+        return new ResponseEntity<>("Activity successfully edited", HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/edit", method = RequestMethod.POST)
     public ResponseEntity<String> editProcess(Long id, String name, boolean primitive) {
         Proces process = processRepository.findOne(id);
@@ -87,7 +98,8 @@ public class ProcessServiceController {
         }
         process.setName(name);
         if (process.isPrimitive() != primitive && primitive) {
-            deleteProcessFromCompany(process);
+//            deleteProcessFromCompany(process);
+            deleteChildrenFromProcess(process);
         }
         if (process.isPrimitive() != primitive && !primitive) {
             process.getActivityList().clear();
@@ -133,5 +145,12 @@ public class ProcessServiceController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+    private void deleteChildrenFromProcess(Proces process) {
+        System.out.println("brisem dete od " + process.getName());
+        Proces child = processRepository.findByParent(process);
+        System.out.println("dete: " + child.getName());
+        processRepository.delete(child);
     }
 }

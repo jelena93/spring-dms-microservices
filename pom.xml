@@ -23,6 +23,8 @@
         <module>process-service</module>
         <module>user-service</module>
         <module>document-service</module>
+        <module>descriptor-service</module>
+        <module>document-type-service</module>
     </modules>
 
     <properties>

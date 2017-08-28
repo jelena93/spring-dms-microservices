@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document.domain;
+package org.descriptor.service;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,12 +32,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "descriptor", indexes = {
-    @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value")
-    ,
-    @Index(columnList = "DOUBLE_VALUE", name = "idx_param_double_value")
-    ,
-    @Index(columnList = "DATE_VALUE", name = "idx_param_date_value")
-    ,
+    @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value"),
+    @Index(columnList = "DOUBLE_VALUE", name = "idx_param_double_value"),
+    @Index(columnList = "DATE_VALUE", name = "idx_param_date_value"),
     @Index(columnList = "STRING_VALUE", name = "idx_param_string_value")
 })
 public class Descriptor implements Serializable {
@@ -44,7 +42,8 @@ public class Descriptor implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "descriptor_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "DescriptorGen", sequenceName = "DESCRIPTOR_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(generator = "DescriptorGen", strategy = GenerationType.SEQUENCE)
     @NotNull
     private Long id;
     @Column(name = "document_type")
@@ -69,7 +68,7 @@ public class Descriptor implements Serializable {
 
     @Column(name = "STRING_VALUE")
     private String stringValue;
-
+    
     private final String DATE_FORMAT = "dd.MM.yyyy";
 
     public Descriptor() {
@@ -111,7 +110,7 @@ public class Descriptor implements Serializable {
     public String getDATE_FORMAT() {
         return DATE_FORMAT;
     }
-
+    
     public void setDocumentType(Long documentType) {
         this.documentType = documentType;
     }
@@ -171,8 +170,7 @@ public class Descriptor implements Serializable {
     }
 
     public void setValue(Object value) {
-        try {
-            Class paramClass = descriptorType.getParamClass();
+        try { Class paramClass = descriptorType.getParamClass();
             if (value == null) {
                 longValue = null;
                 doubleValue = null;
@@ -183,41 +181,27 @@ public class Descriptor implements Serializable {
                     if (value instanceof String) {
                         Integer valueInt = Integer.parseInt(value.toString());
                         longValue = (valueInt).longValue();
-                    } else {
-                        longValue = ((Integer) value).longValue();
-                    }
+                    } else longValue = ((Integer) value).longValue();
                     doubleValue = longValue.doubleValue();
                 } else if (Long.class.equals(paramClass)) {
                     if (value instanceof String) {
                         Long valueLong = Long.parseLong(value.toString());
                         longValue = (valueLong);
-                    } else {
-                        longValue = ((Long) value);
-                    }
+                    } else longValue = ((Long) value);
                     doubleValue = longValue.doubleValue();
                 } else if (Double.class.equals(paramClass)) {
                     if (value instanceof String) {
                         Double valueDouble = Double.parseDouble(value.toString());
                         doubleValue = (valueDouble);
-                    } else {
-                        doubleValue = ((Double) value);
-                    }
+                    } else doubleValue = ((Double) value);
                     longValue = doubleValue.longValue();
-                } else if (String.class.equals(paramClass)) {
-                    stringValue = (String) value;
-                } else if (Date.class.equals(paramClass)) {
-                    try {
-                        dateValue = new SimpleDateFormat(DATE_FORMAT).parse(value.toString());
-                    } catch (ParseException ex) {
-                        dateValue = (Date) value;
-                    }
-                }
+                } else if (String.class.equals(paramClass)) stringValue = (String) value;
+                else if (Date.class.equals(paramClass)) try { dateValue = new SimpleDateFormat(DATE_FORMAT).parse(value.toString()); } catch (ParseException ex) { dateValue = (Date) value; }
+            }} catch (Exception ex) {
+                longValue = null;
+                doubleValue = null;
+                stringValue = null;
+                dateValue = null;
             }
-        } catch (Exception ex) {
-            longValue = null;
-            doubleValue = null;
-            stringValue = null;
-            dateValue = null;
-        }
     }
 }

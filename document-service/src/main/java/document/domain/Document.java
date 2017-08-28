@@ -6,19 +6,17 @@
 package document.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -48,9 +46,9 @@ public class Document implements Serializable {
     @Column(name = "file_content", length = 1024 * 1024 * 25)
     @NotNull
     private byte[] fileContent;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "document_descriptors", joinColumns = @JoinColumn(name = "document"), inverseJoinColumns = @JoinColumn(name = "descriptor"))
-    private List<Descriptor> descriptors;
+    @ElementCollection
+    @CollectionTable(name = "document_descriptors")
+    private List<Long> descriptors = new ArrayList<Long>();
 
     public Document() {
     }
@@ -95,11 +93,11 @@ public class Document implements Serializable {
         this.fileContent = fileContent;
     }
 
-    public List<Descriptor> getDescriptors() {
+    public List<Long> getDescriptors() {
         return descriptors;
     }
 
-    public void setDescriptors(List<Descriptor> descriptors) {
+    public void setDescriptors(List<Long> descriptors) {
         this.descriptors = descriptors;
     }
 
@@ -126,11 +124,6 @@ public class Document implements Serializable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Document{" + "id=" + id + ", companyId=" + companyId + ", fileType=" + fileType + ", fileName=" + fileName + ", fileContent=" + fileContent + ", descriptors=" + descriptors + '}';
     }
 
 }

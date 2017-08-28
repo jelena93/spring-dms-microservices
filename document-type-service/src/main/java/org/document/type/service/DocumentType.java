@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dms.process.service;
+package org.document.type.service;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -18,15 +20,16 @@ import javax.validation.constraints.NotNull;
 public class DocumentType implements Serializable {
 
     @Id
+    @Basic(optional = false)
+    @GeneratedValue
     @Column(name = "document_type_id")
     @NotNull
     private Long id;
+    @Column(name = "name")
+    @NotNull
+    private String name;
 
     public DocumentType() {
-    }
-
-    public DocumentType(Long id) {
-        this.id = id;
     }
 
     public Long getId() {
@@ -37,6 +40,21 @@ public class DocumentType implements Serializable {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+//    public List<Descriptor> getDescriptors() {
+//        return descriptors;
+//    }
+//
+//    public void setDescriptors(List<Descriptor> descriptors) {
+//        this.descriptors = descriptors;
+//    }
     @Override
     public int hashCode() {
         int hash = 3;
@@ -64,6 +82,6 @@ public class DocumentType implements Serializable {
 
     @Override
     public String toString() {
-        return id + "";
+        return name;
     }
 }

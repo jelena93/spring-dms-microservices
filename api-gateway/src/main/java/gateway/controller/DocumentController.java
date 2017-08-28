@@ -14,6 +14,7 @@ import gateway.dto.MessageDto;
 import gateway.dto.User;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
+import gateway.service.DocumentTypeService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.io.IOException;
@@ -50,6 +51,8 @@ public class DocumentController {
     @Autowired
     private DocumentService documentService;
     @Autowired
+    private DocumentTypeService documentTypeService;
+    @Autowired
     ProcessService processService;
     @Autowired
     private UserService userService;
@@ -57,7 +60,7 @@ public class DocumentController {
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView save(Principal principal) {
         ModelAndView mv = new ModelAndView("add_document");
-        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        List<DocumentType> documentTypes = documentTypeService.findAll();
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
         mv.addObject("documentTypes", documentTypes);
@@ -79,7 +82,7 @@ public class DocumentController {
     public ModelAndView save(Principal principal, String inputOutput, MultipartFile file,
             long docType, HttpServletRequest request, long activityID, Long existingDocumentID) {
         Activity activity = processService.findOneActivity(activityID);
-        DocumentType documentType = documentService.findOneDocumentType(docType);
+        DocumentType documentType = documentTypeService.findOne(docType);
         List<Descriptor> descriptors = documentType.getDescriptors();
         List<Descriptor> newDescriptors = new ArrayList<>();
         for (Descriptor descriptor : descriptors) {
@@ -127,7 +130,7 @@ public class DocumentController {
         }
 //        activityService.save(activity);
         ModelAndView mv = new ModelAndView("add_document");
-        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
+        List<DocumentType> documentTypes = documentTypeService.findAll();
         mv.addObject("documentTypes", documentTypes);
         mv.addObject("action_type_processes_search", "add_document");
         User loggedUser = userService.findOne(principal.getName());
