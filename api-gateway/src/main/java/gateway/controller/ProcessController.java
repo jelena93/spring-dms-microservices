@@ -19,7 +19,6 @@ import gateway.service.UserService;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +57,10 @@ public class ProcessController {
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public ModelAndView save(Principal principal, String name, @RequestParam(name = "parent", required = false) Long parent,
-            @RequestParam(name = "primitive", required = false) boolean primitive, boolean isActivity, HttpServletRequest hsr) throws Exception {
+            @RequestParam(name = "primitive", required = false) boolean primitive, boolean isActivity,
+            @RequestParam(name = "inputActivityDocumentTypes", required = false) Long[] inputActivityDocumentTypes,
+            @RequestParam(name = "outputActivityDocumentTypes", required = false) Long[] outputActivityDocumentTypes) throws Exception {
+
         Process process = null;
         String successMessage = "Process successfully added";
         if (parent == null && isActivity) {
@@ -70,10 +72,8 @@ public class ProcessController {
                 throw new Exception("Can't add activity to a non primitive process");
             }
             Activity activity = new Activity(name);
-            System.out.println("inputActivityDocumentTypes " + hsr.getParameter("inputActivityDocumentTypes"));
-            System.out.println("inputActivityDocumentTypes " + hsr.getParameter("outputActivityDocumentTypes"));
-//            activity.setInputListDocumentTypes(Arrays.asList(inputActivityDocumentTypes));
-//            activity.setOutputListDocumentTypes(Arrays.asList(outputActivityDocumentTypes));
+            activity.setInputListDocumentTypes(Arrays.asList(inputActivityDocumentTypes));
+            activity.setOutputListDocumentTypes(Arrays.asList(outputActivityDocumentTypes));
             process.getActivityList().add(activity);
             processService.save(process);
             successMessage = "Activity successfully added";

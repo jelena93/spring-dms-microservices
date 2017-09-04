@@ -36,8 +36,7 @@ $(document).ready(function () {
 function setDescriptors(docType) {
     $.ajax({
         type: "GET",
-        url: action_url_document_type_api,
-        data: {id: docType.value},
+        url: action_url_document_type_api + "/" + docType.value,
         beforeSend: function (request) {
             request.setRequestHeader(header, token);
         },
@@ -192,9 +191,11 @@ function showFormAddDocument() {
     $("#docTypeLabel").text("Input document types");
     $("#docType").html("");
     for (var i = 0; i < inputListDocumentTypes.length; i++) {
-        $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
+        $("#docType").append('<option value="' + inputListDocumentTypes[i] + '">' + inputListDocumentTypes[i] + '</option>');
+//        $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
     }
-    showDescriptors(inputListDocumentTypes[0].descriptors);
+    console.log(inputListDocumentTypes[0])
+//    showDescriptors(inputListDocumentTypes[0].descriptors);
     $("#form-document").show();
 }
 function onSubmitForm() {

@@ -1,6 +1,8 @@
 spring:
   application:
     name: document-type-service
+  aop:
+    proxyTargetClass: true  
   jpa:
     properties:
       hibernate:
@@ -28,11 +30,18 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 
-# Disable spring basic authentication security
 security:
+  # Disable Spring Boot basic authentication
   basic:
     enabled: false
   oauth2:
+#    sso:
+#      loginPath: /login
+    client:
+      accessTokenUri: http://uaa-service/uaa/oauth/token
+      userAuthorizationUri: http://uaa-service/uaa/oauth/authorize
+      clientId: acmes
+      clientSecret: acmesecrets
     resource:
       jwt:
         keyValue: |

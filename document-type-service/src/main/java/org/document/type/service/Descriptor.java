@@ -3,54 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.descriptor.service;
+package org.document.type.service;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "descriptor", indexes = {
-    @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value")
-    ,
-    @Index(columnList = "DOUBLE_VALUE", name = "idx_param_double_value")
-    ,
-    @Index(columnList = "DATE_VALUE", name = "idx_param_date_value")
-    ,
-    @Index(columnList = "STRING_VALUE", name = "idx_param_string_value")
-})
 public class Descriptor implements Serializable {
 
-    @Id
-    @Basic(optional = false)
-    @Column(name = "descriptor_id")
-    @GeneratedValue
-    @NotNull
     private Long id;
-    @Column(name = "document_type")
-    @NotNull
     private Long documentType;
-    @Column(name = "descriptor_key")
-    @NotNull
     private String descriptorKey;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "descriptor_type", nullable = false)
-    private DescriptorType descriptorType;
+    private DescriptorTypeDto descriptorType;
 
     @Column(name = "NUMBER_VALUE")
     private Long longValue;
@@ -70,13 +39,13 @@ public class Descriptor implements Serializable {
     public Descriptor() {
     }
 
-    public Descriptor(String key, Long documentType, DescriptorType descriptorType) {
+    public Descriptor(String key, Long documentType, DescriptorTypeDto descriptorType) {
         this.descriptorKey = key;
         this.documentType = documentType;
         this.descriptorType = descriptorType;
     }
 
-    public Descriptor(String key, Object value, Long documentType, DescriptorType descriptorType) {
+    public Descriptor(String key, Object value, Long documentType, DescriptorTypeDto descriptorType) {
         this.descriptorKey = key;
         this.documentType = documentType;
         this.descriptorType = descriptorType;
@@ -111,11 +80,11 @@ public class Descriptor implements Serializable {
         this.documentType = documentType;
     }
 
-    public DescriptorType getDescriptorType() {
+    public DescriptorTypeDto getDescriptorType() {
         return descriptorType;
     }
 
-    public void setDescriptorType(DescriptorType descriptorType) {
+    public void setDescriptorType(DescriptorTypeDto descriptorType) {
         this.descriptorType = descriptorType;
     }
 

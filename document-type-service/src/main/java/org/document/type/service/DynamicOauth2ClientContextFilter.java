@@ -1,4 +1,4 @@
-package gateway.security;
+package org.document.type.service;
 
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;

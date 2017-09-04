@@ -40,15 +40,6 @@ public class DocumentServiceController {
 //        return documentRepository.findByDescriptorsDescriptorKey(query);
     }
 
-//    @RequestMapping(value = "/document-types", method = RequestMethod.GET)
-//    public List<DocumentType> getDocumentTypes() {
-//        return documentTypeRepository.findAll();
-//    }
-//
-//    @RequestMapping(value = "/document-types/{id}", method = RequestMethod.GET)
-//    public DocumentType findDocumentType(@PathVariable("id") long id) {
-//        return documentTypeRepository.findOne(id);
-//    }
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Document findDocument(@PathVariable("id") long id) {
         return documentRepository.findOne(id);

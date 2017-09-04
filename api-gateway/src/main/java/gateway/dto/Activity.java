@@ -16,8 +16,8 @@ public class Activity implements Serializable {
     private String name;
     private List<Document> inputList;
     private List<Document> outputList;
-    private List<DocumentType> inputListDocumentTypes;
-    private List<DocumentType> outputListDocumentTypes;
+    private List<Long> inputListDocumentTypes;
+    private List<Long> outputListDocumentTypes;
 
     public Activity() {
         this.inputList = new ArrayList<>();
@@ -66,19 +66,19 @@ public class Activity implements Serializable {
         this.outputList = outputList;
     }
 
-    public List<DocumentType> getInputListDocumentTypes() {
+    public List<Long> getInputListDocumentTypes() {
         return inputListDocumentTypes;
     }
 
-    public void setInputListDocumentTypes(List<DocumentType> inputListDocumentTypes) {
+    public void setInputListDocumentTypes(List<Long> inputListDocumentTypes) {
         this.inputListDocumentTypes = inputListDocumentTypes;
     }
 
-    public List<DocumentType> getOutputListDocumentTypes() {
+    public List<Long> getOutputListDocumentTypes() {
         return outputListDocumentTypes;
     }
 
-    public void setOutputListDocumentTypes(List<DocumentType> outputListDocumentTypes) {
+    public void setOutputListDocumentTypes(List<Long> outputListDocumentTypes) {
         this.outputListDocumentTypes = outputListDocumentTypes;
     }
 

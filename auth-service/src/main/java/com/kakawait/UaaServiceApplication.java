@@ -114,6 +114,12 @@ public class UaaServiceApplication extends WebMvcConfigurerAdapter {
                     .secret("acmesecret")
                     .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                     .scopes("openid")
+                    .autoApprove(true)
+                    .and()
+                    .withClient("acmes")
+                    .secret("acmesecrets")
+                    .authorizedGrantTypes("authorization_code", "refresh_token", "password")
+                    .scopes("openid")
                     .autoApprove(true);
         }
         

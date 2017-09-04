@@ -3,68 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.descriptor.service;
+package dms.process.service;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "descriptor", indexes = {
-    @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value")
-    ,
-    @Index(columnList = "DOUBLE_VALUE", name = "idx_param_double_value")
-    ,
-    @Index(columnList = "DATE_VALUE", name = "idx_param_date_value")
-    ,
-    @Index(columnList = "STRING_VALUE", name = "idx_param_string_value")
-})
-public class Descriptor implements Serializable {
+/**
+ *
+ * @author jelena
+ */
+public class Descriptor {
 
-    @Id
-    @Basic(optional = false)
-    @Column(name = "descriptor_id")
-    @GeneratedValue
-    @NotNull
     private Long id;
-    @Column(name = "document_type")
-    @NotNull
     private Long documentType;
-    @Column(name = "descriptor_key")
-    @NotNull
     private String descriptorKey;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "descriptor_type", nullable = false)
     private DescriptorType descriptorType;
-
-    @Column(name = "NUMBER_VALUE")
     private Long longValue;
-
-    @Column(name = "DOUBLE_VALUE")
     private Double doubleValue;
-
-    @Column(name = "DATE_VALUE")
-    @Temporal(TemporalType.DATE)
     private Date dateValue;
-
-    @Column(name = "STRING_VALUE")
     private String stringValue;
-
+    @JsonInclude
     private final String DATE_FORMAT = "dd.MM.yyyy";
 
     public Descriptor() {
@@ -119,6 +80,14 @@ public class Descriptor implements Serializable {
         this.descriptorType = descriptorType;
     }
 
+    public String convertValueToString() {
+        if (Date.class.equals(descriptorType.getParamClass())) {
+            return new SimpleDateFormat(DATE_FORMAT).format(getValue());
+        } else {
+            return getValue() + "";
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -138,15 +107,12 @@ public class Descriptor implements Serializable {
             return false;
         }
         final Descriptor other = (Descriptor) obj;
-        if (!Objects.equals(this.descriptorKey, other.descriptorKey) || !Objects.equals(this.getValue(), other.getValue())) {
-            return false;
-        }
-        return true;
+        return !(!Objects.equals(this.descriptorKey, other.descriptorKey) || !Objects.equals(this.getValue(), other.getValue()));
     }
 
     @Override
     public String toString() {
-        return descriptorKey + ": " + getValue();
+        return "Descriptor{" + "id=" + id + ", documentType=" + documentType + ", descriptorKey=" + descriptorKey + ", descriptorType=" + descriptorType + ", longValue=" + longValue + ", doubleValue=" + doubleValue + ", dateValue=" + dateValue + ", stringValue=" + stringValue + ", DATE_FORMAT=" + DATE_FORMAT + '}';
     }
 
     public Object getValue() {

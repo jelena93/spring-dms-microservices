@@ -3,27 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.descriptor.service;
+package dms.process.service;
 
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "descriptor_type")
-public class DescriptorType implements Serializable {
+/**
+ *
+ * @author jelena
+ */
+public class DescriptorType {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "ID", unique = true, nullable = false)
     private Long id;
-    @Column(name = "PARAM_CLASS")
-    @Lob
     private Class paramClass;
 
     public DescriptorType() {

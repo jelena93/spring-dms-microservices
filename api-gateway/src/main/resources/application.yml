@@ -51,8 +51,8 @@ security:
       id: openid
       serviceId: ${PREFIX:}resource
 
-logging:
-  level.org.springframework.security: DEBUG
+#logging:
+#  level.org.springframework.security: DEBUG
 
 ---
 
