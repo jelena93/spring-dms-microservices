@@ -76,6 +76,6 @@ public class DocumentType implements Serializable {
 
     @Override
     public String toString() {
-        return name + ": " + descriptors;
+        return id + "," + name + ": " + descriptors;
     }
 }

@@ -24,7 +24,6 @@
         <module>user-service</module>
         <module>document-service</module>
         <module>descriptor-service</module>
-        <module>document-type-service</module>
         <module>../../Documents/NetBeansProjects/spring-cloud-event-sourcing-example/shopping-cart-service</module>
     </modules>
 

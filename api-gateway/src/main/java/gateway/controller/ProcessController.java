@@ -5,15 +5,15 @@
  */
 package gateway.controller;
 
-import gateway.dto.Activity;
 import gateway.dto.Company;
 import gateway.dto.DocumentType;
 import gateway.dto.Process;
 import gateway.dto.MessageDto;
 import gateway.dto.User;
+import gateway.model.Activity;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
-import gateway.service.DocumentTypeService;
+import gateway.service.DescriptorService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.security.Principal;
@@ -42,7 +42,7 @@ public class ProcessController {
     @Autowired
     private DocumentService documentService;
     @Autowired
-    private DocumentTypeService documentTypeService;
+    private DescriptorService documentTypeService;
 
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView addProcess(Principal principal) {
@@ -71,7 +71,7 @@ public class ProcessController {
             if (!process.isPrimitive()) {
                 throw new Exception("Can't add activity to a non primitive process");
             }
-            Activity activity = new Activity(name);
+            Activity activity = new Activity();
             activity.setInputListDocumentTypes(Arrays.asList(inputActivityDocumentTypes));
             activity.setOutputListDocumentTypes(Arrays.asList(outputActivityDocumentTypes));
             process.getActivityList().add(activity);

@@ -3,24 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.document.type.service;
+package gateway.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gateway.dto.Descriptor;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DocumentTypeDto implements Serializable {
+public class DocumentDto implements Serializable {
 
     private Long id;
-    private String name;
-    private List<Descriptor> descriptors = new ArrayList<>();
+    private String fileType;
+    private String fileName;
+    @JsonIgnore
+    private byte[] fileContent;
+    private List<Descriptor> descriptors;
 
-    public DocumentTypeDto() {
-    }
-
-    public DocumentTypeDto(String name) {
-        this.name = name;
+    public DocumentDto() {
     }
 
     public Long getId() {
@@ -31,12 +31,28 @@ public class DocumentTypeDto implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFileType() {
+        return fileType;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
     }
 
     public List<Descriptor> getDescriptors() {
@@ -49,8 +65,8 @@ public class DocumentTypeDto implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -65,7 +81,7 @@ public class DocumentTypeDto implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DocumentTypeDto other = (DocumentTypeDto) obj;
+        final DocumentDto other = (DocumentDto) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -74,6 +90,7 @@ public class DocumentTypeDto implements Serializable {
 
     @Override
     public String toString() {
-        return name + ": " + descriptors;
+        return "Document{" + "id=" + id + ", fileType=" + fileType + ", fileName=" + fileName + ", descriptors=" + descriptors + '}';
     }
+
 }

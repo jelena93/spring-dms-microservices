@@ -37,10 +37,8 @@ import javax.validation.constraints.NotNull;
 public class Descriptor implements Serializable {
 
     @Id
-    @Basic(optional = false)
-    @Column(name = "descriptor_id")
     @GeneratedValue
-    @NotNull
+    @Column(name = "descriptor_id")
     private Long id;
     @Column(name = "document_type")
     @NotNull
@@ -146,7 +144,7 @@ public class Descriptor implements Serializable {
 
     @Override
     public String toString() {
-        return descriptorKey + ": " + getValue();
+        return id + "," + descriptorKey + ": " + getValue();
     }
 
     public Object getValue() {

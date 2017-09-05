@@ -164,6 +164,7 @@ function showDescriptors(descriptors) {
     var html = "";
     if (descriptors !== null) {
         for (var i = 0; i < descriptors.length; i++) {
+            console.log(descriptors[i]);
             if (descriptors[i].value === null) {
                 if (descriptors[i].descriptorType.paramClass === 'java.util.Date') {
                     html = '<div class="form-group">' +
@@ -191,11 +192,9 @@ function showFormAddDocument() {
     $("#docTypeLabel").text("Input document types");
     $("#docType").html("");
     for (var i = 0; i < inputListDocumentTypes.length; i++) {
-        $("#docType").append('<option value="' + inputListDocumentTypes[i] + '">' + inputListDocumentTypes[i] + '</option>');
-//        $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
+        $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
     }
-    console.log(inputListDocumentTypes[0])
-//    showDescriptors(inputListDocumentTypes[0].descriptors);
+    showDescriptors(inputListDocumentTypes[0].descriptors);
     $("#form-document").show();
 }
 function onSubmitForm() {

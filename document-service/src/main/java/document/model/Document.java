@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package document.domain;
+package document.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -20,19 +19,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- *
- * @author Hachiko
- */
 @Entity
 @Table(name = "document")
 public class Document implements Serializable {
 
     @Id
-    @Basic(optional = false)
-    @Column(name = "document_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull
+    @Column(name = "document_id")
     private Long id;
     @Column(name = "company_id")
     @NotNull

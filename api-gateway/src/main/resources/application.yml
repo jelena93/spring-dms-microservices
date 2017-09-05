@@ -21,7 +21,6 @@ zuul:
   routes:
     company-service: /api/companies/**
     process-service: /api/processes/**
-    document-type-service: /api/document-types/**
     descriptor-service: /api/descriptors/**
     document-service: /api/documents/**
     uaa-service:

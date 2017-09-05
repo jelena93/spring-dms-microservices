@@ -5,19 +5,17 @@
  */
 package gateway.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Document implements Serializable {
+public class Document {
 
     private Long id;
     private String fileType;
     private String fileName;
-    @JsonIgnore
     private byte[] fileContent;
-    private List<Descriptor> descriptors;
+    private Long companyId;
+    private List<Long> descriptors;
 
     public Document() {
     }
@@ -38,6 +36,14 @@ public class Document implements Serializable {
         this.fileType = fileType;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public String getFileName() {
         return fileName;
     }
@@ -54,11 +60,11 @@ public class Document implements Serializable {
         this.fileContent = fileContent;
     }
 
-    public List<Descriptor> getDescriptors() {
+    public List<Long> getDescriptors() {
         return descriptors;
     }
 
-    public void setDescriptors(List<Descriptor> descriptors) {
+    public void setDescriptors(List<Long> descriptors) {
         this.descriptors = descriptors;
     }
 
@@ -89,7 +95,9 @@ public class Document implements Serializable {
 
     @Override
     public String toString() {
-        return "Document{" + "id=" + id + ", fileType=" + fileType + ", fileName=" + fileName + ", descriptors=" + descriptors + '}';
+        return "id=" + id + ", fileType=" + fileType + ", fileName=" + fileName
+                + ", fileContent=" + fileContent + ", companyId=" + companyId
+                + ", descriptors=" + descriptors;
     }
 
 }

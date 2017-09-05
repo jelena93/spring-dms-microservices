@@ -34,11 +34,11 @@ public class Descriptor implements Serializable {
         this.descriptorType = descriptorType;
     }
 
-    public Descriptor(String key, Object value, Long documentType, DescriptorType descriptorType) {
+    public Descriptor(String key, Descriptor descriptor, Object value, Long documentType, DescriptorType descriptorType) {
         this.descriptorKey = key;
         this.documentType = documentType;
         this.descriptorType = descriptorType;
-        setValue(value);
+        setValue(descriptor, value);
     }
 
     public Long getId() {
@@ -107,11 +107,6 @@ public class Descriptor implements Serializable {
         return !(!Objects.equals(this.descriptorKey, other.descriptorKey) || !Objects.equals(this.getValue(), other.getValue()));
     }
 
-    @Override
-    public String toString() {
-        return "Descriptor{" + "id=" + id + ", documentType=" + documentType + ", descriptorKey=" + descriptorKey + ", descriptorType=" + descriptorType + ", longValue=" + longValue + ", doubleValue=" + doubleValue + ", dateValue=" + dateValue + ", stringValue=" + stringValue + ", DATE_FORMAT=" + DATE_FORMAT + '}';
-    }
-
     public Object getValue() {
         Class paramClass = descriptorType.getParamClass();
         if (Integer.class.equals(paramClass)) {
@@ -128,7 +123,7 @@ public class Descriptor implements Serializable {
         return null;
     }
 
-    public void setValue(Object value) {
+    public void setValue(Descriptor descriptor, Object value) {
         try {
             Class paramClass = descriptorType.getParamClass();
             if (value == null) {
@@ -178,4 +173,12 @@ public class Descriptor implements Serializable {
             dateValue = null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id + ", documentType=" + documentType + ", descriptorKey="
+                + descriptorKey + ", descriptorType=" + descriptorType + ", value="
+                + getValue() + ",stringValue=" + stringValue;
+    }
+
 }

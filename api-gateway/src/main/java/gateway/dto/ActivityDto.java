@@ -5,33 +5,30 @@
  */
 package gateway.dto;
 
+import gateway.model.DocumentDto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Activity implements Serializable {
+public class ActivityDto implements Serializable {
 
     private Long id;
     private String name;
-    private List<Document> inputList;
-    private List<Document> outputList;
-    private List<Long> inputListDocumentTypes;
-    private List<Long> outputListDocumentTypes;
+    private List<DocumentDto> inputList;
+    private List<DocumentDto> outputList;
+    private List<DocumentType> inputListDocumentTypes = new ArrayList<>();
+    private List<DocumentType> outputListDocumentTypes = new ArrayList<>();
 
-    public Activity() {
+    public ActivityDto() {
         this.inputList = new ArrayList<>();
         this.outputList = new ArrayList<>();
-        this.inputListDocumentTypes = new ArrayList<>();
-        this.outputListDocumentTypes = new ArrayList<>();
     }
 
-    public Activity(String name) {
+    public ActivityDto(String name) {
         this.name = name;
         this.inputList = new ArrayList<>();
         this.outputList = new ArrayList<>();
-        this.inputListDocumentTypes = new ArrayList<>();
-        this.outputListDocumentTypes = new ArrayList<>();
     }
 
     public Long getId() {
@@ -50,35 +47,35 @@ public class Activity implements Serializable {
         this.name = name;
     }
 
-    public List<Document> getInputList() {
+    public List<DocumentDto> getInputList() {
         return inputList;
     }
 
-    public void setInputList(List<Document> inputList) {
+    public void setInputList(List<DocumentDto> inputList) {
         this.inputList = inputList;
     }
 
-    public List<Document> getOutputList() {
+    public List<DocumentDto> getOutputList() {
         return outputList;
     }
 
-    public void setOutputList(List<Document> outputList) {
+    public void setOutputList(List<DocumentDto> outputList) {
         this.outputList = outputList;
     }
 
-    public List<Long> getInputListDocumentTypes() {
+    public List<DocumentType> getInputListDocumentTypes() {
         return inputListDocumentTypes;
     }
 
-    public void setInputListDocumentTypes(List<Long> inputListDocumentTypes) {
+    public void setInputListDocumentTypes(List<DocumentType> inputListDocumentTypes) {
         this.inputListDocumentTypes = inputListDocumentTypes;
     }
 
-    public List<Long> getOutputListDocumentTypes() {
+    public List<DocumentType> getOutputListDocumentTypes() {
         return outputListDocumentTypes;
     }
 
-    public void setOutputListDocumentTypes(List<Long> outputListDocumentTypes) {
+    public void setOutputListDocumentTypes(List<DocumentType> outputListDocumentTypes) {
         this.outputListDocumentTypes = outputListDocumentTypes;
     }
 
@@ -100,7 +97,7 @@ public class Activity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Activity other = (Activity) obj;
+        final ActivityDto other = (ActivityDto) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }

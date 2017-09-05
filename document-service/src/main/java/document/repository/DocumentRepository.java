@@ -5,7 +5,7 @@
  */
 package document.repository;
 
-import document.domain.Document;
+import document.model.Document;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

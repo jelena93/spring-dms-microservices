@@ -5,8 +5,8 @@
  */
 package gateway.service;
 
-import gateway.dto.Activity;
 import gateway.dto.Process;
+import gateway.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,12 @@ public class ProcessService {
         process = oAuth2RestTemplate.postForObject(PROCESS_SERVICE + "/add", process, Process.class);
         System.out.println("response: " + process);
         return process;
+    }
+
+    public Activity save(Activity activity) {
+        System.out.println("saveActivity: " + activity);
+        activity = oAuth2RestTemplate.postForObject(PROCESS_SERVICE + "/activity/add", activity, Activity.class);
+        return activity;
     }
 
 }

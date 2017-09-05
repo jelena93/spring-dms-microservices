@@ -5,23 +5,22 @@
  */
 package gateway.controller;
 
-import gateway.dto.Activity;
 import gateway.dto.Company;
 import gateway.dto.Descriptor;
 import gateway.dto.Document;
 import gateway.dto.DocumentType;
 import gateway.dto.MessageDto;
 import gateway.dto.User;
+import gateway.model.Activity;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
-import gateway.service.DocumentTypeService;
+import gateway.service.DescriptorService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -38,10 +37,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- *
- * @author jelena
- */
 @Controller
 @RequestMapping("/documents")
 public class DocumentController {
@@ -51,7 +46,7 @@ public class DocumentController {
     @Autowired
     private DocumentService documentService;
     @Autowired
-    private DocumentTypeService documentTypeService;
+    private DescriptorService descriptorService;
     @Autowired
     ProcessService processService;
     @Autowired
@@ -60,11 +55,8 @@ public class DocumentController {
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView save(Principal principal) {
         ModelAndView mv = new ModelAndView("add_document");
-        List<DocumentType> documentTypes = documentTypeService.findAll();
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
-        mv.addObject("documentTypes", documentTypes);
-        mv.addObject("action_type_processes_search", "add_document");
         mv.addObject("company", company);
         return mv;
     }
@@ -82,35 +74,37 @@ public class DocumentController {
     public ModelAndView save(Principal principal, String inputOutput, MultipartFile file,
             long docType, HttpServletRequest request, long activityID, Long existingDocumentID) {
         Activity activity = processService.findOneActivity(activityID);
-        DocumentType documentType = documentTypeService.findOne(docType);
-        List<Descriptor> descriptors = documentType.getDescriptors();
+        System.out.println("activity:" + activity);
+        DocumentType documentType = descriptorService.findOne(docType);
+        System.out.println("documentType:" + documentType);
         List<Descriptor> newDescriptors = new ArrayList<>();
-        for (Descriptor descriptor : descriptors) {
+        for (Descriptor descriptor : documentType.getDescriptors()) {
             if (descriptor.getValue() == null) {
                 String key = descriptor.getDescriptorKey();
                 String value = request.getParameter(key).trim();
-                descriptor.setValue(value);
-                Descriptor newDescriptor = new Descriptor(key, descriptor.getValue(), docType, descriptor.getDescriptorType());
+                Descriptor newDescriptor = new Descriptor(key, descriptor, value, docType, descriptor.getDescriptorType());
                 newDescriptors.add(newDescriptor);
+                System.out.println("novi desc" + newDescriptor);
             }
         }
+        List<Long> newDescriptorsIds = descriptorService.save(newDescriptors);
         Document document = new Document();
         boolean found = false;
-        if (existingDocumentID != null) {
-            List<Document> documents;
-            if (inputOutput.equals("input")) {
-                documents = activity.getInputList();
-            } else {
-                documents = activity.getInputList();
-            }
-            for (Document doc : documents) {
-                if (Objects.equals(existingDocumentID, doc.getId())) {
-                    document = doc;
-                    found = true;
-                    break;
-                }
-            }
-        }
+//        if (existingDocumentID != null) {
+//            List<Document> documents;
+//            if (inputOutput.equals("input")) {
+//                documents = activity.getInputList();
+//            } else {
+//                documents = activity.getInputList();
+//            }
+//            for (DocumentDto doc : documents) {
+//                if (Objects.equals(existingDocumentID, doc.getId())) {
+//                    document = doc;
+//                    found = true;
+//                    break;
+//                }
+//            }
+//        }
         document.setFileName(file.getOriginalFilename());
         document.setFileType(file.getContentType());
         try {
@@ -120,27 +114,32 @@ public class DocumentController {
             mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_ERROR, ex.getMessage()));
             return mv;
         }
-        document.setDescriptors(newDescriptors);
-        if (!found) {
-            if (inputOutput.equals("input")) {
-                activity.getInputList().add(document);
-            } else {
-                activity.getOutputList().add(document);
-            }
-        }
-//        activityService.save(activity);
-        ModelAndView mv = new ModelAndView("add_document");
-        List<DocumentType> documentTypes = documentTypeService.findAll();
-        mv.addObject("documentTypes", documentTypes);
-        mv.addObject("action_type_processes_search", "add_document");
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
-        mv.addObject("company", company);
-        if (found) {
-            mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, "Document successfully edited"));
-        } else {
-            mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, "Document successfully added"));
+        document.setCompanyId(company.getId());
+        document.setDescriptors(newDescriptorsIds);
+        documentType.getDescriptors().addAll(newDescriptors);
+        System.out.println("new doc" + documentType);
+        System.out.println("document" + document);
+        document = documentService.save(document);
+        if (!found) {
+            if (inputOutput.equals("input")) {
+                activity.getInputList().add(document.getId());
+            } else {
+                activity.getOutputList().add(document.getId());
+            }
         }
+        System.out.println("activity" + activity);
+        processService.save(activity);
+        ModelAndView mv = new ModelAndView("add_document");
+        List<DocumentType> documentTypes = descriptorService.findAll();
+        mv.addObject("documentTypes", documentTypes);
+        mv.addObject("company", company);
+//        if (found) {
+//            mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, "Document successfully edited"));
+//        } else {
+        mv.addObject("message", new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, "Document successfully added"));
+//        }
         return mv;
     }
 

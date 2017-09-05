@@ -7,7 +7,7 @@ package document.controller;
 
 import document.dto.MessageDto;
 import document.repository.DocumentRepository;
-import document.domain.Document;
+import document.model.Document;
 import java.util.List;
 import javax.management.Descriptor;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,11 @@ public class DocumentServiceController {
         }
         return documentRepository.findAll();
 //        return documentRepository.findByDescriptorsDescriptorKey(query);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Document addDocument(@RequestBody Document document) {
+        return documentRepository.save(document);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
