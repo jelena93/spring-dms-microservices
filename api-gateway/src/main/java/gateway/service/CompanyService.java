@@ -5,7 +5,7 @@
  */
 package gateway.service;
 
-import gateway.dto.Company;
+import gateway.model.Company;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

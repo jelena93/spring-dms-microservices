@@ -5,7 +5,7 @@
  */
 package gateway.controller;
 
-import gateway.dto.Company;
+import gateway.model.Company;
 import gateway.dto.MessageDto;
 import gateway.dto.User;
 import gateway.service.CompanyService;

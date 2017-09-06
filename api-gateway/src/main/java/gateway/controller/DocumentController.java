@@ -5,16 +5,15 @@
  */
 package gateway.controller;
 
-import gateway.dto.Company;
+import gateway.model.Company;
 import gateway.dto.Descriptor;
-import gateway.dto.Document;
+import gateway.model.Document;
 import gateway.dto.DocumentType;
 import gateway.dto.MessageDto;
 import gateway.dto.User;
 import gateway.model.Activity;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
-import gateway.service.DescriptorService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.io.IOException;
@@ -46,8 +45,6 @@ public class DocumentController {
     @Autowired
     private DocumentService documentService;
     @Autowired
-    private DescriptorService descriptorService;
-    @Autowired
     ProcessService processService;
     @Autowired
     private UserService userService;
@@ -75,7 +72,7 @@ public class DocumentController {
             long docType, HttpServletRequest request, long activityID, Long existingDocumentID) {
         Activity activity = processService.findOneActivity(activityID);
         System.out.println("activity:" + activity);
-        DocumentType documentType = descriptorService.findOne(docType);
+        DocumentType documentType = documentService.findOneDocumentType(docType);
         System.out.println("documentType:" + documentType);
         List<Descriptor> newDescriptors = new ArrayList<>();
         for (Descriptor descriptor : documentType.getDescriptors()) {
@@ -87,7 +84,7 @@ public class DocumentController {
                 System.out.println("novi desc" + newDescriptor);
             }
         }
-        List<Long> newDescriptorsIds = descriptorService.save(newDescriptors);
+        List<Long> newDescriptorsIds = documentService.save(newDescriptors);
         Document document = new Document();
         boolean found = false;
 //        if (existingDocumentID != null) {
@@ -132,7 +129,7 @@ public class DocumentController {
         System.out.println("activity" + activity);
         processService.save(activity);
         ModelAndView mv = new ModelAndView("add_document");
-        List<DocumentType> documentTypes = descriptorService.findAll();
+        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
         mv.addObject("documentTypes", documentTypes);
         mv.addObject("company", company);
 //        if (found) {

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gateway.model;
+package gateway.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import gateway.dto.Descriptor;
 import java.io.Serializable;
 import java.util.List;
@@ -16,8 +15,6 @@ public class DocumentDto implements Serializable {
     private Long id;
     private String fileType;
     private String fileName;
-    @JsonIgnore
-    private byte[] fileContent;
     private List<Descriptor> descriptors;
 
     public DocumentDto() {
@@ -45,14 +42,6 @@ public class DocumentDto implements Serializable {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public byte[] getFileContent() {
-        return fileContent;
-    }
-
-    public void setFileContent(byte[] fileContent) {
-        this.fileContent = fileContent;
     }
 
     public List<Descriptor> getDescriptors() {

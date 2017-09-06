@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.descriptor.service;
+package document.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -46,24 +48,20 @@ public class Descriptor implements Serializable {
     @Column(name = "descriptor_key")
     @NotNull
     private String descriptorKey;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "descriptor_type", nullable = false)
     private DescriptorType descriptorType;
-
     @Column(name = "NUMBER_VALUE")
     private Long longValue;
-
     @Column(name = "DOUBLE_VALUE")
     private Double doubleValue;
-
     @Column(name = "DATE_VALUE")
     @Temporal(TemporalType.DATE)
     private Date dateValue;
-
     @Column(name = "STRING_VALUE")
     private String stringValue;
-
     private final String DATE_FORMAT = "dd.MM.yyyy";
+    @Transient
+    private Object value;
 
     public Descriptor() {
     }
@@ -176,33 +174,42 @@ public class Descriptor implements Serializable {
                     if (value instanceof String) {
                         Integer valueInt = Integer.parseInt(value.toString());
                         longValue = (valueInt).longValue();
+                        this.value = longValue;
                     } else {
                         longValue = ((Integer) value).longValue();
+                        this.value = longValue;
                     }
                     doubleValue = longValue.doubleValue();
                 } else if (Long.class.equals(paramClass)) {
                     if (value instanceof String) {
                         Long valueLong = Long.parseLong(value.toString());
                         longValue = (valueLong);
+                        this.value = longValue;
                     } else {
                         longValue = ((Long) value);
+                        this.value = longValue;
                     }
                     doubleValue = longValue.doubleValue();
                 } else if (Double.class.equals(paramClass)) {
                     if (value instanceof String) {
                         Double valueDouble = Double.parseDouble(value.toString());
                         doubleValue = (valueDouble);
+                        this.value = doubleValue;
                     } else {
                         doubleValue = ((Double) value);
+                        this.value = doubleValue;
                     }
                     longValue = doubleValue.longValue();
                 } else if (String.class.equals(paramClass)) {
                     stringValue = (String) value;
+                    this.value = stringValue;
                 } else if (Date.class.equals(paramClass)) {
                     try {
                         dateValue = new SimpleDateFormat(DATE_FORMAT).parse(value.toString());
+                        this.value = dateValue;
                     } catch (ParseException ex) {
                         dateValue = (Date) value;
+                        this.value = dateValue;
                     }
                 }
             }

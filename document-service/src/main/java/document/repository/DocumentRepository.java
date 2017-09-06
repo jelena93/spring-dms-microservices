@@ -16,8 +16,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
 //    List<Document> findByDescriptorsDescriptorKey(String descriptorKey);
-
     List<Document> findByCompanyId(Long companyId);
 
     List<Document> findByFileName(String fileName);
+
+    List<Document> findByIdIn(List<Long> ids);
 }

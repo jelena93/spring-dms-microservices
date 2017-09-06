@@ -5,6 +5,7 @@
  */
 package document.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,8 +40,9 @@ public class Document implements Serializable {
     private String fileName;
     @Column(name = "file_content", length = 1024 * 1024 * 25)
     @NotNull
+    @JsonIgnore
     private byte[] fileContent;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "document_descriptors")
     private List<Long> descriptors = new ArrayList<Long>();
 

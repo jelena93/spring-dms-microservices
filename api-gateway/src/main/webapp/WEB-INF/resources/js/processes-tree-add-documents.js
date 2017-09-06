@@ -36,7 +36,7 @@ $(document).ready(function () {
 function setDescriptors(docType) {
     $.ajax({
         type: "GET",
-        url: action_url_document_type_api + "/" + docType.value,
+        url: action_url_document_type_api + "/document-types/" + docType.value,
         beforeSend: function (request) {
             request.setRequestHeader(header, token);
         },
@@ -104,6 +104,7 @@ function getActivityInfo(id) {
 }
 function displayActivityInfo(activity) {
     var inputList = "";
+    console.log(activity)
     for (var i = 0; i < activity.inputList.length; i++) {
         inputList += '<div class="panel-group" id="accordion">' +
                 '<div class="panel panel-default">' +

@@ -23,7 +23,6 @@
         <module>process-service</module>
         <module>user-service</module>
         <module>document-service</module>
-        <module>descriptor-service</module>
         <module>../../Documents/NetBeansProjects/spring-cloud-event-sourcing-example/shopping-cart-service</module>
     </modules>
 

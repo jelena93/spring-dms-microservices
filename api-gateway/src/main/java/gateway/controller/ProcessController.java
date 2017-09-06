@@ -5,7 +5,7 @@
  */
 package gateway.controller;
 
-import gateway.dto.Company;
+import gateway.model.Company;
 import gateway.dto.DocumentType;
 import gateway.dto.Process;
 import gateway.dto.MessageDto;
@@ -13,7 +13,6 @@ import gateway.dto.User;
 import gateway.model.Activity;
 import gateway.service.CompanyService;
 import gateway.service.DocumentService;
-import gateway.service.DescriptorService;
 import gateway.service.ProcessService;
 import gateway.service.UserService;
 import java.security.Principal;
@@ -41,8 +40,6 @@ public class ProcessController {
     private CompanyService companyService;
     @Autowired
     private DocumentService documentService;
-    @Autowired
-    private DescriptorService documentTypeService;
 
     @RequestMapping(path = "/add", method = RequestMethod.GET)
     public ModelAndView addProcess(Principal principal) {
@@ -50,7 +47,7 @@ public class ProcessController {
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());
         mv.addObject("company", company);
-        List<DocumentType> documentTypes = documentTypeService.findAll();
+        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
         mv.addObject("documentTypes", documentTypes);
         return mv;
     }
@@ -90,7 +87,7 @@ public class ProcessController {
             processService.save(process);
         }
         ModelAndView mv = new ModelAndView("add_process");
-        List<DocumentType> documentTypes = documentTypeService.findAll();
+        List<DocumentType> documentTypes = documentService.findAllDocumentTypes();
         mv.addObject("documentTypes", documentTypes);
         User loggedUser = userService.findOne(principal.getName());
         Company company = companyService.findOne(loggedUser.getCompanyId());

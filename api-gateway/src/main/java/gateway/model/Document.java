@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gateway.dto;
+package gateway.model;
 
 import java.util.List;
 import java.util.Objects;

@@ -43,7 +43,7 @@ public class ProcessService {
 
     public Activity save(Activity activity) {
         System.out.println("saveActivity: " + activity);
-        activity = oAuth2RestTemplate.postForObject(PROCESS_SERVICE + "/activity/add", activity, Activity.class);
+        activity = oAuth2RestTemplate.postForObject(PROCESS_SERVICE + "/activity", activity, Activity.class);
         return activity;
     }
 

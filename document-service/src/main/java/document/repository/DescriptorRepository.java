@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.descriptor.service;
+package document.repository;
 
+import document.model.Descriptor;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

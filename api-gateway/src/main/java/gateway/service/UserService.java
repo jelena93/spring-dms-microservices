@@ -5,7 +5,7 @@
  */
 package gateway.service;
 
-import gateway.dto.Company;
+import gateway.model.Company;
 import gateway.dto.Role;
 import gateway.dto.User;
 import java.util.Arrays;

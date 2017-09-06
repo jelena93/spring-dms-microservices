@@ -5,7 +5,7 @@
  */
 package gateway.dto;
 
-import gateway.model.DocumentDto;
+import gateway.model.Document;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ public class ActivityDto implements Serializable {
 
     private Long id;
     private String name;
-    private List<DocumentDto> inputList;
-    private List<DocumentDto> outputList;
+    private List<Document> inputList;
+    private List<Document> outputList;
     private List<DocumentType> inputListDocumentTypes = new ArrayList<>();
     private List<DocumentType> outputListDocumentTypes = new ArrayList<>();
 
@@ -47,19 +47,19 @@ public class ActivityDto implements Serializable {
         this.name = name;
     }
 
-    public List<DocumentDto> getInputList() {
+    public List<Document> getInputList() {
         return inputList;
     }
 
-    public void setInputList(List<DocumentDto> inputList) {
+    public void setInputList(List<Document> inputList) {
         this.inputList = inputList;
     }
 
-    public List<DocumentDto> getOutputList() {
+    public List<Document> getOutputList() {
         return outputList;
     }
 
-    public void setOutputList(List<DocumentDto> outputList) {
+    public void setOutputList(List<Document> outputList) {
         this.outputList = outputList;
     }
 

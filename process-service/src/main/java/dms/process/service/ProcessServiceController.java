@@ -65,6 +65,12 @@ public class ProcessServiceController {
         return new ResponseEntity<>(process, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/activity", method = RequestMethod.POST)
+    public Activity saveActivity(@RequestBody Activity activity) throws Exception {
+        System.out.println("saveActivity " + activity);
+        return activityRepository.save(activity);
+    }
+
     @RequestMapping(path = "/activity/{id}", method = RequestMethod.GET)
     public ResponseEntity<Activity> showActivity(@PathVariable("id") long id) throws Exception {
         Activity activity = activityRepository.findOne(id);

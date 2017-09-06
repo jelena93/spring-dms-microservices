@@ -8,6 +8,9 @@ package document.controller;
 import document.dto.MessageDto;
 import document.repository.DocumentRepository;
 import document.model.Document;
+import document.model.DocumentType;
+import document.repository.DescriptorRepository;
+import document.repository.DocumentTypeRepository;
 import java.util.List;
 import javax.management.Descriptor;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +34,42 @@ public class DocumentServiceController {
 
     @Autowired
     DocumentRepository documentRepository;
+    @Autowired
+    private DescriptorRepository descriptorRepository;
+    @Autowired
+    private DocumentTypeRepository documentTypeRepository;
+
+    @RequestMapping(value = "document-type", method = RequestMethod.GET)
+    public List<DocumentType> getDocumentTypes() {
+        List<DocumentType> documentTypes = documentTypeRepository.findAll();
+        return documentTypes;
+    }
+
+    @RequestMapping(value = "/document-types")
+    public List<DocumentType> findDocumentTypesByIds(@RequestBody List<Long> ids) {
+        List<DocumentType> documentTypes = documentTypeRepository.findByIdIn(ids);
+        for (DocumentType documentType : documentTypes) {
+            System.out.println("doc" + documentType);
+        }
+        return documentTypes;
+    }
+
+    @RequestMapping(value = "/document-type/{id}", method = RequestMethod.GET)
+    public DocumentType findByDocumentType(@PathVariable("id") Long id) {
+        return documentTypeRepository.findOne(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public void updateDocumentType(@RequestBody DocumentType documentType) {
+        System.out.println("updating " + documentType);
+        documentTypeRepository.save(documentType);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public List<document.model.Descriptor> addDescriptors(@RequestBody List<document.model.Descriptor> descriptors) {
+        System.out.println("adding " + descriptors);
+        return descriptorRepository.save(descriptors);
+    }
 
     @RequestMapping(value = "/{company}/search", method = RequestMethod.GET)
     public List<Document> search(@PathVariable("company") Long company, String query) {
@@ -44,6 +83,12 @@ public class DocumentServiceController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Document addDocument(@RequestBody Document document) {
         return documentRepository.save(document);
+    }
+
+    @RequestMapping(value = "/ids")
+    public List<Document> findDocumentByIds(@RequestBody List<Long> ids) {
+        List<Document> documents = documentRepository.findByIdIn(ids);
+        return documents;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

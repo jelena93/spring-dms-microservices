@@ -110,7 +110,7 @@
         <put-attribute name="action_url_processes_api" value="api/processes" cascade="true" />  
         <put-attribute name="action_url_show_activity_api" value="processes/activity" cascade="true" />  
         <put-attribute name="action_url_document_validation_api" value="api/documents/validation" cascade="true" />  
-        <put-attribute name="action_url_document_type_api" value="api/descriptors" cascade="true" />  
+        <put-attribute name="action_url_document_type_api" value="api/documents" cascade="true" />  
         <put-attribute name="process_tree" value="/WEB-INF/views/pages/process_tree.jsp" cascade="true"/>  
         <put-attribute name="document" value="/WEB-INF/views/pages/document.jsp" cascade="true"/>  
         <put-attribute name="activity_info" value="/WEB-INF/views/pages/activity_info.jsp" cascade="true"/>  
