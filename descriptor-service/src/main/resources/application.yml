@@ -1,0 +1,28 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: descriptor-service
+  http:
+    multipart:
+     max-file-size: 128KB
+     max-request-size: 128KB
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/descriptor?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    username: admin
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+eureka:
+  instance:
+      hostname: localhost
+      port: 8761
+  client:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+add-to-db: true

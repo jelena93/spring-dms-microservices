@@ -27,19 +27,6 @@ public class MessageDto {
         this.messageText = messageText;
     }
 
-    public MessageDto(String messageType, String messageText, String messageAction) {
-        this.messageType = messageType;
-        this.messageText = messageText;
-        this.messageAction = messageAction;
-    }
-
-    public MessageDto(String messageType, String messageText, Object messageData, String messageAction) {
-        this.messageType = messageType;
-        this.messageText = messageText;
-        this.messageData = messageData;
-        this.messageAction = messageAction;
-    }
-
     public String getMessageType() {
         return messageType;
     }

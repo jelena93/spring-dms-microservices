@@ -1,0 +1,57 @@
+package descriptor;
+
+import descriptor.domain.Descriptor;
+import descriptor.domain.DescriptorType;
+import descriptor.domain.DocumentType;
+import descriptor.service.DescriptorTypeService;
+import descriptor.service.DocumentTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+
+@Component
+public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
+
+    @Value("${add-to-db}")
+    private boolean addToDb;
+
+    @Autowired
+    DocumentTypeService documentTypeService;
+    @Autowired
+    DescriptorTypeService descriptorTypeService;
+
+    @Override
+    public void onApplicationEvent(final ApplicationReadyEvent event) {
+        if (addToDb) {
+            DescriptorType descriptorTypeInteger = new DescriptorType(Integer.class);
+            DescriptorType descriptorTypeDouble = new DescriptorType(Double.class);
+            DescriptorType descriptorTypeDate = new DescriptorType(Date.class);
+
+            descriptorTypeInteger = descriptorTypeService.save(descriptorTypeInteger);
+            descriptorTypeDouble = descriptorTypeService.save(descriptorTypeDouble);
+            descriptorTypeDate = descriptorTypeService.save(descriptorTypeDate);
+
+            DocumentType documentType = new DocumentType("Nalog za placanje");
+            Descriptor descriptor = new Descriptor("Broj naloga", documentType, descriptorTypeInteger);
+            documentType.getDescriptors().add(descriptor);
+            descriptor = new Descriptor("Suma", documentType, descriptorTypeDouble);
+            documentType.getDescriptors().add(descriptor);
+            descriptor = new Descriptor("Datum", documentType, descriptorTypeDate);
+            documentType.getDescriptors().add(descriptor);
+            documentTypeService.save(documentType);
+
+            documentType = new DocumentType("Otpremnica dobavljaca");
+            documentType = documentTypeService.save(documentType);
+            descriptor = new Descriptor("Broj otpremnice", documentType, descriptorTypeInteger);
+            documentType.getDescriptors().add(descriptor);
+            descriptor = new Descriptor("Datum", documentType, descriptorTypeDate);
+            documentType.getDescriptors().add(descriptor);
+            documentTypeService.save(documentType);
+        }
+
+    }
+}
