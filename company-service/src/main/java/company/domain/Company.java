@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package company;
+package company.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,17 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- *
- * @author jelena
- */
 @Entity
 @Table(name = "company")
 public class Company implements Serializable {
 
+    private static final long serialVersionUID = -5946299712984511388L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "name")
     @NotNull
@@ -109,15 +102,13 @@ public class Company implements Serializable {
             return false;
         }
         final Company other = (Company) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString() {
-        return "Company{" + "id=" + id + ", name=" + name + ", pib=" + pib + ", identificationNumber=" + identificationNumber + ", headquarters=" + headquarters + '}';
+        return "Company{" + "id=" + id + ", name=" + name + ", pib=" + pib + ", identificationNumber="
+                + identificationNumber + ", headquarters=" + headquarters + '}';
     }
 
 }
