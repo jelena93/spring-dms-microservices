@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kakawait</groupId>
+    <groupId>org.dms</groupId>
     <artifactId>spring-dms-microservices</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -16,14 +16,14 @@
     </parent>
 
     <modules>
-        <module>api-gateway</module>
-        <module>service-registry</module>
+        <module>service-discovery</module>
         <module>auth-service</module>
+        <module>api-gateway</module>
         <module>company-service</module>
-        <module>process-service</module>
         <module>user-service</module>
+        <module>process-service</module>
+		<module>descriptor-service</module>
         <module>document-service</module>
-		<module>descriptor-service</module>		
   </modules>
 
     <properties>
@@ -55,55 +55,6 @@
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>prepare-dockerfile</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.build.directory}/docker</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>${project.basedir}/src/main/docker</directory>
-                                        <filtering>true</filtering>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.4.13</version>
-                    <executions>
-                        <execution>
-                            <id>build-image</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <imageName>kakawait/${project.artifactId}</imageName>
-                        <imageTags>
-                            <imageTag>${project.version}</imageTag>
-                            <imageTag>latest</imageTag>
-                        </imageTags>
-                        <forceTags>true</forceTags>
-                        <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
-                        <resources>
-                            <resource>
-                                <targetPath>/</targetPath>
-                                <directory>${project.build.directory}</directory>
-                                <include>${project.build.finalName}.jar</include>
-                                <filtering>true</filtering>
-                            </resource>
-                        </resources>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

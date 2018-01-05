@@ -10,9 +10,9 @@
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>com.kakawait</groupId>
+        <groupId>org.dms</groupId>
         <artifactId>spring-dms-microservices</artifactId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <properties>
@@ -81,19 +81,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>docker</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 </project>
