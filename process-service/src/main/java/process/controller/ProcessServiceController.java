@@ -13,14 +13,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import process.command.ActivityCmd;
+import process.command.ProcessCmd;
 import process.domain.Activity;
 import process.domain.Process;
 import process.dto.TreeDto;
-import process.repository.ActivityRepository;
-import process.repository.ProcessRepository;
+import process.mapper.ActivityMapper;
+import process.mapper.ProcessMapper;
+import process.service.ActivityService;
+import process.service.ProcessService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,13 +31,17 @@ import java.util.List;
 public class ProcessServiceController {
 
     @Autowired
-    ProcessRepository processRepository;
+    ProcessService processService;
     @Autowired
-    ActivityRepository activityRepository;
+    ActivityService activityService;
+    @Autowired
+    ProcessMapper processMapper;
+    @Autowired
+    ActivityMapper activityMapper;
 
     @GetMapping(path = "/all/{user}")
     public ResponseEntity<List<TreeDto>> getProcesses(@PathVariable String user) {
-        List<Process> processes = processRepository.findByUser(user);
+        List<Process> processes = processService.findByUser(user);
         List<TreeDto> data = new ArrayList<>();
         for (Process process : processes) {
             TreeDto p;
@@ -60,7 +67,7 @@ public class ProcessServiceController {
 
     @GetMapping(path = "/process/{id}")
     public ResponseEntity<Process> showProcess(@PathVariable long id) throws Exception {
-        Process process = processRepository.findOne(id);
+        Process process = processService.findOne(id);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
@@ -68,70 +75,52 @@ public class ProcessServiceController {
     }
 
     @PostMapping(path = "/process")
-    public Process addProcess(@RequestBody Process process) {
-        System.out.println("saving " + process);
-        return processRepository.save(process);
+    public Process addProcess(@RequestBody ProcessCmd processCmd) {
+        System.out.println("addProcess " + processCmd);
+        return processService.save(processMapper.mapToEntity(processCmd));
     }
 
     @PutMapping(path = "/process/{id}")
-    public ResponseEntity<String> editProcess(@PathVariable Long id, String name, boolean primitive) {
-        Process process = processRepository.findOne(id);
+    public ResponseEntity<String> editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd) {
+        Process process = processService.findOne(id);
         if (process == null) {
             return new ResponseEntity<>("Process is null", HttpStatus.NOT_FOUND);
         }
-        process.setName(name);
-        if (process.isPrimitive() != primitive && primitive) {
-            deleteChildrenFromProcess(process);
-        }
-        if (process.isPrimitive() != primitive && !primitive) {
-            process.getActivityList().clear();
-        }
-        process.setPrimitive(primitive);
-        processRepository.save(process);
+        processMapper.updateEntityFromModel(processCmd, process);
+        processService.update(processCmd, process);
         return new ResponseEntity<>("Process successfully edited", HttpStatus.OK);
-    }
-
-    @PostMapping(path = "/activity")
-    public Activity addActivity(@RequestBody Activity activity) throws Exception {
-        System.out.println("addActivity " + activity);
-        return activityRepository.save(activity);
     }
 
     @GetMapping(path = "/activity/{id}")
     public ResponseEntity<Activity> getActivity(@PathVariable long id) throws Exception {
-        Activity activity = activityRepository.findOne(id);
+        Activity activity = activityService.findOne(id);
+        System.out.println(activity);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/activity")
+    public ResponseEntity<String> addActivity(@RequestBody ActivityCmd activityCmd) throws Exception {
+        System.out.println("addActivity " + activityCmd);
+        Process process = processService.findOne(activityCmd.getProcessId());
+        Activity activity = activityMapper.mapToEntity(activityCmd);
+        process.getActivityList().add(activity);
+        processService.save(process);
+        return new ResponseEntity<>("Activity successfully added", HttpStatus.OK);
+    }
+
     @PutMapping(path = "/activity/{id}")
-    public ResponseEntity<String> editActivity(@PathVariable Long id, String name, Long[] inputListDocumentTypes,
-                                               Long[] outputListDocumentTypes) {
-        Activity activity = activityRepository.findOne(id);
-        activity.setName(name);
-        activity.setInputListDocumentTypes(Arrays.asList(inputListDocumentTypes));
-        activity.setOutputListDocumentTypes(Arrays.asList(outputListDocumentTypes));
-        activityRepository.save(activity);
-        return new ResponseEntity<>("Activity successfully edited", HttpStatus.OK);
-    }
-
-    private List<Process> getChildren(Process p, List<Process> lista) {
-        List<Process> children = new ArrayList<>();
-        for (Process process : lista) {
-            if (p != null && p.equals(process.getParent())) {
-                children.add(process);
-            }
+    public ResponseEntity<String> editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd)
+            throws Exception {
+        Activity activity = activityService.findOne(id);
+        if (activity == null) {
+            throw new Exception("There is no activity with id " + id);
         }
-        return children;
-    }
-
-    private void deleteChildrenFromProcess(Process process) {
-        System.out.println("deleting child from " + process.getName());
-        Process child = processRepository.findByParent(process);
-        System.out.println("child: " + child.getName());
-        processRepository.delete(child);
+        activityMapper.updateEntityFromModel(activityCmd, activity);
+        activityService.save(activity);
+        return new ResponseEntity<>("Activity successfully edited", HttpStatus.OK);
     }
 
     @InitBinder

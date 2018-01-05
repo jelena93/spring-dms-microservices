@@ -1,5 +1,6 @@
 server:
   port: 8083
+add-to-db: true
 spring:
   application:
     name: descriptor-service
@@ -8,12 +9,12 @@ spring:
      max-file-size: 128KB
      max-request-size: 128KB
   jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        hbm2ddl:
-          auto: create-drop
+    hibernate:
+      show_sql: true
+      format_sql: true
+      hbm2ddl:
+      auto: create-drop
+      use-new-id-generator-mappings: true
   datasource:
     url: jdbc:mysql://localhost:3306/descriptor?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: admin
@@ -25,4 +26,3 @@ eureka:
       port: 8761
   client:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
-add-to-db: true

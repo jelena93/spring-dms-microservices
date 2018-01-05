@@ -1,3 +1,10 @@
 package process.service;
 
-public interface ActivityService {}
+import process.domain.Activity;
+
+public interface ActivityService {
+
+    Activity save(Activity activity);
+
+    Activity findOne(Long id);
+}
