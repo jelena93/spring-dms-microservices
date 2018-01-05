@@ -13,14 +13,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableSwagger2
 @EnableDiscoveryClient
-public class CompanyApplication {
+@EnableSwagger2
+public class CompanyServiceApplication {
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                                                      .apis(RequestHandlerSelectors.basePackage("process.controller"))
+                                                      .apis(RequestHandlerSelectors.basePackage("company.controller"))
                                                       .paths(PathSelectors.any()).build();
     }
 
@@ -31,7 +31,7 @@ public class CompanyApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(CompanyApplication.class, args);
+        SpringApplication.run(CompanyServiceApplication.class, args);
     }
 
 }

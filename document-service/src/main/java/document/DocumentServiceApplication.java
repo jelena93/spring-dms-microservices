@@ -21,7 +21,7 @@ public class DocumentServiceApplication {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                                                      .apis(RequestHandlerSelectors.basePackage("descriptor.controller"))
+                                                      .apis(RequestHandlerSelectors.basePackage("document.controller"))
                                                       .paths(PathSelectors.any()).build();
     }
 
