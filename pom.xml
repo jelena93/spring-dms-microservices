@@ -24,6 +24,7 @@
         <module>process-service</module>
 		<module>descriptor-service</module>
         <module>document-service</module>
+        <module>gate</module>
   </modules>
 
     <properties>

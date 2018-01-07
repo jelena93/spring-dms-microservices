@@ -1,0 +1,1 @@
+<h2>Welcome ${user}</h2>
