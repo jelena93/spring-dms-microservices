@@ -1,7 +1,11 @@
 package company.controller;
 
+import company.command.UserCmd;
 import company.domain.Company;
+import company.domain.User;
+import company.mapper.UserMapper;
 import company.service.CompanyService;
+import company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +22,14 @@ import java.util.List;
 public class CompanyServiceController {
 
     private final CompanyService companyService;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
-    public CompanyServiceController(CompanyService companyService) {
+    public CompanyServiceController(CompanyService companyService, UserService userService, UserMapper userMapper) {
         this.companyService = companyService;
+        this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping(value = "/all")
@@ -34,8 +42,7 @@ public class CompanyServiceController {
         if (query == null || query.isEmpty()) {
             return new ResponseEntity<>(companyService.findAll(), HttpStatus.OK);
         }
-        return new ResponseEntity<>(companyService.findByNameContainingOrHeadquartersContaining(query, query),
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(companyService.search(query), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
@@ -58,6 +65,12 @@ public class CompanyServiceController {
     public Company editCompany(@RequestBody Company company) {
         System.out.println("editCompany " + company);
         return companyService.save(company);
+    }
+
+    @PostMapping("/user")
+    public User addUser(@RequestBody UserCmd userCmd) throws Exception {
+        System.out.println("addUserToCompany " + userCmd);
+        return userService.save(userMapper.mapToEntity(userCmd));
     }
 
 }

@@ -1,6 +1,9 @@
 package company.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -14,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -21,7 +25,7 @@ import javax.validation.constraints.NotNull;
 public class User implements Serializable {
     private static final long serialVersionUID = -4127224650485567860L;
     @Id
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotNull
     private String email;
     @Column(name = "password")
@@ -33,7 +37,6 @@ public class User implements Serializable {
     @NotNull
     @Column(name = "surname")
     private String surname;
-    @NotNull
     @JoinColumn(name = "company_id")
     @OneToOne
     private Company company;
@@ -41,7 +44,9 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user") })
     @Column(name = "user_role")
-    private List<Role> roles;
+    @NotEmpty(message = "At least one role is required")
+    @Valid
+    private List<Role> roles = new ArrayList<>();
 
     public User() { }
 

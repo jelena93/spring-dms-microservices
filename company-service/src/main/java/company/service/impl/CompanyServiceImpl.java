@@ -2,6 +2,7 @@ package company.service.impl;
 
 import company.domain.Company;
 import company.repository.CompanyRepository;
+import company.repository.CompanySpecs;
 import company.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> findByNameContainingOrHeadquartersContaining(String name, String headquarters) {
-        return companyRepository.findByNameContainingOrHeadquartersContaining(name, headquarters);
-    }
-
-    @Override
     public Company findOne(long id) {
         return companyRepository.findOne(id);
+    }
+
+    public List<Company> search(String searchTerm) {
+        return companyRepository.findAll(CompanySpecs.searchCompanies(searchTerm));
     }
 }

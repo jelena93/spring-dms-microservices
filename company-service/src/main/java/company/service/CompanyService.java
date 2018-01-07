@@ -10,7 +10,7 @@ public interface CompanyService {
 
     Company save(Company company);
 
-    List<Company> findByNameContainingOrHeadquartersContaining(String name, String headquarters);
+    List<Company> search(String searchTerm);
 
     Company findOne(long id);
 }

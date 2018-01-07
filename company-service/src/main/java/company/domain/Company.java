@@ -1,13 +1,19 @@
 package company.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +38,9 @@ public class Company implements Serializable {
     @Column(name = "headquarters")
     @NotNull
     private String headquarters;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "company_id")
+    private List<User> userList = new ArrayList<>();
 
     public Company() {
     }
@@ -83,6 +92,14 @@ public class Company implements Serializable {
         this.headquarters = headquarters;
     }
 
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -107,8 +124,8 @@ public class Company implements Serializable {
 
     @Override
     public String toString() {
-        return "Company{" + "id=" + id + ", name=" + name + ", pib=" + pib + ", identificationNumber="
-                + identificationNumber + ", headquarters=" + headquarters + '}';
+        return "Company{" + "id=" + id + ", name='" + name + '\'' + ", pib='" + pib + '\'' + ", identificationNumber='"
+                + identificationNumber + '\'' + ", headquarters='" + headquarters + '\'' + ", userList=" + userList
+                + '}';
     }
-
 }
