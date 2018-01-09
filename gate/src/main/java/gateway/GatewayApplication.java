@@ -6,10 +6,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableZuulProxy
+@EnableSwagger2
 public class GatewayApplication extends SpringBootServletInitializer{
 	
 	 private static Class<GatewayApplication> applicationClass = GatewayApplication.class;

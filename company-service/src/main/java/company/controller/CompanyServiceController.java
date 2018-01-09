@@ -32,12 +32,12 @@ public class CompanyServiceController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping("/all")
     public List<Company> getCompanies() {
         return companyService.findAll();
     }
 
-    @GetMapping(value = "/search")
+    @GetMapping("/search")
     public ResponseEntity<List<Company>> search(String query) {
         if (query == null || query.isEmpty()) {
             return new ResponseEntity<>(companyService.findAll(), HttpStatus.OK);
@@ -45,7 +45,12 @@ public class CompanyServiceController {
         return new ResponseEntity<>(companyService.search(query), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping({ "/swagger", "/docs" })
+    public String redirectSwagger() {
+        return "redirect:/swagger-ui.html";
+    }
+
+    @GetMapping("/{id}")
     public Company getCompanyById(@PathVariable long id) throws Exception {
         Company company = companyService.findOne(id);
         if (company == null) {

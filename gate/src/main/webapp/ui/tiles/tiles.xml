@@ -76,8 +76,6 @@
 
     <definition name="home" extends="default_layout">
         <put-attribute name="active_role" value="ADMIN" cascade="true"/>
-        <put-attribute name="action_url_search_companies_api" value="api/companies/search" cascade="true"/>
-        <put-attribute name="action_url_edit_company_api" value="api/companies/edit" cascade="true"/>
         <put-attribute name="search_documents" value="/ui/jsp/view/search_documents.jsp" cascade="true"/>
         <put-attribute name="action_url_search_documents_api" value="api/documents/search" cascade="true"/>
         <put-attribute name="action_url_download_document" value="documents/document/download" cascade="true"/>

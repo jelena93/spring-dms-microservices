@@ -11,9 +11,9 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String losgin(Authentication principal) {
-        if (principal == null) {
-            return "redirect:login";
-        }
+//        if (principal == null) {
+//            return "redirect:login";
+//        }
         return "home";
     }
 }

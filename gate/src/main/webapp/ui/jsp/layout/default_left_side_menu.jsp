@@ -7,17 +7,17 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <c:forEach var="role" items="${authorities}">
-            <c:if test = "${role == 'ADMIN'}">
+        <%--<c:forEach var="role" items="${authorities}">--%>
+            <%--<c:if test = "${role == 'ADMIN'}">--%>
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
-                        <span>Companies</span>
+                        <span>Company</span>
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="${pageContext.request.contextPath}/companies/search">Search companies</a></li>                          
-                        <li><a class="" href="${pageContext.request.contextPath}/companies/add">Add company</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/company/search">Search company</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/company/add">Add company</a></li>                          
                     </ul>
                 </li>  
                 <li class="sub-menu">
@@ -30,20 +30,20 @@
                         <li><a class="" href="${pageContext.request.contextPath}/users/add">Add user</a></li>                          
                     </ul>
                 </li>  
-            </c:if>
-            <c:if test = "${role == 'USER'}">
+            <%--</c:if>--%>
+            <%--<c:if test = "${role == 'USER'}">--%>
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
-                        <span>Processes</span>
+                        <span>Process</span>
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
                         <li><a class="" href="${pageContext.request.contextPath}/processes/add">Add process / Activity</a></li>                          
                     </ul>
                 </li>  
-            </c:if>
-            <c:if test = "${role == 'UPLOADER'}">
+            <%--</c:if>--%>
+            <%--<c:if test = "${role == 'UPLOADER'}">--%>
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
@@ -55,7 +55,7 @@
                         <li><a class="" href="${pageContext.request.contextPath}/documents/search">Search documents</a></li>                          
                     </ul>
                 </li> 
-            </c:if>
-        </c:forEach>
+            <%--</c:if>--%>
+        <%--</c:forEach>--%>
     </ul>
 </div>

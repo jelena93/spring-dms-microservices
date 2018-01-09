@@ -1,21 +1,27 @@
 package gateway.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/companies")
+@RequestMapping("/company")
 public class CompanyController {
 
-    //    @Autowired
-    //    private CompanyService companyService;
-    //    @Autowired
-    //    private UserService userService;
-
-    @RequestMapping(path = "/add", method = RequestMethod.GET)
+    @GetMapping(path = "/add")
     public String addCompany() {
         return "add_company";
+    }
+
+    @GetMapping(path = "/search")
+    public String searchCompany() {
+        return "search_companies";
+    }
+
+    @GetMapping(path = "/{companyId}")
+    public String showCompany(@PathVariable long companyId) {
+        return "company";
     }
 
     //    @RequestMapping(path = "/add", method = RequestMethod.POST)
@@ -33,15 +39,6 @@ public class CompanyController {
     //        return mv;
     //    }
     //
-    //    @RequestMapping(path = "/company/{id}", method = RequestMethod.GET)
-    //    public ModelAndView showCompany(@PathVariable("id") long id) {
-    //        Company company = companyService.findOne(id);
-    //        List<User> usersOfCompany = userService.findByCompanyId(id);
-    //        ModelAndView mv = new ModelAndView("company");
-    //        mv.addObject("company", company);
-    //        mv.addObject("users", usersOfCompany);
-    //        return mv;
-    //    }
     //
     //    @RequestMapping(path = "/company/{id}", method = RequestMethod.POST)
     //    public String editCompany(@PathVariable("id") long id, String name, String pib, String
@@ -53,5 +50,4 @@ public class CompanyController {
     ////        mv.addObject("users", usersOfCompany);
     //        return "redirect:/companies/company/" + id;
     //    }
-
 }
