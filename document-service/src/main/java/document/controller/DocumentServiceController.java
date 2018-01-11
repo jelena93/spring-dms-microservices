@@ -1,7 +1,5 @@
 package document.controller;
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import document.command.DocumentCmd;
 import document.domain.Document;
@@ -9,25 +7,20 @@ import document.dto.DocumentDto;
 import document.elasticsearch.DocumentIndexer;
 import document.elasticsearch.service.DocumentService;
 import document.mapper.DocumentMapper;
-import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,12 +34,17 @@ import javax.servlet.http.Part;
 @RequestMapping("/")
 public class DocumentServiceController {
 
+    private final DocumentMapper documentMapper;
+    private final DocumentIndexer documentIndexer;
+    private final DocumentService documentService;
+
     @Autowired
-    DocumentMapper documentMapper;
-    @Autowired
-    DocumentIndexer documentIndexer;
-    @Autowired
-    DocumentService documentService;
+    public DocumentServiceController(DocumentMapper documentMapper, DocumentIndexer documentIndexer,
+                                     DocumentService documentService) {
+        this.documentMapper = documentMapper;
+        this.documentIndexer = documentIndexer;
+        this.documentService = documentService;
+    }
 
     @GetMapping("/search")
     public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query)
@@ -58,6 +56,7 @@ public class DocumentServiceController {
         for (SearchHit hit : searchResponse.getHits()) {
             documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
         }
+        System.out.println(searchResponse.getHits());
         return documents;
     }
 
@@ -99,61 +98,37 @@ public class DocumentServiceController {
         System.out.println(document);
         return document.getId() + "";
     }
-    //    @PostMapping
-    //    public String addDocument(@RequestParam MultipartFile file, @RequestParam Long ownerId,
-    //                                   @RequestParam(required = false) List<Descriptor> descriptors) throws
-    // Exception {
-    //        Document document = new Document();
-    //        try {
-    //            SearchResponse sr = documentService.getMaxId();
-    //            Max max = sr.getAggregations().get("latest");
-    //            document.setId((long) max.getValue());
-    //        } catch (Exception e) {
-    //            document.setId(1L);
-    //            System.out.println(e.getMessage());
-    //        }
-    //
-    //        document.setOwnerId(ownerId);
-    //        document.setFileName(file.getOriginalFilename());
-    //        document.setDescriptors(descriptors);
-    //        document.setContent(Base64.getUrlEncoder().encodeToString(file.getBytes()));
-    //        documentIndexer.indexDocument(document);
-    //        return " You successfully uploaded " + file.getOriginalFilename() + "!";
-    //    }
 
-    //    @RequestMapping(method = RequestMethod.POST)
-    //    public List<Descriptor> addDescriptors(@RequestBody List<Descriptor>
-    // descriptors) {
-    //        System.out.println("adding " + descriptors);
-    //        return descriptorRepository.save(descriptors);
-    //    }
-
-    //    @RequestMapping(value = "/{company}/search", method = RequestMethod.GET)
-    //    public List<Document> search(@PathVariable("company") Long company, String query) {
-    //        if (query == null || query.isEmpty()) {
-    //            return documentRepository.findAll();
+    @GetMapping(path = "/{ownerId}/{documentId}")
+    public String showFile(@PathVariable long ownerId, @PathVariable long documentId) throws IOException {
+        SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
+        ObjectMapper mapper = new ObjectMapper();
+        for (SearchHit hit : searchResponse.getHits()) {
+            DocumentDto documentDto = mapper.readValue(hit.getSourceAsString(), DocumentDto.class);
+            return documentDto.getAttachment().getContent();
+        }
+        return null;
+    }
+    //    @RequestMapping(path = "/document/{id}", method = RequestMethod.GET)
+    //    public ResponseEntity<byte[]> showFile(@PathVariable("id") long id) {
+    //        Document document = documentService.findOne(id);
+    //        if (document == null) {
+    //            throw new CustomException("There is no document with id " + id, "400");
     //        }
-    //        return documentRepository.findAll();
-    ////        return documentRepository.findByDescriptorsDescriptorKey(query);
+    //        HttpHeaders header = new HttpHeaders();
+    //        header.setContentType(MediaType.valueOf(document.getFileType()));
+    //        header.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + document.getFileName());
+    //        header.setContentLength(document.getFileContent().length);
+    //        return new ResponseEntity<>(document.getFileContent(), header, HttpStatus.OK);
     //    }
-    //
-    //    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    //    public Document addDocument(@RequestBody Document descriptor) {
-    //        return documentRepository.save(descriptor);
-    //    }
-    //
-    //    @RequestMapping(value = "/ids")
-    //    public List<Document> findDocumentByIds(@RequestBody List<Long> ids) {
-    //        List<Document> documents = documentRepository.findByIdIn(ids);
-    //        return documents;
-    //    }
-
-    //    @RequestMapping(value = "/search/{companyId}", method = RequestMethod.GET)
-    //    public List<Document> getDocumentTypes(@PathVariable("companyId") Long companyId, String query) {
-    //        if (query == null || query.isEmpty()) {
-    //            return documentRepository.findByCompanyId(companyId);
-    //        }
-    //        return documentRepository.findByCompanyId(companyId);
+    //    @RequestMapping(path = "/document/download/{id}", method = RequestMethod.GET)
+    //    public ResponseEntity<byte[]> downloadFile(@PathVariable long ownerId, @PathVariable long documentId) {
+    //        Document document = documentService.findOne(id);
+    //        HttpHeaders header = new HttpHeaders();
+    //        header.setContentType(MediaType.valueOf(document.getFileType()));
+    //        header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + document.getFileName());
+    //        header.setContentLength(document.getFileContent().length);
+    //        return new ResponseEntity<>(document.getFileContent(), header, HttpStatus.OK);
     //    }
 
     //    @RequestMapping(path = "/validation", method = RequestMethod.POST)

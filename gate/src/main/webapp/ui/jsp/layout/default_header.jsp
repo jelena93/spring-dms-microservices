@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <tiles:importAttribute name="site_name"/>
-<tiles:importAttribute name="action_logout_url"/>
 <tiles:importAttribute name="active_role" ignore="true"/>
 <div class="toggle-nav">
     <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
@@ -20,7 +19,7 @@
                 <li class="eborder-top">
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/${action_logout_url}"><i class="icon_key_alt"></i> Log Out</a>
+                    <a href="${pageContext.request.contextPath}/logout"><i class="icon_key_alt"></i> Log Out</a>
                 </li>
             </ul>
         </li>

@@ -15,6 +15,7 @@ zuul:
     company-service: /api/company/**
     process-service: /api/process/**
     document-service: /api/document/**
+    descriptor-service: /api/descriptor/**
     uaa-service:
       sensitiveHeaders:
       path: /uaa/**

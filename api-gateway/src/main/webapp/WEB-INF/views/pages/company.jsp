@@ -4,7 +4,7 @@
 <script language=javascript>
     var action_url_edit_company_api = "${pageContext.request.contextPath}/${action_url_edit_company_api}";
 </script>
-<script src="<c:url value="/resources/js/edit-company.js" />"></script>
+<script src="<c:url value="/resources/js/company.js" />"></script>
 <div id="profile" >
     <section class="panel">
         <header class="panel-heading"> ${title}</header>

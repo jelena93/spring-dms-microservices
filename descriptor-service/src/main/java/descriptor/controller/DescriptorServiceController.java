@@ -9,7 +9,6 @@ import descriptor.mapper.DocumentTypeMapper;
 import descriptor.service.DocumentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,9 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +33,17 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/")
 public class DescriptorServiceController {
+    private final DocumentTypeService documentTypeService;
+    private final DocumentTypeMapper documentTypeMapper;
+    private final RestTemplate restTemplate;
+
     @Autowired
-    DocumentTypeService documentTypeService;
-    @Autowired
-    DocumentTypeMapper documentTypeMapper;
-    @Autowired
-    RestTemplate restTemplate;
+    public DescriptorServiceController(DocumentTypeService documentTypeService, DocumentTypeMapper documentTypeMapper,
+                                       RestTemplate restTemplate) {
+        this.documentTypeService = documentTypeService;
+        this.documentTypeMapper = documentTypeMapper;
+        this.restTemplate = restTemplate;
+    }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadImage(DocumentCmd documentCmd, HttpServletRequest request) throws Exception {

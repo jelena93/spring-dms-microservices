@@ -27,7 +27,7 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="${pageContext.request.contextPath}/users/add">Add user</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/user/add">Add user</a></li>
                     </ul>
                 </li>  
             <%--</c:if>--%>
@@ -39,7 +39,7 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="${pageContext.request.contextPath}/processes/add">Add process / Activity</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/process/add">Add process / Activity</a></li>
                     </ul>
                 </li>  
             <%--</c:if>--%>
@@ -51,8 +51,8 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="${pageContext.request.contextPath}/documents/add">Add document</a></li>                          
-                        <li><a class="" href="${pageContext.request.contextPath}/documents/search">Search documents</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/document/add">Add document</a></li>
+                        <li><a class="" href="${pageContext.request.contextPath}/document/search">Search documents</a></li>
                     </ul>
                 </li> 
             <%--</c:if>--%>

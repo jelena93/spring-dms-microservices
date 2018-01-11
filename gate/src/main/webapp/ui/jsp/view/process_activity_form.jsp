@@ -4,7 +4,7 @@
 <tiles:importAttribute name="label_name"/>
 <tiles:importAttribute name="input_name"/>
 <div class="form" id="info" style="display: none">
-    <form class="form-validate form-horizontal " id="register_form" method="POST">
+    <form class="form-validate form-horizontal" id="register_form">
         <div class="form-group ">
             <label for="name" class="control-label col-lg-2">Name <span class="required">*</span></label>
             <div class="col-lg-8">

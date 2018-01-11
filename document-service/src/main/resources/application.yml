@@ -3,12 +3,6 @@ server:
 spring:
   application:
     name: document-service
-#  data:
-#    elasticsearch:
-#      host: localhost
-#      port: 9300
-#      cluster-name: documents
-#      cluster-nodes: localhost:9200
   http:
     multipart:
      max-file-size: 128KB

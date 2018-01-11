@@ -24,7 +24,6 @@
         <put-attribute name="left_side_menu" value="/ui/jsp/layout/default_left_side_menu.jsp"/>
         <put-attribute name="modal_question" value="/ui/jsp/view/modal_question.jsp"/>
         <put-attribute name="site_content" value="/ui/jsp/view/dashboard.jsp"/>
-        <put-attribute name="action_logout_url" value="logout" cascade="true"/>
         <put-attribute name="message" value="/ui/jsp/view/message.jsp" cascade="true"/>
         <put-list-attribute name="cssList" cascade="true">
             <add-attribute value="/resources/css/bootstrap.min.css"/>
@@ -51,7 +50,6 @@
         <put-attribute name="shortcut_icon" value="/resources/img/favicon.jpg" cascade="true"/>
         <put-attribute name="head" value="/ui/jsp/layout/default_head.jsp"/>
         <put-attribute name="title" value="Login" cascade="true"/>
-        <put-attribute name="action_login_url" value="login"/>
         <put-list-attribute name="cssList" cascade="true">
             <add-attribute value="/resources/css/bootstrap.min.css"/>
             <add-attribute value="/resources/css/bootstrap-theme.css"/>
@@ -77,9 +75,6 @@
     <definition name="home" extends="default_layout">
         <put-attribute name="active_role" value="ADMIN" cascade="true"/>
         <put-attribute name="search_documents" value="/ui/jsp/view/search_documents.jsp" cascade="true"/>
-        <put-attribute name="action_url_search_documents_api" value="api/documents/search" cascade="true"/>
-        <put-attribute name="action_url_download_document" value="documents/document/download" cascade="true"/>
-        <put-attribute name="action_url_display_document" value="documents/document" cascade="true"/>
     </definition>
 
     <definition name="add_company" extends="home">
@@ -89,7 +84,6 @@
 
     <definition name="search_companies" extends="home">
         <put-attribute name="title" value="Search companies"/>
-        <put-attribute name="action_url_show_company" value="companies/company" cascade="true"/>
         <put-attribute name="site_content" value="/ui/jsp/view/search_companies.jsp"/>
     </definition>
 
@@ -104,11 +98,6 @@
         <put-attribute name="title" value="Add process"/>
         <put-attribute name="label_name" value="Parent" cascade="true"/>
         <put-attribute name="input_name" value="parent" cascade="true"/>
-        <put-attribute name="action_url_processes_api" value="api/processes" cascade="true"/>
-        <put-attribute name="action_url_show_process_api" value="api/processes/process" cascade="true"/>
-        <put-attribute name="action_url_show_activity_api" value="processes/activity" cascade="true"/>
-        <put-attribute name="action_url_edit_process_api" value="api/processes/edit" cascade="true"/>
-        <put-attribute name="action_url_edit_activity_api" value="api/processes/activity/edit" cascade="true"/>
         <put-attribute name="process_tree" value="/ui/jsp/view/process_tree.jsp" cascade="true"/>
         <put-attribute name="process_activity_form" value="/ui/jsp/view/process_activity_form.jsp"
                        cascade="true"/>
@@ -119,10 +108,6 @@
         <put-attribute name="title" value="Add document"/>
         <put-attribute name="label_name" value="Process" cascade="true"/>
         <put-attribute name="input_name" value="processId" cascade="true"/>
-        <put-attribute name="action_url_processes_api" value="api/processes" cascade="true"/>
-        <put-attribute name="action_url_show_activity_api" value="processes/activity" cascade="true"/>
-        <put-attribute name="action_url_document_validation_api" value="api/documents/validation" cascade="true"/>
-        <put-attribute name="action_url_document_type_api" value="api/documents" cascade="true"/>
         <put-attribute name="process_tree" value="/ui/jsp/view/process_tree.jsp" cascade="true"/>
         <put-attribute name="document" value="/ui/jsp/view/document.jsp" cascade="true"/>
         <put-attribute name="activity_info" value="/ui/jsp/view/activity_info.jsp" cascade="true"/>

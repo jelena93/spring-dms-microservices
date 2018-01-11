@@ -2,7 +2,7 @@ server:
   port: 8761
 spring:
   application:
-    name: service-registry
+    name: service-discovery
 eureka:
   instance:
     hostname: localhost

@@ -11,26 +11,34 @@ import org.elasticsearch.search.aggregations.metrics.max.MaxAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 public class DocumentService {
 
-    @Autowired
-    private ElasticClient elasticClient;
+    private final ElasticClient elasticClient;
 
-    public SearchResponse getMaxId() throws IOException {
+    @Autowired
+    public DocumentService(ElasticClient elasticClient) {this.elasticClient = elasticClient;}
+
+    public SearchResponse getMaxId() {
         MaxAggregationBuilder aggregation = AggregationBuilders.max("id").field("id");
         return elasticClient.getClient().prepareSearch("documents").setTypes("documents").addAggregation(aggregation)
                             .execute().actionGet();
     }
 
-    public SearchResponse getAllDocuments() throws IOException {
+    public SearchResponse getAllDocuments() {
         return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(matchAllQuery())
                             .execute().actionGet();
     }
 
-    public SearchResponse searchDocumentsForOwner(Long ownerId, String query, int limit, int page) throws IOException {
+    public SearchResponse findOne(long ownerId, long documentId) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
+        boolQuery.must(QueryBuilders.termQuery("id", documentId));
+        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
+                            .actionGet();
+    }
+
+    public SearchResponse searchDocumentsForOwner(Long ownerId, String query, int limit, int page) {
         int offset = (page - 1) * limit;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));

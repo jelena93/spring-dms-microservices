@@ -1,16 +1,17 @@
 package gateway.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    //    @Autowired
-    //    private UserService userService;
-    //    @Autowired
-    //    private CompanyService companyService;
+    @GetMapping(path = "/add")
+    public String addCompany() {
+        return "add_user";
+    }
 
     //    @RequestMapping(path = "/add", method = RequestMethod.GET)
     //    public ModelAndView getAddUser() {

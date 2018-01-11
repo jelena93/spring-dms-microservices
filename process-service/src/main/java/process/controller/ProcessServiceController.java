@@ -2,8 +2,6 @@ package process.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -40,7 +38,7 @@ public class ProcessServiceController {
     ActivityMapper activityMapper;
 
     @GetMapping(path = "/all/{user}")
-    public ResponseEntity<List<TreeDto>> getProcesses(@PathVariable String user) {
+    public List<TreeDto> getProcesses(@PathVariable String user) {
         List<Process> processes = processService.findByUser(user);
         List<TreeDto> data = new ArrayList<>();
         for (Process process : processes) {
@@ -62,16 +60,16 @@ public class ProcessServiceController {
                 }
             }
         }
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return data;
     }
 
     @GetMapping(path = "/process/{id}")
-    public ResponseEntity<Process> showProcess(@PathVariable long id) throws Exception {
+    public Process showProcess(@PathVariable long id) throws Exception {
         Process process = processService.findOne(id);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
-        return new ResponseEntity<>(process, HttpStatus.OK);
+        return process;
     }
 
     @PostMapping(path = "/process")
@@ -81,46 +79,45 @@ public class ProcessServiceController {
     }
 
     @PutMapping(path = "/process/{id}")
-    public ResponseEntity<String> editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd) {
+    public Process editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd) throws Exception {
         Process process = processService.findOne(id);
         if (process == null) {
-            return new ResponseEntity<>("Process is null", HttpStatus.NOT_FOUND);
+            throw new Exception("There is no process with id " + id);
         }
         processMapper.updateEntityFromModel(processCmd, process);
         processService.update(processCmd, process);
-        return new ResponseEntity<>("Process successfully edited", HttpStatus.OK);
+        return process;
     }
 
     @GetMapping(path = "/activity/{id}")
-    public ResponseEntity<Activity> getActivity(@PathVariable long id) throws Exception {
+    public Activity getActivity(@PathVariable long id) throws Exception {
         Activity activity = activityService.findOne(id);
         System.out.println(activity);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
-        return new ResponseEntity<>(activity, HttpStatus.OK);
+        return activity;
     }
 
     @PostMapping(path = "/activity")
-    public ResponseEntity<String> addActivity(@RequestBody ActivityCmd activityCmd) throws Exception {
+    public Process addActivity(@RequestBody ActivityCmd activityCmd) throws Exception {
         System.out.println("addActivity " + activityCmd);
         Process process = processService.findOne(activityCmd.getProcessId());
         Activity activity = activityMapper.mapToEntity(activityCmd);
         process.getActivityList().add(activity);
-        processService.save(process);
-        return new ResponseEntity<>("Activity successfully added", HttpStatus.OK);
+        process = processService.save(process);
+        return process;
     }
 
     @PutMapping(path = "/activity/{id}")
-    public ResponseEntity<String> editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd)
-            throws Exception {
+    public Activity editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd) throws Exception {
         Activity activity = activityService.findOne(id);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
         activityMapper.updateEntityFromModel(activityCmd, activity);
         activityService.save(activity);
-        return new ResponseEntity<>("Activity successfully edited", HttpStatus.OK);
+        return activity;
     }
 
     @InitBinder

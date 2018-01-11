@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>           
 <div class="form" id="form-document" style="display: none;">
-    <form class="form-validate form-horizontal " id="register_form" method="POST" onsubmit="return onSubmitForm()" enctype="multipart/form-data">
+    <form class="form-validate form-horizontal" id="register_form">
         <div class="form-group">
             <label class="control-label col-lg-2" for="inputSuccess">Input or output</label>
             <div class="col-lg-10">
@@ -39,7 +39,7 @@
         <input type="hidden" name="existingDocumentID" id="existingDocumentID"/>
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
-                <button class="btn btn-primary pull-right" type="submit">${title}</button>
+                <button class="btn btn-primary pull-right" type="button" onclick="saveDocument()">${title}</button>
             </div>
         </div>
     </form>
