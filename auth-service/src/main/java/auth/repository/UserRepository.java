@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package auth;
+package auth.repository;
 
+import auth.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

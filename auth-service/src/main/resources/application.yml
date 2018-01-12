@@ -1,24 +1,22 @@
 spring:
   application:
-    name: uaa-service
+    name: auth-service
   datasource:
-    url: jdbc:mysql://localhost:3306/dms_user?useSSL=false&useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 
+    url: jdbc:mysql://localhost:3306/auth?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    username: admin
+    password: admin
     driver-class: com.mysql.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
       ddl-auto: update
-# Define the port where the UAA server would be running
+
 server:
-  port: 8769
-  # Use different context-path to avoid session cookie overlapping
-  context-path: /uaa
+  port: 9999
+  context-path: /auth
   use-forward-headers: false
 
-# Define the Eureka server that handles service registration
 eureka:
   instance:
       hostname: localhost
@@ -27,7 +25,6 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 
-# Define security
 security:
   basic:
     enabled: false

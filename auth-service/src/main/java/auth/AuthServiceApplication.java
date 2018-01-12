@@ -1,5 +1,6 @@
 package auth;
 
+import auth.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -35,10 +36,10 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableWebSecurity
-public class UaaServiceApplication extends WebMvcConfigurerAdapter {
+public class AuthServiceApplication extends WebMvcConfigurerAdapter {
     
     public static void main(String[] args) {
-        SpringApplication.run(UaaServiceApplication.class, args);
+        SpringApplication.run(AuthServiceApplication.class, args);
     }
     
     @Bean
