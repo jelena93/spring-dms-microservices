@@ -12,6 +12,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.Size;
 
+//ADMIN, //kreira kompaniju, kreira korisnika i dodeljuje korisnika kompaniji
+//        USER, //kreira procese kompaniji
+//        UPLOADER //uploaduje dokumenta i unosi deskriptore
+
 @Entity
 public class User {
 
@@ -38,10 +42,8 @@ public class User {
     private String resetPasswordKey;
 
     @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "authority"))
+    @JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "username"), inverseJoinColumns =
+    @JoinColumn(name = "authority"))
     private Set<Authority> authorities;
 
     public String getUsername() {
@@ -102,12 +104,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         User user = (User) o;
 
-        if (!username.equals(user.username)) return false;
+        if (!username.equals(user.username)) { return false; }
 
         return true;
     }
@@ -119,14 +121,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", activated='" + activated + '\'' +
-                ", activationKey='" + activationKey + '\'' +
-                ", resetPasswordKey='" + resetPasswordKey + '\'' +
-                ", authorities=" + authorities +
-                '}';
+        return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\''
+                + ", activated='" + activated + '\'' + ", activationKey='" + activationKey + '\''
+                + ", resetPasswordKey='" + resetPasswordKey + '\'' + ", authorities=" + authorities + '}';
     }
 }

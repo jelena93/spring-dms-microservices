@@ -18,19 +18,17 @@ zuul:
     process-service: /api/process/**
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**
-    uaa-service:
-      path: /uaa/**
-      stripPrefix: false
-#      url: http://uaa-service/uaa/user
-
+    user:
+      path: /user/**
+      url: http://localhost:9999/uaa/user
 security:
   oauth2:
     client:
-      accessTokenUri: http://uaa-service/uaa/oauth/token
-      userAuthorizationUri: /uaa/oauth/authorize
+      accessTokenUri: http://localhost:9999/uaa/oauth/token
+      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
       clientId: ui1
       clientSecret: ui1-secret
     resource:
-      userInfoUri: http://uaa-service/uaa/user
+      userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false
   sessions: ALWAYS
