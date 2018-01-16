@@ -20,12 +20,10 @@
         <module>auth-service</module>
         <module>api-gateway</module>
         <module>company-service</module>
-        <module>user-service</module>
         <module>process-service</module>
-		<module>descriptor-service</module>
+        <module>descriptor-service</module>
         <module>document-service</module>
-        <module>gate</module>
-  </modules>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
