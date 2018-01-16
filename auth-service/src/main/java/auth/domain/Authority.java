@@ -1,4 +1,4 @@
-package com.rd.domain;
+package auth.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

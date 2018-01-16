@@ -1,8 +1,8 @@
-package com.rd.security;
+package auth;
 
-import com.rd.domain.Authority;
-import com.rd.domain.User;
-import com.rd.repository.UserRepository;
+import auth.domain.Authority;
+import auth.domain.User;
+import auth.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 
 @Component("userDetailsService")
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {

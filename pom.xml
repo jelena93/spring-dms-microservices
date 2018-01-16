@@ -25,7 +25,6 @@
 		<module>descriptor-service</module>
         <module>document-service</module>
         <module>gate</module>
-        <module>test-auth-service</module>
   </modules>
 
     <properties>

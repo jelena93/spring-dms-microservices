@@ -1,76 +1,48 @@
 package auth.domain;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
+import java.util.Set;
+
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "user")
-public class User implements Serializable {
+public class User {
 
     @Id
-    @Basic(optional = false)
-    @Column(name = "username")
-    @NotNull
+    @Column(updatable = false, nullable = false)
+    @Size(min = 0, max = 50)
     private String username;
-    @Column(name = "password")
-    @NotNull
+
+    @Size(min = 0, max = 500)
     private String password;
-    @NotNull
-    @Column(name = "name")
-    private String name;
-    @NotNull
-    @Column(name = "surname")
-    private String surname;
-    @Column(name = "company_id")
-    private Long companyId;
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_roles", joinColumns = {
-        @JoinColumn(name = "user")})
-    @Column(name = "user_role")
-    private List<Role> roles;
 
-    public User() {
-    }
+    @Email
+    @Size(min = 0, max = 50)
+    private String email;
 
-    public User(String username, String password, String name, String surname, Long companyId, List<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.companyId = companyId;
-        this.roles = roles;
-    }
+    private boolean activated;
 
-    public String getName() {
-        return name;
-    }
+    @Size(min = 0, max = 100)
+    @Column(name = "activationkey")
+    private String activationKey;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Size(min = 0, max = 100)
+    @Column(name = "resetpasswordkey")
+    private String resetPasswordKey;
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "authority"))
+    private Set<Authority> authorities;
 
     public String getUsername() {
         return username;
@@ -88,49 +60,73 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public boolean isActivated() {
+        return activated;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
+    }
+
+    public String getResetPasswordKey() {
+        return resetPasswordKey;
+    }
+
+    public void setResetPasswordKey(String resetPasswordKey) {
+        this.resetPasswordKey = resetPasswordKey;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 13 * hash + Objects.hashCode(this.username);
-        return hash;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
+        User user = (User) o;
+
+        if (!username.equals(user.username)) return false;
+
         return true;
     }
 
     @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
+    @Override
     public String toString() {
-        return username;
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", activated='" + activated + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                ", resetPasswordKey='" + resetPasswordKey + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

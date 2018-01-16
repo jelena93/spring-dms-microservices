@@ -1,4 +1,4 @@
-package com.rd.domain;
+package auth.domain;
 
 public class Greeting {
 

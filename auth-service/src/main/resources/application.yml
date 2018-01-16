@@ -1,21 +1,18 @@
+server:
+  port: 9999
+  context-path: /uaa
+
+security:
+  sessions: if-required
+
 spring:
   application:
-    name: auth-service
+      name: uaa-service
   datasource:
-    url: jdbc:mysql://localhost:3306/auth?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/testdb?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: admin
     password: admin
     driver-class: com.mysql.jdbc.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
-server:
-  port: 9999
-  context-path: /auth
-  use-forward-headers: false
 
 eureka:
   instance:
@@ -24,13 +21,3 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
-
-security:
-  basic:
-    enabled: false
-  user:
-    password: password
-  ignored: /css/**,/js/**,/favicon.ico,/webjars/**
-
-logging:
-  level.org.springframework.security: DEBUG
