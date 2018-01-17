@@ -13,6 +13,13 @@ public class Authority {
     @Size(min = 0, max = 50)
     private String name;
 
+    public Authority() {
+    }
+
+    public Authority(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -23,12 +30,12 @@ public class Authority {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         Authority authority = (Authority) o;
 
-        if (!name.equals(authority.name)) return false;
+        if (!name.equals(authority.name)) { return false; }
 
         return true;
     }
@@ -40,9 +47,7 @@ public class Authority {
 
     @Override
     public String toString() {
-        return "Authority{" +
-                "name='" + name + '\'' +
-                '}';
+        return "Authority{" + "name='" + name + '\'' + '}';
     }
 
 }

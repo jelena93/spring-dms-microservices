@@ -19,7 +19,7 @@ public class CustomSwaggerResourceProvider implements SwaggerResourcesProvider {
     @Override
     public List<SwaggerResource> get() {
         return Arrays.asList(
-                swaggerResource("company-service", "/company/api/v2/api-docs")
+                swaggerResource("process-service", "/process/api/v2/api-docs")
                 //, swaggerResource("auth-service", "/auth/v2/api-docs")
         );
     }

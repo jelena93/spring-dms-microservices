@@ -8,9 +8,6 @@ function getCompany(url) {
     $.ajax({
         type: "GET",
         url: "/api" + url,
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
         success: function (data) {
             fillForm(data);
         },
@@ -37,9 +34,9 @@ function saveCompany() {
             identificationNumber: $("#identificationNumber").val(),
             headquarters: $("#headquarters").val()
         }),
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             fillForm(data);
         },
@@ -67,9 +64,9 @@ function editCompany() {
             identificationNumber: $("#identificationNumber").val(),
             headquarters: $("#headquarters").val()
         }),
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             showMessage(data, "alert-success");
         },
@@ -85,11 +82,17 @@ function editCompany() {
 }
 
 function fillForm(company) {
+    console.log(company);
     $("#id").val(company.id);
     $("#name").val(company.name);
     $("#pib").val(company.pib);
     $("#identificationNumber").val(company.identificationNumber);
     $("#headquarters").val(company.headquarters);
+    $("#company-users tbody").html('');
+    for (var i = 0; i < company.userList.length; i++) {
+        $('#company-users tbody').append('<tr><td>' + company.userList[i].username + '</td><td>' + company.userList[i].name + '</td><td>' +
+            company.userList[i].surname + '</td></tr>');
+    }
 }
 
 function showMessage(data, messageType) {

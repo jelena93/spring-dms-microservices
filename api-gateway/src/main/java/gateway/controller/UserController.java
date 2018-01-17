@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     @GetMapping(path = "/add")
@@ -13,14 +13,6 @@ public class UserController {
         return "add_user";
     }
 
-    //    @RequestMapping(path = "/add", method = RequestMethod.GET)
-    //    public ModelAndView getAddUser() {
-    //        List<Company> companies = companyService.findAll();
-    //        ModelAndView mv = new ModelAndView("add_user");
-    //        mv.addObject("roles", getRoles());
-    //        mv.addObject("companies", companies);
-    //        return mv;
-    //    }
     //
     //    @RequestMapping(path = "/add", method = RequestMethod.POST)
     //    public ModelAndView save(String username, String password, String name, String surname,
@@ -54,12 +46,5 @@ public class UserController {
     //        return mv;
     //    }
     //
-    //    private List<Role> getRoles() {
-    //        List<Role> roles = new ArrayList<>();
-    //        roles.add(Role.ADMIN);
-    //        roles.add(Role.USER);
-    //        roles.add(Role.UPLOADER);
-    //        return roles;
-    //    }
 
 }

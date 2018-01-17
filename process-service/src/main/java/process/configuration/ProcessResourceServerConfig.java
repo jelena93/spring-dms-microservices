@@ -13,8 +13,12 @@ public class ProcessResourceServerConfig extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers("/**").and().authorizeRequests().
-                antMatchers("/**").access("hasRole('ROLE_USER')");
+        http.authorizeRequests()
+            .antMatchers("/swagge‌​r-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources",
+                         "/configuration/security", "/webjars/**", "/swagger-resources/configuration/ui",
+                         "/swagger-resources/configuration/security").permitAll();
+//            .and().authorizeRequests().
+//                    antMatchers("/**").access("hasRole('ROLE_USER')");
     }
 
 }

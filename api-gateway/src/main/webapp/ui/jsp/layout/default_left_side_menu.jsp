@@ -2,13 +2,13 @@
 <div id="sidebar"  class="nav-collapse ">
     <ul class="sidebar-menu">                
         <li class="active">
-            <a class="" href="${pageContext.request.contextPath}">
+            <a class="" href="/">
                 <i class="icon_house_alt"></i>
                 <span>Dashboard</span>
             </a>
         </li>
-        <%--<c:forEach var="role" items="${authorities}">--%>
-            <%--<c:if test = "${role == 'ADMIN'}">--%>
+        <c:forEach var="role" items="${authorities}">
+            <c:if test = "${role == 'ROLE_ADMIN'}">
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
@@ -30,8 +30,8 @@
                         <li><a class="" href="${pageContext.request.contextPath}/user/add">Add user</a></li>
                     </ul>
                 </li>  
-            <%--</c:if>--%>
-            <%--<c:if test = "${role == 'USER'}">--%>
+            </c:if>
+            <c:if test = "${role == 'ROLE_USER'}">
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
@@ -42,8 +42,8 @@
                         <li><a class="" href="${pageContext.request.contextPath}/process/add">Add process / Activity</a></li>
                     </ul>
                 </li>  
-            <%--</c:if>--%>
-            <%--<c:if test = "${role == 'UPLOADER'}">--%>
+            </c:if>
+            <c:if test = "${role == 'ROLE_UPLOADER'}">
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
@@ -55,7 +55,7 @@
                         <li><a class="" href="${pageContext.request.contextPath}/document/search">Search documents</a></li>
                     </ul>
                 </li> 
-            <%--</c:if>--%>
-        <%--</c:forEach>--%>
+            </c:if>
+        </c:forEach>
     </ul>
 </div>

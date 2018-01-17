@@ -9,9 +9,6 @@ function search(query) {
         type: "GET",
         url: "/api/document/search",
         data: {ownerId: 1, query: query},
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
         dataType: 'json',
         success: function (data) {
             var documentsHtml = "";

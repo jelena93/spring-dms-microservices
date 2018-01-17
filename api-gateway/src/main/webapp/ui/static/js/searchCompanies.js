@@ -1,7 +1,5 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-var total;
-// var selectedCompanyId = null;
 $(document).ready(function () {
     search('');
 });
@@ -11,9 +9,6 @@ function search(query) {
         type: "GET",
         url: "/api/company/search",
         data: {query: query},
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
         dataType: 'json',
         success: function (data) {
             $("#table-companies tbody").html('');
@@ -31,7 +26,7 @@ function search(query) {
                 var message = jQuery.parseJSON(request.responseText);
                 showMessage(message.messageText, message.messageType);
             } catch (e) {
-                console.log(request);
+                console.log(request.responseText);
             }
         }
     });

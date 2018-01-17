@@ -5,21 +5,12 @@
 
 <tiles-definitions>
 
-    <!--<definition name="mainLayout" template="/ui/jsp/layout/main.jsp">-->
-    <!--<put-attribute name="header" value="/ui/jsp/layout/header.jsp" />-->
-    <!--<put-attribute name="body" value="" />-->
-    <!--<put-attribute name="footer" value="/ui/jsp/layout/footer.jsp" />-->
-    <!--</definition>-->
-
-    <!--<definition name="dashboard" extends="mainLayout">-->
-    <!--<put-attribute name="body" value="/ui/jsp/view/dashboard.jsp" />-->
-    <!--</definition>-->
     <!-- Base Definition -->
     <definition name="default_layout" template="/ui/jsp/layout/default_layout.jsp">
         <put-attribute name="shortcut_icon" value="/resources/img/favicon.jpg" cascade="true"/>
         <put-attribute name="head" value="/ui/jsp/layout/default_head.jsp"/>
         <put-attribute name="title" value="Document management system" cascade="true"/>
-        <put-attribute name="site_name" value="dms" cascade="true"/>
+        <put-attribute name="site_name" value="Document Management System" cascade="true"/>
         <put-attribute name="header" value="/ui/jsp/layout/default_header.jsp"/>
         <put-attribute name="left_side_menu" value="/ui/jsp/layout/default_left_side_menu.jsp"/>
         <put-attribute name="modal_question" value="/ui/jsp/view/modal_question.jsp"/>
@@ -43,6 +34,7 @@
             <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"/>
             <add-attribute value="/resources/js/jquery.validate.min.js"/>
             <add-attribute value="/resources/js/form-validation-script.js"/>
+            <add-attribute value="/resources/js/common.js"/>
         </put-list-attribute>
     </definition>
     <!-- Login Page -->

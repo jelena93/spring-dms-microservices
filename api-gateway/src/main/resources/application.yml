@@ -18,8 +18,8 @@ zuul:
     process-service: /api/process/**
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**
-    user:
-      path: /user/**
+    uaa-service:
+      path: /uaa/**
       url: http://localhost:9999/uaa/user
 security:
   oauth2:

@@ -7,7 +7,7 @@
     <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i
             class="icon_menu"></i></div>
 </div>
-<a href="${pageContext.request.contextPath}" class="logo"><span class="lite">${site_name}</span></a>
+<a href="/" class="logo"><span class="lite">${site_name}</span></a>
 <div class="top-nav notification-row">
     <ul class="nav pull-right top-menu">
         <li class="dropdown">

@@ -19,7 +19,7 @@
         <module>service-discovery</module>
         <module>auth-service</module>
         <module>api-gateway</module>
-        <module>company-service</module>
+        <module>company-user-service</module>
         <module>process-service</module>
         <module>descriptor-service</module>
         <module>document-service</module>

@@ -49,9 +49,6 @@ function getInfo(url) {
     $.ajax({
         type: "GET",
         url: url,
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
         dataType: 'json',
         success: function (data) {
             $('#id').val(data.id);
@@ -140,9 +137,9 @@ function addProcess() {
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             $("#register_form").hide();
             $('#processes').jstree(true).refresh();
@@ -165,9 +162,9 @@ function addActivity() {
             inputListDocumentTypes: null,
             outputListDocumentTypes: null
         }),
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             $('#processes').jstree(true).refresh();
         },
@@ -209,9 +206,9 @@ function editProcess(url) {
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             canEdit = false;
             isSure = false;

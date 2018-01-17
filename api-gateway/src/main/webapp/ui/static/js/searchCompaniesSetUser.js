@@ -1,38 +1,52 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 var selectedCompanyId = null;
-var action_url_search_companies_api;
-function search(name) {
+$(document).ready(function () {
+    search('');
+    getRoles();
+});
+
+function getRoles() {
     $.ajax({
         type: "GET",
-        url: action_url_search_companies_api,
-        data: {name: name},
-        beforeSend: function (request) {
-            request.setRequestHeader(header, token);
+        url: "/api/company/roles",
+        dataType: 'json',
+        success: function (roles) {
+            $("#roles").html('');
+            for (var i = 0; i < roles.length; i++) {
+                var selected = i === 0 ? "selected" : "";
+                $("#roles").append('<option value="' + roles[i] + '"' + selected + '>' + roles[i] + '</option>');
+            }
         },
+        error: function (textStatus, errorThrown) {
+            alert(textStatus);
+        }
+    });
+}
+
+function search(query) {
+    $.ajax({
+        type: "GET",
+        url: "/api/company/search",
+        data: {query: query},
         dataType: 'json',
         success: function (data) {
             $("#table-companies-set-user tbody").html('');
             selectedCompanyId = null;
             for (var i = 0; i < data.length; i++) {
-                $('#table-companies-set-user tbody').
-                        append('<tr class="clickable-row" id="' + data[i].id + '"><td>' + data[i].id + '</td><td>' + data[i].name + '</td><td>' +
-                                data[i].pib + '</td><td>'
-                                + data[i].identificationNumber + '</td><td>' +
-                                data[i].headquarters
-                                + '</td></tr>');
+                $('#table-companies-set-user tbody').append('<tr class="clickable-row" id="' + data[i].id + '"><td>' + data[i].id + '</td><td>' + data[i].name + '</td><td>' +
+                    data[i].pib + '</td><td>'
+                    + data[i].identificationNumber + '</td><td>' +
+                    data[i].headquarters
+                    + '</td></tr>');
             }
         },
-        error: function (request, status, error) {
-            try {
-                var message = jQuery.parseJSON(request.responseText);
-                showMessage(message.messageText, message.messageType);
-            } catch (e) {
-                console.log(request);
-            }
+        error: function (textStatus, errorThrown) {
+            alert(textStatus);
         }
     });
 }
+
 $('#table-companies-set-user').on('click', '.clickable-row', function (event) {
     if ($(this).hasClass('active')) {
         $(this).removeClass('active');
@@ -55,19 +69,39 @@ $('#roles').change(function () {
         $("#companySection").show();
     }
 });
-function onSubmitForm() {
+
+function addUser() {
     var roles = $('#roles').val();
     if (roles === null) {
         return false;
     }
-    if (roles.length === 1 && roles[0] === "ADMIN") {
-        return true;
-    }
-    if (selectedCompanyId === null) {
+    if ((roles.length !== 1 && roles[0] !== "ADMIN") && selectedCompanyId === null) {
         $("#company").val(null);
         search("");
         return false;
     }
-
+    $.ajax({
+        type: "POST",
+        url: "/api/company/user",
+        contentType: "application/json",
+        dataType: 'json',
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
+        data: JSON.stringify({
+            name: $("#name").val(),
+            surname: $("#surname").val(),
+            username: $("#username").val(),
+            password: $("#password").val(),
+            roles: $("#roles").val(),
+            companyId: selectedCompanyId
+        }),
+        success: function (data) {
+            showSuccessMessage("User successfully added");
+        },
+        error: function (textStatus, errorThrown) {
+            showErrorMessage(textStatus);
+        }
+    });
     return true;
 }

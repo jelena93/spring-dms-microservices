@@ -74,9 +74,6 @@ function getActivityInfo(id) {
     $.ajax({
         type: "GET",
         url: "/api/process/activity" + "/" + id,
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
         dataType: 'json',
         success: function (data) {
             displayActivityInfo(data);
@@ -208,9 +205,9 @@ function saveDocument() {
         enctype: 'multipart/form-data',
         contentType: false,
         dataType: 'json',
-        // beforeSend: function (request) {
-        //     request.setRequestHeader(header, token);
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
             if (data.messageType === "question") {
                 if (data.messageAction === "edit") {
