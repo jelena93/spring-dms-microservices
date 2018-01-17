@@ -20,6 +20,13 @@ spring:
     username: admin
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
+security:
+  oauth2:
+    client:
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+      preferTokenInfo: false
+  sessions: NEVER
 eureka:
   instance:
       hostname: localhost
