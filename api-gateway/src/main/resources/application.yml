@@ -19,8 +19,11 @@ zuul:
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**
     uaa-service:
-      path: /uaa/**
-      url: http://localhost:9999/uaa/user
+         path: /uauser/**
+         url: http://localhost:9999/uaa/user
+#    uaa-service:
+#      path: /uaa/**
+#      url: http://localhost:9999/uaa/user
 security:
   oauth2:
     client:

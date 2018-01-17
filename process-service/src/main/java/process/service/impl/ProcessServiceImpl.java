@@ -31,8 +31,8 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public List<Process> findByUser(String user) {
-        return processRepository.findByUser(user);
+    public List<Process> findByOwnerId(long ownerId) {
+        return processRepository.findByOwnerId(ownerId);
     }
 
     @Override

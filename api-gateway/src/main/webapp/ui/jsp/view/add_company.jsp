@@ -42,4 +42,4 @@
         </section>
     </div>
 </div>
-<script src="<c:url value="/resources/js/company.js" />"></script>
+<script src="<c:url value="/resources/js/addCompany.js" />"></script>

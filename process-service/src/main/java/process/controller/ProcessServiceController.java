@@ -37,9 +37,9 @@ public class ProcessServiceController {
     @Autowired
     ActivityMapper activityMapper;
 
-    @GetMapping(path = "/all/{user}")
-    public List<TreeDto> getProcesses(@PathVariable String user) {
-        List<Process> processes = processService.findByUser(user);
+    @GetMapping(path = "/all/{ownerId}")
+    public List<TreeDto> getProcesses(@PathVariable long ownerId) {
+        List<Process> processes = processService.findByOwnerId(ownerId);
         List<TreeDto> data = new ArrayList<>();
         for (Process process : processes) {
             TreeDto p;

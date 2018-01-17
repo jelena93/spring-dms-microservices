@@ -19,4 +19,4 @@
     </div>
 </div>
 <script src="<c:url value="/resources/js/processes-tree.js" />"></script>
-<script>getProcessesForAddProcess("${user}");</script>
+<script>getProcessesForAddProcess();</script>

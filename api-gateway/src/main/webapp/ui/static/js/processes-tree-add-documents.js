@@ -41,11 +41,13 @@ function setDescriptors(docType) {
     });
 }
 
+var companyId = getCookie("companyId");
+
 function getProcessesForAddDocument(user) {
     $('#processes').jstree({
         'core': {
             'data': {
-                url: "/api/process/all/admin",
+                url: "/api/process/all/" + companyId,
                 'data': function (node) {
                     return {'id': node.id};
                 }
@@ -194,7 +196,7 @@ function saveDocument() {
     // return false;
     var data = new FormData();
     data.append("file", $("#file").prop('files')[0]);
-    data.append("documentType",  $("#docType").val());
+    data.append("documentType", $("#docType").val());
     data.append("activityID", selectedNode.id);
     data.append("inputOutput", $("input[name='inputOutput']:checked").val());
     $.ajax({

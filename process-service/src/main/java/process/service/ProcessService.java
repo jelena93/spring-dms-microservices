@@ -13,7 +13,7 @@ public interface ProcessService {
 
     Process findOne(Long id);
 
-    List<Process> findByUser(String user);
+    List<Process> findByOwnerId(long ownerId);
 
     void update(ProcessCmd processCmd, Process process);
 }

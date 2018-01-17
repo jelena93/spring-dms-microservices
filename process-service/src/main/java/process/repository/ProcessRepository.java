@@ -11,5 +11,5 @@ public interface ProcessRepository extends JpaRepository<Process, Long> {
 
     List<Process> findByParent(Process parent);
 
-    List<Process> findByUser(String user);
+    List<Process> findByOwnerId(long ownerId);
 }

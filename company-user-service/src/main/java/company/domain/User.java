@@ -40,7 +40,6 @@ public class User implements Serializable {
     private String surname;
     @JoinColumn(name = "company_id")
     @OneToOne
-    @JsonIgnore
     private Company company;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

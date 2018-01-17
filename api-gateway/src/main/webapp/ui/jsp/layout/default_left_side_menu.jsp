@@ -7,7 +7,7 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <c:forEach var="role" items="${authorities}">
+        <c:forEach var="role" items="${authorityList}">
             <c:if test = "${role == 'ROLE_ADMIN'}">
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
@@ -16,10 +16,10 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="${pageContext.request.contextPath}/company/search">Search company</a></li>                          
-                        <li><a class="" href="${pageContext.request.contextPath}/company/add">Add company</a></li>                          
+                        <li><a class="" href="${pageContext.request.contextPath}/company/search">Search company</a></li>
+                        <li><a class="" href="${pageContext.request.contextPath}/company/add">Add company</a></li>
                     </ul>
-                </li>  
+                </li>
                 <li class="sub-menu">
                     <a href="javascript:;" class="">
                         <i class="icon_document_alt"></i>
@@ -29,7 +29,7 @@
                     <ul class="sub">
                         <li><a class="" href="${pageContext.request.contextPath}/user/add">Add user</a></li>
                     </ul>
-                </li>  
+                </li>
             </c:if>
             <c:if test = "${role == 'ROLE_USER'}">
                 <li class="sub-menu">
@@ -41,7 +41,7 @@
                     <ul class="sub">
                         <li><a class="" href="${pageContext.request.contextPath}/process/add">Add process / Activity</a></li>
                     </ul>
-                </li>  
+                </li>
             </c:if>
             <c:if test = "${role == 'ROLE_UPLOADER'}">
                 <li class="sub-menu">
@@ -54,7 +54,7 @@
                         <li><a class="" href="${pageContext.request.contextPath}/document/add">Add document</a></li>
                         <li><a class="" href="${pageContext.request.contextPath}/document/search">Search documents</a></li>
                     </ul>
-                </li> 
+                </li>
             </c:if>
         </c:forEach>
     </ul>

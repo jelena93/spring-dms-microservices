@@ -6,14 +6,15 @@ var modeEdit = "edit";
 var modeAdd = "add";
 var mode = modeEdit;
 var isSure = false;
+var companyId = getCookie("companyId");
 
-function getProcessesForAddProcess(user) {
+function getProcessesForAddProcess() {
     $('#processes').bind('ready.jstree', function (e, data) {
         $("#btn-add").show();
     }).jstree({
         'core': {
             'data': {
-                url: "/api/process/all/admin",
+                url: "/api/process/all/" + companyId,
                 'data': function (node) {
                     return {'id': node.id};
                 }
@@ -77,8 +78,9 @@ function getInfo(url) {
             $("#message-box-container").hide();
             $('#info').show();
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -133,7 +135,7 @@ function addProcess() {
         dataType: 'json',
         data: JSON.stringify({
             name: $("#name").val(),
-            user: "admin",
+            ownerId: companyId,
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),
@@ -144,8 +146,9 @@ function addProcess() {
             $("#register_form").hide();
             $('#processes').jstree(true).refresh();
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -168,8 +171,9 @@ function addActivity() {
         success: function (data) {
             $('#processes').jstree(true).refresh();
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -202,7 +206,7 @@ function editProcess(url) {
         dataType: 'json',
         data: JSON.stringify({
             name: $("#name").val(),
-            user: "admin",
+            ownerId: companyId,
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),
@@ -226,8 +230,9 @@ function editProcess(url) {
                 $("#btn-add").prop("disabled", true);
             }
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }

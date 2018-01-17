@@ -3,7 +3,7 @@ package process.command;
 public class ProcessCmd {
 
     private String name;
-    private String user;
+    private long ownerId;
     private Long parentId;
     private boolean primitive;
 
@@ -15,12 +15,12 @@ public class ProcessCmd {
         this.name = name;
     }
 
-    public String getUser() {
-        return user;
+    public long getOwnerId() {
+        return ownerId;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Long getParentId() {
@@ -41,7 +41,7 @@ public class ProcessCmd {
 
     @Override
     public String toString() {
-        return "ProcessCmd{" + "name='" + name + '\'' + ", user='" + user + '\'' + ", parentId=" + parentId
+        return "ProcessCmd{" + "name='" + name + '\'' + ", ownerId='" + ownerId + '\'' + ", parentId=" + parentId
                 + ", primitive=" + primitive + '}';
     }
 }

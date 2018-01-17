@@ -37,8 +37,8 @@ public class Process implements Serializable {
     @Column(name = "name")
     private String name;
     @NotNull
-    @Column(name = "user")
-    private String user = "admin";
+    @Column(name = "owner_id")
+    private long ownerId;
     @JoinColumn(name = "parent")
     @ManyToOne
     private Process parent;
@@ -50,17 +50,11 @@ public class Process implements Serializable {
 
     public Process() { }
 
-    public Process(String name, Process parent, boolean primitive, String user) {
+    public Process(String name, Process parent, boolean primitive, long ownerId) {
         this.name = name;
         this.parent = parent;
         this.primitive = primitive;
-        this.user = user;
-    }
-
-    public Process(String name, Process parent, boolean primitive) {
-        this.name = name;
-        this.parent = parent;
-        this.primitive = primitive;
+        this.ownerId = ownerId;
     }
 
     public Long getId() {
@@ -95,12 +89,12 @@ public class Process implements Serializable {
         this.primitive = primitive;
     }
 
-    public String getUser() {
-        return user;
+    public long getOwnerId() {
+        return ownerId;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public List<Activity> getActivityList() {
@@ -135,7 +129,7 @@ public class Process implements Serializable {
 
     @Override
     public String toString() {
-        return "Process{" + "id=" + id + ", name='" + name + '\'' + ", user='" + user + '\'' + ", parent=" + parent
-                + ", primitive=" + primitive + ", activityList=" + activityList + '}';
+        return "Process{" + "id=" + id + ", name='" + name + '\'' + ", ownerId='" + ownerId + '\'' + ", parent="
+                + parent + ", primitive=" + primitive + ", activityList=" + activityList + '}';
     }
 }
