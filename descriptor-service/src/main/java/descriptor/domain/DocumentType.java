@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "document_type")
-public class DocumentType implements Serializable {
+public class DocumentType  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

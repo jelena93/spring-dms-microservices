@@ -64,6 +64,13 @@
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct-processor.version}</version>
         </dependency>
+
+        <!-- Spring Cloud dependencies -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
