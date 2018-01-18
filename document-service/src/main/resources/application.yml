@@ -5,11 +5,13 @@ spring:
     name: document-service
   http:
     multipart:
-     max-file-size: 128KB
-     max-request-size: 128KB
+     max-file-size: 1024KB
+     max-request-size: 1024KB
 security:
   oauth2:
     client:
+      clientId: ui3
+      clientSecret: ui3-secret
     resource:
       userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false

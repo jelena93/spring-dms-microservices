@@ -20,7 +20,7 @@ public class DocumentIndexer {
 
     public void indexDocument(Document document) throws Exception {
         elasticClient.getClient().prepareIndex("documents", "documents", String.valueOf(document.getId()))
-                     .setPipeline("attachments").setSource(buildDocument(document)).get();
+                     .setPipeline("attachment").setSource(buildDocument(document)).get();
     }
 
     public void insertOrUpdateDocuments(long companyID, List<Document> documents) throws Exception {

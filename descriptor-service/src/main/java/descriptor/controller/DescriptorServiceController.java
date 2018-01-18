@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,19 +37,19 @@ import javax.servlet.http.HttpServletRequest;
 public class DescriptorServiceController {
     private final DocumentTypeService documentTypeService;
     private final DocumentTypeMapper documentTypeMapper;
-    private final RestTemplate restTemplate;
+    private final OAuth2RestTemplate auth2RestTemplate;
 
     @Autowired
     public DescriptorServiceController(DocumentTypeService documentTypeService, DocumentTypeMapper documentTypeMapper,
-                                       RestTemplate restTemplate) {
+                                       OAuth2RestTemplate auth2RestTemplate) {
         this.documentTypeService = documentTypeService;
         this.documentTypeMapper = documentTypeMapper;
-        this.restTemplate = restTemplate;
+        this.auth2RestTemplate = auth2RestTemplate;
     }
 
     @PreAuthorize("hasRole('ROLE_UPLOADER')")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadImage(DocumentCmd documentCmd, HttpServletRequest request) throws Exception {
+    @PostMapping("/upload")
+    public String uploadDocument(DocumentCmd documentCmd, HttpServletRequest request) throws Exception {
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
 
@@ -58,6 +59,7 @@ public class DescriptorServiceController {
         List<Descriptor> descriptors = documentType.getDescriptors();
         List<DescriptorDto> newDescriptors = new ArrayList<>();
         System.out.println(request.getParameterMap());
+        //.stream().map()
         for (Descriptor descriptor : descriptors) {
             if (descriptor.getValue() == null) {
                 String key = descriptor.getDescriptorKey();
@@ -80,28 +82,14 @@ public class DescriptorServiceController {
         valueMap.add("documentCmd", documentCmd);
         System.out.println(documentCmd);
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(valueMap, headers);
-        ResponseEntity<String> responseEntity = restTemplate
-                .exchange("http://document-service/", HttpMethod.POST, entity, String.class);
-        return responseEntity.toString();
+        String documentId = auth2RestTemplate.postForObject("http://document-service/", entity, String.class);
+        //        List forObject = auth2RestTemplate.getForObject("http://document-service/all", List.class);
+        System.out.println(documentId);
+        return documentId;
     }
 
-    //    @PostMapping("/document")
-    //    public String asd(MultipartFile file, HttpServletRequest request) {
-    //        DocumentCmd doc = new DocumentCmd();
-    //        doc.setFile(file);
-    //        doc.setOwnerId(1L);
-    //        List<Descriptor> asd = new ArrayList<>();
-    //        Descriptor d = new Descriptor();
-    //        d.setDescriptorKey("key");
-    //        d.setValue(request.getParameter("key"));
-    //        request.getParameter("key");
-    //        doc.setDescriptors(asd);
-    //        DocumentCmd documentCmd = restTemplate.postForObject("http://document-service/", doc, DocumentCmd.class);
-    //        return documentCmd.getOwnerId() + "";
-    //    }
-
     @GetMapping("/document-type/all")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_USER')")
     public List<DocumentTypeDto> getAllDocumentTypes() {
         return documentTypeMapper.mapToModelList(documentTypeService.findAll());
     }

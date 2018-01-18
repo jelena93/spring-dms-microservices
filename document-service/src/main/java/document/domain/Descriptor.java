@@ -1,11 +1,9 @@
 package document.domain;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class Descriptor implements Serializable{
-
-    private static final long serialVersionUID = -7932993172790322047L;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Descriptor {
     private String descriptorKey;
     private String descriptorValue;
 
@@ -23,5 +21,11 @@ public class Descriptor implements Serializable{
 
     public void setDescriptorValue(String descriptorValue) {
         this.descriptorValue = descriptorValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Descriptor{" + "descriptorKey='" + descriptorKey + '\'' + ", descriptorValue='" + descriptorValue + '\''
+                + '}';
     }
 }

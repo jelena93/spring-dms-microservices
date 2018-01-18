@@ -6,8 +6,8 @@ spring:
     name: descriptor-service
   http:
     multipart:
-     max-file-size: 128KB
-     max-request-size: 128KB
+     max-file-size: 1024KB
+     max-request-size: 1024KB
   jpa:
     hibernate:
       use-new-id-generator-mappings: true
@@ -25,6 +25,8 @@ spring:
 security:
   oauth2:
     client:
+      clientId: ui2
+      clientSecret: ui2-secret
     resource:
       userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false

@@ -3,7 +3,7 @@
 <div class="form" id="form-document" style="display: none;">
     <form class="form-validate form-horizontal" id="register_form">
         <div class="form-group">
-            <label class="control-label col-lg-2" for="inputSuccess">Input or output</label>
+            <label class="control-label col-lg-2">Input or output</label>
             <div class="col-lg-10">
                 <div class="radio">
                     <label>

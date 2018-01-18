@@ -23,7 +23,7 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = -5946299712984511388L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "company_id")
     private Long id;
     @Column(name = "name")

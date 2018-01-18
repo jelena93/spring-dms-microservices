@@ -5,23 +5,26 @@ var checked = false;
 var isSure = false;
 var inputListDocumentTypes = null;
 var outputListDocumentTypes = null;
+var documentTypes;
 $(document).ready(function () {
     $('#form-document input[type="radio"]').click(function () {
         $("#docType").html("");
         if ($(this).val() === "input") {
             $("#docTypeLabel").text("Input document types");
             for (var i = 0; i < inputListDocumentTypes.length; i++) {
-                $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
+                $("#docType").append('<option value="' + documentTypes[inputListDocumentTypes[i]].id + '">' + documentTypes[inputListDocumentTypes[i]].name + '</option>');
             }
-            showDescriptors(inputListDocumentTypes.length > 0 ? inputListDocumentTypes[0].descriptors : null);
+            showDescriptors(documentTypes[inputListDocumentTypes[0]].descriptors);
         } else if ($(this).val() === "output") {
             $("#docTypeLabel").text("Output document types");
             for (var i = 0; i < outputListDocumentTypes.length; i++) {
-                $("#docType").append('<option value="' + outputListDocumentTypes[i].id + '">' + outputListDocumentTypes[i].name + '</option>');
+                $("#docType").append('<option value="' + documentTypes[outputListDocumentTypes[i]].id + '">' + documentTypes[outputListDocumentTypes[i]].name + '</option>');
             }
-            showDescriptors(outputListDocumentTypes.length > 0 ? outputListDocumentTypes[0].descriptors : null);
+            showDescriptors(documentTypes[outputListDocumentTypes[0]].descriptors);
         }
     });
+    getProcesses();
+    getDocumentTypes();
 });
 
 function setDescriptors(docType) {
@@ -35,15 +38,16 @@ function setDescriptors(docType) {
         success: function (data) {
             showDescriptors(data);
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
 
 var companyId = getCookie("companyId");
 
-function getProcessesForAddDocument(user) {
+function getProcesses() {
     $('#processes').jstree({
         'core': {
             'data': {
@@ -72,6 +76,26 @@ function getProcessesForAddDocument(user) {
     });
 }
 
+function getDocumentTypes() {
+    $.ajax({
+        type: "GET",
+        url: "/api/descriptor/document-type/all",
+        dataType: 'json',
+        success: function (docTypes) {
+            documentTypes = docTypes.reduce(function (map, obj) {
+                map[obj.id] = obj;
+                return map;
+            }, {});
+
+            console.log(documentTypes);
+        },
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
+        }
+    });
+}
+
 function getActivityInfo(id) {
     $.ajax({
         type: "GET",
@@ -80,8 +104,9 @@ function getActivityInfo(id) {
         success: function (data) {
             displayActivityInfo(data);
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -100,7 +125,7 @@ function displayActivityInfo(activity) {
             '<div id="colapse' + activity.inputList[i].id + '" class="panel-collapse collapse">' +
             '<div class="panel-body">';
         for (var j = 0; j < activity.inputList[i].descriptors.length; j++) {
-            if (activity.inputList[i].descriptors[j].descriptorType.paramClass === "java.util.Date") {
+            if (activity.inputList[i].descriptors[j].paramClass === "java.util.Date") {
                 inputList += '<p><strong>' + activity.inputList[i].descriptors[j].descriptorKey + '</strong>: ' +
                     getFormattedDate(activity.inputList[i].descriptors[j].descriptorValue) + '</p>';
             } else {
@@ -146,19 +171,20 @@ function displayActivityInfo(activity) {
 }
 
 function showDescriptors(descriptors) {
+    console.log("desc " + descriptors);
     $("#descriptors").html("");
     var html = "";
     if (descriptors !== null) {
         for (var i = 0; i < descriptors.length; i++) {
             console.log(descriptors[i]);
             if (descriptors[i].descriptorValue === null) {
-                if (descriptors[i].descriptorType.paramClass === 'java.util.Date') {
+                if (descriptors[i].paramClass === 'java.util.Date') {
                     html = '<div class="form-group">' +
                         '<label for="' + descriptors[i].id + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
                         + '<span class="required">*</span></label><div class="col-lg-8">' +
                         '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
                         + '" id="' + descriptors[i].id + '" placeholder="Enter ' + descriptors[i].descriptorKey
-                        + ' in format ' + descriptors[i].date_FORMAT + '" required></div></div>';
+                        + ' in format DD.MM.YYYY" required></div></div>';
                 } else {
                     html = '<div class="form-group">' +
                         '<label for="' + descriptors[i].id + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
@@ -179,9 +205,9 @@ function showFormAddDocument() {
     $("#docTypeLabel").text("Input document types");
     $("#docType").html("");
     for (var i = 0; i < inputListDocumentTypes.length; i++) {
-        $("#docType").append('<option value="' + inputListDocumentTypes[i].id + '">' + inputListDocumentTypes[i].name + '</option>');
+        $("#docType").append('<option value="' + documentTypes[inputListDocumentTypes[i]].id + '">' + documentTypes[inputListDocumentTypes[i]].name + '</option>');
     }
-    showDescriptors(inputListDocumentTypes.length > 0 ? inputListDocumentTypes[0].descriptors : null);
+    showDescriptors(documentTypes[inputListDocumentTypes[0]].descriptors);
     $("#form-document").show();
 }
 
@@ -195,10 +221,15 @@ function saveDocument() {
     // validateDocument();
     // return false;
     var data = new FormData();
+    data.append("ownerId", companyId);
     data.append("file", $("#file").prop('files')[0]);
     data.append("documentType", $("#docType").val());
     data.append("activityID", selectedNode.id);
-    data.append("inputOutput", $("input[name='inputOutput']:checked").val());
+    data.append("input", $("input[name='inputOutput']:checked").val() === "input");
+    var descriptors = $(".descriptors");
+    for (var i = 0; i < descriptors.length; i++) {
+        data.append([descriptors[i].name], descriptors[i].value);
+    }
     $.ajax({
         type: "POST",
         url: "/api/descriptor/upload",
@@ -225,8 +256,9 @@ function saveDocument() {
                 console.log(data);
             }
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -243,7 +275,7 @@ function validateDocument() {
         var descriptors = $(".descriptors");
         var sendValidationRequest = true;
         for (var i = 0; i < descriptors.length; i++) {
-            data.append([descriptors[i].name], descriptors[i].descriptorValue);
+            data.append([descriptors[i].name], descriptors[i].value);
             if (descriptors[i].descriptorValue === "") {
                 sendValidationRequest = false;
                 break;
@@ -283,8 +315,9 @@ function documentValidation(params) {
                 console.log(data);
             }
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -295,14 +328,6 @@ function reset(data) {
     $("#btn-add-document").hide();
     selectedNode = null;
     data.instance.deselect_node(data.node, true);
-}
-
-function showMessage(data, messageType) {
-    $("#message-box").removeClass("alert-success");
-    $("#message-box").removeClass("alert-danger");
-    $("#message-box").addClass(messageType);
-    $("#message-text").html(data);
-    $("#message-box-container").show();
 }
 
 function showPopUp(text) {

@@ -1,13 +1,10 @@
 package descriptor.dto;
 
-import java.io.Serializable;
-
-public class DescriptorDto implements Serializable {
-
-    private static final long serialVersionUID = 8678545558547116374L;
+public class DescriptorDto {
 
     private String descriptorKey;
     private String descriptorValue;
+    private Class paramClass;
 
     public String getDescriptorKey() {
         return descriptorKey;
@@ -23,5 +20,19 @@ public class DescriptorDto implements Serializable {
 
     public void setDescriptorValue(String descriptorValue) {
         this.descriptorValue = descriptorValue;
+    }
+
+    public Class getParamClass() {
+        return paramClass;
+    }
+
+    public void setParamClass(Class paramClass) {
+        this.paramClass = paramClass;
+    }
+
+    @Override
+    public String toString() {
+        return "DescriptorDto{" + "descriptorKey='" + descriptorKey + '\'' + ", descriptorValue='" + descriptorValue
+                + '\'' + ", paramClass=" + paramClass + '}';
     }
 }

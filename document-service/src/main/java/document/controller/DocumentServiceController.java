@@ -1,5 +1,7 @@
 package document.controller;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import document.command.DocumentCmd;
 import document.domain.Document;
@@ -12,13 +14,16 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -72,8 +77,35 @@ public class DocumentServiceController {
         return documents;
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
-    public String addDocument(HttpServletRequest request) throws Exception {
+    //    @PostMapping(produces = "application/json")
+    //    public ResponseEntity<String> addDocument(HttpServletRequest request) throws Exception {
+    //        ObjectMapper mapper = new ObjectMapper();
+    //        DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
+    //        System.out.println(documentCmd);
+    //        Document document = documentMapper.mapToEntity(documentCmd);
+    //        Part filePart = request.getPart("file");
+    //        try {
+    //            SearchResponse sr = documentService.getMaxId();
+    //            Max max = sr.getAggregations().get("id");
+    //            System.out.println("max: " + max.getValue());
+    //            if (max.getValue() < 0) {
+    //                document.setId(1L);
+    //            } else {
+    //                document.setId((long) max.getValue() + 1);
+    //            }
+    //        } catch (Exception e) {
+    //            document.setId(1L);
+    //            System.out.println("addDocument, no index - " + e.getMessage());
+    //        }
+    //        document.setContent(
+    //                Base64.getUrlEncoder().encodeToString(StreamUtils.copyToByteArray(filePart.getInputStream())));
+    //        //        documentIndexer.indexDocument(document);
+    //        System.out.println("saved " + document);
+    //        return new ResponseEntity<>(document.getId() + "", HttpStatus.OK);
+    //    }
+
+    @PostMapping()
+    public ResponseEntity<String> asd(HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
         System.out.println(documentCmd);
@@ -95,8 +127,9 @@ public class DocumentServiceController {
         document.setContent(
                 Base64.getUrlEncoder().encodeToString(StreamUtils.copyToByteArray(filePart.getInputStream())));
         documentIndexer.indexDocument(document);
-        System.out.println(document);
-        return document.getId() + "";
+        System.out.println("saved " + document);
+        //TODO send message to activity
+        return new ResponseEntity<>(String.valueOf(document.getId()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{ownerId}/{documentId}")

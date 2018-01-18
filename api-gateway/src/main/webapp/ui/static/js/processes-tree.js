@@ -60,7 +60,7 @@ function getDocumentTypes() {
             console.log(docTypes);
             documentTypes = docTypes;
             $("#input_document_types").html('');
-            $("#ouput_document_types").html('');
+            $("#output_document_types").html('');
             for (var i = 0; i < documentTypes.length; i++) {
                 $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
                 $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
@@ -330,7 +330,7 @@ function showFormForAdding() {
         $("#output_document_types").prop("disabled", false);
         $("#form-primitive").hide();
         $("#input_document_types").html('');
-        $("#ouput_document_types").html('');
+        $("#output_document_types").html('');
         for (var i = 0; i < documentTypes.length; i++) {
             $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
             $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");

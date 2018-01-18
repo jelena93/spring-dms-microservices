@@ -2,11 +2,12 @@ package descriptor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -26,10 +27,11 @@ public class DescriptorServiceApplication {
                                                       .paths(PathSelectors.any()).build();
     }
 
-    @Bean
     @LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
+    @Bean
+    public OAuth2RestTemplate auth2RestTemplate(OAuth2ProtectedResourceDetails resourceDetails,
+                                                OAuth2ClientContext clientContext) {
+        return new OAuth2RestTemplate(resourceDetails, clientContext);
     }
 
     public static void main(String[] args) {

@@ -14,7 +14,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 zuul:
   routes:
-    company-service: /api/company/**
+    company-user-service: /api/company/**
     process-service: /api/process/**
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**

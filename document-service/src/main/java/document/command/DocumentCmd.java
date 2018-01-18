@@ -4,14 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import document.domain.Descriptor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DocumentCmd implements Serializable {
-
-    private static final long serialVersionUID = 7607325603160192150L;
+public class DocumentCmd {
 
     private Long id;
     private Long ownerId;

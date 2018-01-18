@@ -1,20 +1,19 @@
-package descriptor;
+package descriptor.startup;
 
 import descriptor.domain.Descriptor;
 import descriptor.domain.DescriptorType;
 import descriptor.domain.DocumentType;
 import descriptor.service.DescriptorTypeService;
 import descriptor.service.DocumentTypeService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
-public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationStartup implements InitializingBean {
 
     @Value("${add-to-db}")
     private boolean addToDb;
@@ -25,7 +24,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     DescriptorTypeService descriptorTypeService;
 
     @Override
-    public void onApplicationEvent(final ApplicationReadyEvent event) {
+    public void afterPropertiesSet() {
         if (addToDb) {
             DescriptorType descriptorTypeInteger = new DescriptorType(Integer.class);
             DescriptorType descriptorTypeDouble = new DescriptorType(Double.class);

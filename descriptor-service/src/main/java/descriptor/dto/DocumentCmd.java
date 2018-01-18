@@ -1,18 +1,15 @@
 package descriptor.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import descriptor.domain.Descriptor;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
-public class DocumentCmd implements Serializable {
+public class DocumentCmd {
 
-    private static final long serialVersionUID = 8406813989467909660L;
+    private boolean input;
     private Long ownerId;
+    private Long activityId;
     private String fileName;
     private Long documentType;
     private List<DescriptorDto> descriptors;
@@ -22,12 +19,28 @@ public class DocumentCmd implements Serializable {
     public DocumentCmd() {
     }
 
+    public boolean isInput() {
+        return input;
+    }
+
+    public void setInput(boolean input) {
+        this.input = input;
+    }
+
     public Long getOwnerId() {
         return ownerId;
     }
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public Long getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
     }
 
     public String getFileName() {
@@ -64,7 +77,7 @@ public class DocumentCmd implements Serializable {
 
     @Override
     public String toString() {
-        return "DocumentCmd{" + "ownerId=" + ownerId + ", fileName='" + fileName + '\'' + ", documentType="
-                + documentType + ", descriptors=" + descriptors + ", file=" + file + '}';
+        return "DocumentCmd{" + "input=" + input + ", ownerId=" + ownerId + ", fileName='" + fileName + '\''
+                + ", documentType=" + documentType + ", descriptors=" + descriptors + ", file=" + file + '}';
     }
 }
