@@ -20,11 +20,11 @@
                 <li class="eborder-top">
                 </li>
                 <li>
-                    <%--<a href="/uaa/logout"><i class="icon_key_alt"></i> Log Out</a>--%>
-                    <form action="/uaa/logout" method="POST">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">logout</button>
-                    </form>
+                    <a href="/uaa/logout"><i class="icon_key_alt"></i> Log Out</a>
+                    <%--<form action="/uaa/logout" method="POST">--%>
+                    <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
+                    <%--<button class="btn btn-primary btn-lg btn-block" type="submit">logout</button>--%>
+                    <%--</form>--%>
                 </li>
             </ul>
         </li>

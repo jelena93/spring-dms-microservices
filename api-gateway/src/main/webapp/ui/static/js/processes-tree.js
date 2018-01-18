@@ -7,8 +7,13 @@ var modeAdd = "add";
 var mode = modeEdit;
 var isSure = false;
 var companyId = getCookie("companyId");
+var documentTypes = null;
+$(document).ready(function () {
+    getProcesses();
+    getDocumentTypes();
+});
 
-function getProcessesForAddProcess() {
+function getProcesses() {
     $('#processes').bind('ready.jstree', function (e, data) {
         $("#btn-add").show();
     }).jstree({
@@ -46,6 +51,28 @@ function getProcessesForAddProcess() {
     });
 }
 
+function getDocumentTypes() {
+    $.ajax({
+        type: "GET",
+        url: "/api/descriptor/document-type/all",
+        dataType: 'json',
+        success: function (docTypes) {
+            console.log(docTypes);
+            documentTypes = docTypes;
+            $("#input_document_types").html('');
+            $("#ouput_document_types").html('');
+            for (var i = 0; i < documentTypes.length; i++) {
+                $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+                $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+            }
+        },
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
+        }
+    });
+}
+
 function getInfo(url) {
     $.ajax({
         type: "GET",
@@ -59,11 +86,11 @@ function getInfo(url) {
                 $("#form-primitive").hide();
                 $("#input_document_types > option").attr("selected", false);
                 for (var i = 0; i < data.inputListDocumentTypes.length; i++) {
-                    $("#input_document_types").find("option[value=" + data.inputListDocumentTypes[i].id + "]").prop("selected", "selected");
+                    $("#input_document_types").find("option[value=" + data.inputListDocumentTypes[i] + "]").prop("selected", "selected");
                 }
                 $("#output_document_types > option").attr("selected", false);
                 for (var i = 0; i < data.outputListDocumentTypes.length; i++) {
-                    $("#output_document_types").find("option[value=" + data.outputListDocumentTypes[i].id + "]").prop("selected", "selected");
+                    $("#output_document_types").find("option[value=" + data.outputListDocumentTypes[i] + "]").prop("selected", "selected");
                 }
                 $("#form_output_document_types").show();
                 $("#form_input_document_types").show();
@@ -105,11 +132,7 @@ function checkData() {
             } else {
                 canEdit = false;
                 if (selectedNode.activity) {
-                    //     var selected = [];
-                    //     $('#input_document_types :selected').each(function () {
-                    //         selected[$(this).val()] = $(this).val();
-                    //     });
-                    // editActivity("/api/process/activity/" + selectedNode.id);
+                    editActivity("/api/process/activity/" + selectedNode.id);
                 } else {
                     //     params.primitive = $("#primitive").prop('checked');
                     editProcess("/api/process/process/" + selectedNode.id);
@@ -162,8 +185,8 @@ function addActivity() {
         data: JSON.stringify({
             name: $("#name").val(),
             processId: selectedNode !== null ? selectedNode.id : null,
-            inputListDocumentTypes: null,
-            outputListDocumentTypes: null
+            inputListDocumentTypes: $("#input_document_types").val(),
+            outputListDocumentTypes: $("#output_document_types").val()
         }),
         beforeSend: function (request) {
             request.setRequestHeader(header, token);
@@ -237,6 +260,44 @@ function editProcess(url) {
     });
 }
 
+function editActivity(url) {
+    $.ajax({
+        type: "PUT",
+        url: url,
+        contentType: "application/json",
+        dataType: 'json',
+        data: JSON.stringify({
+            name: $("#name").val(),
+            inputListDocumentTypes: $("#input_document_types").val(),
+            outputListDocumentTypes: $("#output_document_types").val()
+        }),
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
+        success: function (data) {
+            canEdit = false;
+            isSure = false;
+            disableForm();
+            $('#processes').jstree(true).refresh();
+            selectedNode.name = $("#name").val();
+            if (!selectedNode.activity) {
+                selectedNode.primitive = $("#primitive").prop('checked');
+                if (selectedNode.primitive) {
+                    $("#btn-add").prop("disabled", false);
+                } else {
+                    $("#btn-add").prop("disabled", false);
+                }
+            } else {
+                $("#btn-add").prop("disabled", true);
+            }
+        },
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
+        }
+    });
+}
+
 function add() {
     mode = modeAdd;
     showFormForAdding();
@@ -260,14 +321,6 @@ function disableForm() {
     mode = modeEdit;
 }
 
-function showMessage(data, messageType) {
-    $("#message-box").removeClass("alert-success");
-    $("#message-box").removeClass("alert-danger");
-    $("#message-box").addClass(messageType);
-    $("#message-text").html(data);
-    $("#message-box-container").show();
-}
-
 function showFormForAdding() {
     hideErrorForName();
     $("#name").prop("disabled", false);
@@ -276,6 +329,13 @@ function showFormForAdding() {
         $("#input_document_types").prop("disabled", false);
         $("#output_document_types").prop("disabled", false);
         $("#form-primitive").hide();
+        $("#input_document_types").html('');
+        $("#ouput_document_types").html('');
+        for (var i = 0; i < documentTypes.length; i++) {
+            $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+            $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+        }
+
         $("#form_output_document_types").show();
         $("#form_input_document_types").show();
         $("#form_input_document_types option:selected").removeAttr("selected");

@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class DescriptorServiceController {
         this.restTemplate = restTemplate;
     }
 
+    @PreAuthorize("hasRole('ROLE_UPLOADER')")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadImage(DocumentCmd documentCmd, HttpServletRequest request) throws Exception {
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
@@ -99,16 +101,19 @@ public class DescriptorServiceController {
     //    }
 
     @GetMapping("/document-type/all")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<DocumentTypeDto> getAllDocumentTypes() {
         return documentTypeMapper.mapToModelList(documentTypeService.findAll());
     }
 
     @GetMapping("/document-type/{id}")
+    //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
     public DocumentTypeDto getDocumentTypeById(@PathVariable long id) {
         return documentTypeMapper.mapToModel(documentTypeService.findOne(id));
     }
 
     @PostMapping("/document-type")
+    //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
     public DocumentTypeDto addDocumentType(@RequestBody DocumentTypeDto documentTypeDto) {
         DocumentType documentType = documentTypeMapper.mapToEntity(documentTypeDto);
         return documentTypeMapper.mapToModel(documentTypeService.save(documentType));

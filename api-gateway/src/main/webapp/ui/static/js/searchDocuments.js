@@ -1,7 +1,7 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 $(document).ready(function () {
-    search( "");
+    search("");
 });
 
 function search(query) {
@@ -29,8 +29,9 @@ function search(query) {
             }
             $("#documents").html(documentsHtml);
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }

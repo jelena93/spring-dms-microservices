@@ -10,11 +10,13 @@ spring:
      max-request-size: 128KB
   jpa:
     hibernate:
-      show_sql: true
-      format_sql: true
-      hbm2ddl:
-      auto: create-drop
       use-new-id-generator-mappings: true
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        hbm2ddl:
+          auto: create-drop
   datasource:
     url: jdbc:mysql://localhost:3306/descriptor?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: admin
