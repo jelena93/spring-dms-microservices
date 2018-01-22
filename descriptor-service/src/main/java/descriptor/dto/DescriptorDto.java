@@ -6,6 +6,15 @@ public class DescriptorDto {
     private String descriptorValue;
     private Class paramClass;
 
+    public DescriptorDto() {
+    }
+
+    public DescriptorDto(String descriptorKey, String descriptorValue, Class paramClass) {
+        this.descriptorKey = descriptorKey;
+        this.descriptorValue = descriptorValue;
+        this.paramClass = paramClass;
+    }
+
     public String getDescriptorKey() {
         return descriptorKey;
     }

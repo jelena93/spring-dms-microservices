@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,25 +59,13 @@ public class DescriptorServiceController {
         headers.setAccept(acceptableMediaTypes);
         DocumentType documentType = documentTypeService.findOne(documentCmd.getDocumentType());
         List<Descriptor> descriptors = documentType.getDescriptors();
-        List<DescriptorDto> newDescriptors = new ArrayList<>();
         System.out.println(request.getParameterMap());
-        //.stream().map()
-        for (Descriptor descriptor : descriptors) {
-            if (descriptor.getValue() == null) {
-                String key = descriptor.getDescriptorKey();
-                System.out.println("key: " + key);
-                String value = request.getParameter(key).trim();
-                descriptor.setValue(value);
-                System.out.println("value: " + value);
-                //                Descriptor newDescriptor = new Descriptor(key, descriptor.getValue(), documentType,
-                //                                                          descriptor.getDescriptorType());
-                DescriptorDto newDescriptor = new DescriptorDto();
-                newDescriptor.setDescriptorValue(value);
-                newDescriptor.setDescriptorKey(descriptor.getDescriptorKey());
-                newDescriptors.add(newDescriptor);
-            }
-        }
-        documentCmd.setDescriptors(newDescriptors);
+        List<DescriptorDto> descriptorDtos = descriptors.stream().filter(descriptor -> descriptor.getValue() == null).
+                map(descriptor -> new DescriptorDto(descriptor.getDescriptorKey(),
+                                                    request.getParameter(descriptor.getDescriptorKey()).trim(),
+                                                    descriptor.getDescriptorType().getParamClass()))
+                                                        .collect(Collectors.toList());
+        documentCmd.setDescriptors(descriptorDtos);
         MultiValueMap<String, Object> valueMap = new LinkedMultiValueMap<>();//
         valueMap.add("file", new ByteArrayResource(documentCmd.getFile().getBytes()));
         documentCmd.setFileName(documentCmd.getFile().getOriginalFilename());
@@ -84,7 +73,7 @@ public class DescriptorServiceController {
         System.out.println(documentCmd);
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(valueMap, headers);
         String documentId = auth2RestTemplate.postForObject("http://document-service/", entity, String.class);
-        System.out.println(documentId);
+        System.out.println("document id " + documentId);
         documentMessagingService.sendDocumentAdded(
                 new DocumentMessagingDto(Long.valueOf(documentId), documentCmd.isInput(), documentCmd.getActivityId()));
         return documentId;

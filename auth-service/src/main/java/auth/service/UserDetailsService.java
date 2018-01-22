@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -33,7 +34,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         String lowercaseLogin = login.toLowerCase();
 
         User userFromDatabase;
-        if(lowercaseLogin.contains("@")) {
+        if (lowercaseLogin.contains("@")) {
             userFromDatabase = userRepository.findByEmail(lowercaseLogin);
         } else {
             userFromDatabase = userRepository.findByUsernameCaseInsensitive(lowercaseLogin);
@@ -45,13 +46,13 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw new UserNotActivatedException("User " + lowercaseLogin + " is not activated");
         }
 
-        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (Authority authority : userFromDatabase.getAuthorities()) {
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
-            grantedAuthorities.add(grantedAuthority);
-        }
-
-        return new org.springframework.security.core.userdetails.User(userFromDatabase.getUsername(), userFromDatabase.getPassword(), grantedAuthorities);
+        Collection<GrantedAuthority> grantedAuthorities = userFromDatabase.getAuthorities().stream()
+                                                                          .map(a -> new SimpleGrantedAuthority(
+                                                                                  a.getName()))
+                                                                          .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(userFromDatabase.getUsername(),
+                                                                      userFromDatabase.getPassword(),
+                                                                      grantedAuthorities);
 
     }
 

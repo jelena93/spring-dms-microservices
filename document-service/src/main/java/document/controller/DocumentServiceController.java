@@ -48,60 +48,41 @@ public class DocumentServiceController {
     }
 
     @GetMapping("/search")
-    public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query)
-            throws IOException {
-        SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, 10, 1);
+    public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query) {
         List<DocumentDto> documents = new ArrayList<>();
-        System.out.println(searchResponse);
-        ObjectMapper mapper = new ObjectMapper();
-        for (SearchHit hit : searchResponse.getHits()) {
-            documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
+        try {
+            SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, 10, 1);
+            System.out.println(searchResponse);
+            ObjectMapper mapper = new ObjectMapper();
+            for (SearchHit hit : searchResponse.getHits()) {
+                documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
+            }
+            System.out.println(searchResponse.getHits());
+        } catch (Exception e) {
+            System.out.println("search " + e.getMessage());
         }
-        System.out.println(searchResponse.getHits());
         return documents;
     }
 
     @GetMapping("/all")
-    public List<DocumentDto> all() throws IOException {
-        SearchResponse searchResponse = documentService.getAllDocuments();
+    public List<DocumentDto> all() {
         List<DocumentDto> documents = new ArrayList<>();
-        System.out.println(searchResponse);
-        ObjectMapper mapper = new ObjectMapper();
-        for (SearchHit hit : searchResponse.getHits()) {
-            documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
+        try {
+            SearchResponse searchResponse = documentService.getAllDocuments();
+            System.out.println(searchResponse);
+            ObjectMapper mapper = new ObjectMapper();
+            for (SearchHit hit : searchResponse.getHits()) {
+                documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
+            }
+        } catch (Exception e) {
+            System.out.println("all " + e.getMessage());
         }
+
         return documents;
     }
 
-    //    @PostMapping(produces = "application/json")
-    //    public ResponseEntity<String> addDocument(HttpServletRequest request) throws Exception {
-    //        ObjectMapper mapper = new ObjectMapper();
-    //        DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
-    //        System.out.println(documentCmd);
-    //        Document document = documentMapper.mapToEntity(documentCmd);
-    //        Part filePart = request.getPart("file");
-    //        try {
-    //            SearchResponse sr = documentService.getMaxId();
-    //            Max max = sr.getAggregations().get("id");
-    //            System.out.println("max: " + max.getValue());
-    //            if (max.getValue() < 0) {
-    //                document.setId(1L);
-    //            } else {
-    //                document.setId((long) max.getValue() + 1);
-    //            }
-    //        } catch (Exception e) {
-    //            document.setId(1L);
-    //            System.out.println("addDocument, no index - " + e.getMessage());
-    //        }
-    //        document.setContent(
-    //                Base64.getUrlEncoder().encodeToString(StreamUtils.copyToByteArray(filePart.getInputStream())));
-    //        //        documentIndexer.indexDocument(document);
-    //        System.out.println("saved " + document);
-    //        return new ResponseEntity<>(document.getId() + "", HttpStatus.OK);
-    //    }
-
     @PostMapping()
-    public ResponseEntity<String> asd(HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> addDocument(HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
         System.out.println(documentCmd);
@@ -121,9 +102,9 @@ public class DocumentServiceController {
         SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
         ObjectMapper mapper = new ObjectMapper();
         DocumentDto documentDto = new DocumentDto();
-        for (SearchHit hit : searchResponse.getHits()) {
-            documentDto = mapper.readValue(hit.getSourceAsString(), DocumentDto.class);
-            break;
+        if (searchResponse.getHits().getHits().length > 0) {
+            documentDto = mapper
+                    .readValue(searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
         }
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.valueOf(documentDto.getAttachment().getContentType()));
@@ -132,25 +113,15 @@ public class DocumentServiceController {
         return new ResponseEntity<>(documentDto.getFile(), header, HttpStatus.OK);
     }
 
-    //    @GetMapping(path = "/{ownerId}/{documentId}")
-    //    public String showFile(@PathVariable long ownerId, @PathVariable long documentId) throws IOException {
-    //        SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
-    //        ObjectMapper mapper = new ObjectMapper();
-    //        for (SearchHit hit : searchResponse.getHits()) {
-    //            DocumentDto documentDto = mapper.readValue(hit.getSourceAsString(), DocumentDto.class);
-    //            return documentDto.getAttachment().getContent();
-    //        }
-    //        return null;
-    //    }
-
     @GetMapping(path = "/{ownerId}/{documentId}")
-    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId, @PathVariable long documentId) throws IOException {
+    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId, @PathVariable long documentId)
+            throws IOException {
         SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
         DocumentDto documentDto = new DocumentDto();
         ObjectMapper mapper = new ObjectMapper();
-        for (SearchHit hit : searchResponse.getHits()) {
-            documentDto = mapper.readValue(hit.getSourceAsString(), DocumentDto.class);
-            break;
+        if (searchResponse.getHits().getHits().length > 0) {
+            documentDto = mapper
+                    .readValue(searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
         }
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.valueOf(documentDto.getAttachment().getContentType()));
@@ -226,10 +197,4 @@ public class DocumentServiceController {
     //        return null;
     //    }
 
-    //    @ExceptionHandler(Exception.class)
-    //    public ResponseEntity<MessageDto> handleError(Exception ex, WebRequest request) {
-    //        ex.printStackTrace();
-    //        return new ResponseEntity<>(new MessageDto(MessageDto.MESSAGE_TYPE_ERROR, ex.getMessage()),
-    //                                    HttpStatus.BAD_REQUEST);
-    //    }
 }
