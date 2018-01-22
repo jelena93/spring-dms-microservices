@@ -15,3 +15,5 @@ curl -XPUT 'localhost:9200/_ingest/pipeline/attachment' -d'
     }
   ]
 }'
+
+curl -XDELETE localhost:9200/documents

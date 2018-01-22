@@ -6,14 +6,14 @@ import descriptor.dto.DescriptorDto;
 import descriptor.dto.DocumentCmd;
 import descriptor.dto.DocumentTypeDto;
 import descriptor.mapper.DocumentTypeMapper;
+import descriptor.messaging.DocumentMessagingDto;
+import descriptor.messaging.DocumentMessagingService;
 import descriptor.service.DocumentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +34,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 public class DescriptorServiceController {
     private final DocumentTypeService documentTypeService;
+    private final DocumentMessagingService documentMessagingService;
     private final DocumentTypeMapper documentTypeMapper;
     private final OAuth2RestTemplate auth2RestTemplate;
 
     @Autowired
-    public DescriptorServiceController(DocumentTypeService documentTypeService, DocumentTypeMapper documentTypeMapper,
-                                       OAuth2RestTemplate auth2RestTemplate) {
+    public DescriptorServiceController(DocumentTypeService documentTypeService,
+                                       DocumentMessagingService documentMessagingService,
+                                       DocumentTypeMapper documentTypeMapper, OAuth2RestTemplate auth2RestTemplate) {
         this.documentTypeService = documentTypeService;
+        this.documentMessagingService = documentMessagingService;
         this.documentTypeMapper = documentTypeMapper;
         this.auth2RestTemplate = auth2RestTemplate;
     }
@@ -83,8 +84,9 @@ public class DescriptorServiceController {
         System.out.println(documentCmd);
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(valueMap, headers);
         String documentId = auth2RestTemplate.postForObject("http://document-service/", entity, String.class);
-        //        List forObject = auth2RestTemplate.getForObject("http://document-service/all", List.class);
         System.out.println(documentId);
+        documentMessagingService.sendDocumentAdded(
+                new DocumentMessagingDto(Long.valueOf(documentId), documentCmd.isInput(), documentCmd.getActivityId()));
         return documentId;
     }
 

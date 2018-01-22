@@ -30,11 +30,13 @@ public class ApplicationStartup implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         if (addToDb) {
-            User user = new User("admin", "admin", "admin", "admin", null, new ArrayList<>(Arrays.asList(Role.ADMIN)));
-            userService.save(user);
-
             Company company = new Company("Silab d.o.o", "011111111", "01111111", "Vozdovac, Beograd");
             company = companyService.save(company);
+
+            User user = new User("admin", "admin", "admin", "admin", company,
+                                 new ArrayList<>(Arrays.asList(Role.ADMIN, Role.USER, Role.UPLOADER)));
+            userService.save(user);
+
             user = new User("asd", "asd", "asd", "asd", company,
                             new ArrayList<>(Arrays.asList(Role.USER, Role.UPLOADER)));
             user.setCompany(company);

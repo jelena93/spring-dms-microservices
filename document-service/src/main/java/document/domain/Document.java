@@ -1,5 +1,6 @@
 package document.domain;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ public class Document {
     private Long ownerId;
     private String fileName;
     private String content;
+    private byte[] file;
     private List<Descriptor> descriptors;
 
     public Document() {
@@ -46,6 +48,14 @@ public class Document {
         this.content = content;
     }
 
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
     public List<Descriptor> getDescriptors() {
         return descriptors;
     }
@@ -73,7 +83,7 @@ public class Document {
 
     @Override
     public String toString() {
-        return "Document{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + '\'' + ", descriptors="
-                + descriptors + '}';
+        return "Document{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + '\'' + ", content='"
+                + content + '\'' + ", file=" + Arrays.toString(file) + ", descriptors=" + descriptors + '}';
     }
 }

@@ -6,6 +6,7 @@ var isSure = false;
 var inputListDocumentTypes = null;
 var outputListDocumentTypes = null;
 var documentTypes;
+var documents;
 $(document).ready(function () {
     $('#form-document input[type="radio"]').click(function () {
         $("#docType").html("");
@@ -25,6 +26,7 @@ $(document).ready(function () {
     });
     getProcesses();
     getDocumentTypes();
+    getDocuments();
 });
 
 function setDescriptors(docType) {
@@ -96,6 +98,26 @@ function getDocumentTypes() {
     });
 }
 
+function getDocuments() {
+    $.ajax({
+        type: "GET",
+        url: "/api/document/all",
+        dataType: 'json',
+        success: function (docs) {
+            documents = docs.reduce(function (map, obj) {
+                map[obj.id] = obj;
+                return map;
+            }, {});
+
+            console.log(documents);
+        },
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
+        }
+    });
+}
+
 function getActivityInfo(id) {
     $.ajax({
         type: "GET",
@@ -119,24 +141,19 @@ function displayActivityInfo(activity) {
             '<div class="panel panel-default">' +
             '<div class="panel-heading">' +
             '<h4 class="panel-title">' +
-            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + activity.inputList[i].id + '">' + activity.inputList[i].fileName + '</a>' +
+            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.inputList[i]].id + '">' + documents[activity.inputList[i]].fileName + '</a>' +
             '</h4>' +
             '</div>' +
-            '<div id="colapse' + activity.inputList[i].id + '" class="panel-collapse collapse">' +
+            '<div id="colapse' + documents[activity.inputList[i]].id + '" class="panel-collapse collapse">' +
             '<div class="panel-body">';
-        for (var j = 0; j < activity.inputList[i].descriptors.length; j++) {
-            if (activity.inputList[i].descriptors[j].paramClass === "java.util.Date") {
-                inputList += '<p><strong>' + activity.inputList[i].descriptors[j].descriptorKey + '</strong>: ' +
-                    getFormattedDate(activity.inputList[i].descriptors[j].descriptorValue) + '</p>';
-            } else {
-                inputList += '<p><strong>' + activity.inputList[i].descriptors[j].descriptorKey + '</strong>: ' +
-                    activity.inputList[i].descriptors[j].descriptorValue + '</p>';
-            }
+        for (var j = 0; j < documents[activity.inputList[i]].descriptors.length; j++) {
+            inputList += '<p><strong>' + documents[activity.inputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
+                documents[activity.inputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         inputList += "</div><div class='panel-footer clearfix'>";
-        inputList += "<a class='btn btn-default' target='_blank' href='document/" + activity.inputList[i].id
+        inputList += "<a class='btn btn-default' target='_blank' href='/api/document/1/" + documents[activity.inputList[i]].id
             + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
-            "<a class='btn btn-default pull-right' href='document/document/download/" + activity.inputList[i].id +
+            "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.inputList[i]].id +
             "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
         inputList += '</div></div></div></div> ';
     }
@@ -147,18 +164,18 @@ function displayActivityInfo(activity) {
             '<div class="panel panel-default">' +
             '<div class="panel-heading">' +
             '<h4 class="panel-title">' +
-            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + activity.outputList[i].id + '">' + activity.outputList[i].fileName + '</a>' +
+            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.outputList[i]].id + '">' + documents[activity.outputList[i]].fileName + '</a>' +
             '</h4>' +
             '</div>' +
-            '<div id="colapse' + activity.outputList[i].id + '" class="panel-collapse collapse">' +
+            '<div id="colapse' + documents[activity.outputList[i]].id + '" class="panel-collapse collapse">' +
             '<div class="panel-body">';
-        for (var j = 0; j < activity.outputList[i].descriptors.length; j++) {
-            outputList += '<p><strong>' + activity.outputList[i].descriptors[j].descriptorKey + '</strong>: ' +
-                activity.outputList[i].descriptors[j].descriptorValue + '</p>';
+        for (var j = 0; j < documents[activity.outputList[i]].descriptors.length; j++) {
+            outputList += '<p><strong>' + documents[activity.outputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
+                documents[activity.outputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         outputList += "</div><div class='panel-footer'>";
-        outputList += "<a target='_blank' href='document/" + activity.outputList[i].id + "'>View file </a>" +
-            "<a class='btn btn-default pull-right' href='document/document/download/" + activity.outputList[i].id +
+        outputList += "<a target='_blank' href='/api/document/1/" + documents[activity.outputList[i]].id + "'>View file </a>" +
+            "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.outputList[i]].id +
             "' title='Download'><span class='icon_cloud-download'></span> Download file</a>";
         outputList += '</div></div></div></div> ';
     }
@@ -224,7 +241,7 @@ function saveDocument() {
     data.append("ownerId", companyId);
     data.append("file", $("#file").prop('files')[0]);
     data.append("documentType", $("#docType").val());
-    data.append("activityID", selectedNode.id);
+    data.append("activityId", selectedNode.id);
     data.append("input", $("input[name='inputOutput']:checked").val() === "input");
     var descriptors = $(".descriptors");
     for (var i = 0; i < descriptors.length; i++) {
@@ -265,12 +282,12 @@ function saveDocument() {
 
 function validateDocument() {
     if (selectedNode !== null) {
-        $("#activityID").val(selectedNode.id);
+        $("#activityId").val(selectedNode.id);
         var docType = $("#docType").val();
         var data = new FormData();
         data.append("file", $("#file").prop('files')[0]);
         data.append("docType", docType);
-        data.append("activityID", selectedNode.id);
+        data.append("activityId", selectedNode.id);
         data.append("inputOutput", $("input[name='inputOutput']:checked").val());
         var descriptors = $(".descriptors");
         var sendValidationRequest = true;

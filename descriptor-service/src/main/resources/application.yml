@@ -22,6 +22,17 @@ spring:
     username: admin
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    stream:
+      bindings:
+        documentAddedOutput:
+          destination: documentAddedInput
+          contentType: application/json
+  rabbitmq:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
 security:
   oauth2:
     client:

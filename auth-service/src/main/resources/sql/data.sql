@@ -8,5 +8,7 @@ INSERT INTO authority (name) VALUES ('ROLE_ADMIN');
 INSERT INTO authority (name) VALUES ('ROLE_UPLOADER');
 
 INSERT INTO user_authority (username, authority) VALUES ('admin', 'ROLE_ADMIN');
+INSERT INTO user_authority (username, authority) VALUES ('admin', 'ROLE_USER');
+INSERT INTO user_authority (username, authority) VALUES ('admin', 'ROLE_UPLOADER');
 INSERT INTO user_authority (username, authority) VALUES ('asd', 'ROLE_USER');
 INSERT INTO user_authority (username, authority) VALUES ('asd', 'ROLE_UPLOADER');

@@ -192,6 +192,7 @@ function addActivity() {
             request.setRequestHeader(header, token);
         },
         success: function (data) {
+            $("#register_form").hide();
             $('#processes').jstree(true).refresh();
         },
         error: function (request) {

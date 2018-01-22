@@ -13,6 +13,7 @@ public class DocumentDto implements Serializable {
     private Long id;
     private Long ownerId;
     private String fileName;
+    private byte[] file;
     private AttachmentDto attachment;
     private List<DescriptorDto> descriptors;
 
@@ -41,6 +42,14 @@ public class DocumentDto implements Serializable {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
     public AttachmentDto getAttachment() {
@@ -74,5 +83,11 @@ public class DocumentDto implements Serializable {
         DocumentDto document = (DocumentDto) o;
 
         return id.equals(document.id);
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentDto{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + '\'' + ", attachment="
+                + attachment + ", descriptors=" + descriptors + '}';
     }
 }

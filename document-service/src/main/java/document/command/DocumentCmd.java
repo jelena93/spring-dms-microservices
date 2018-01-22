@@ -12,7 +12,6 @@ public class DocumentCmd {
     private Long id;
     private Long ownerId;
     private String fileName;
-    private MultipartFile file;
     private List<Descriptor> descriptors;
 
     public DocumentCmd() {
@@ -42,14 +41,6 @@ public class DocumentCmd {
         this.fileName = fileName;
     }
 
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
-
     public List<Descriptor> getDescriptors() {
         return descriptors;
     }
@@ -60,7 +51,7 @@ public class DocumentCmd {
 
     @Override
     public String toString() {
-        return "DocumentCmd{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + '\'' + ", file="
-                + file + ", descriptors=" + descriptors + '}';
+        return "DocumentCmd{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + ", descriptors="
+                + descriptors + '}';
     }
 }
