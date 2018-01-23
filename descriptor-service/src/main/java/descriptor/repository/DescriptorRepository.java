@@ -12,8 +12,6 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface DescriptorRepository extends JpaRepository<Descriptor, Long> {
-    //    @Transactional
-    //    void deleteByDocumentIdIn(List<Long> documentIds);
 
     @Modifying
     @Transactional

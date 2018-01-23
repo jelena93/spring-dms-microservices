@@ -118,8 +118,8 @@ function checkData() {
         if (!canEdit) {
             $('#name').prop("disabled", false);
             $('#primitive').prop("disabled", false);
-            $("#input_document_types").prop("disabled", false);
-            $("#output_document_types").prop("disabled", false);
+            $("#input_document_types").prop("disabled", true);
+            $("#output_document_types").prop("disabled", true);
 //            $("#primitive").prop("disabled", true);
             canEdit = true;
             $("#btn-edit").text("Save");
@@ -167,7 +167,9 @@ function addProcess() {
         },
         success: function (data) {
             $("#register_form").hide();
-            $('#processes').jstree(true).refresh();
+            $('#processes').jstree("deselect_all");
+            selectedNode = null;
+            $('#processes').jstree(false).refresh();
         },
         error: function (request) {
             console.log(request);
@@ -243,12 +245,14 @@ function editProcess(url) {
             disableForm();
             $('#processes').jstree(true).refresh();
             selectedNode.name = $("#name").val();
-            if (!selectedNode.activity) {
+            if (data.primitive !== undefined) {
                 selectedNode.primitive = $("#primitive").prop('checked');
                 if (selectedNode.primitive) {
                     $("#btn-add").prop("disabled", false);
+                    $("#btn-add").text("Add activity");
                 } else {
                     $("#btn-add").prop("disabled", false);
+                    $("#btn-add").text("Add process");
                 }
             } else {
                 $("#btn-add").prop("disabled", true);
@@ -347,6 +351,8 @@ function showFormForAdding() {
         $("#form_input_document_types").hide();
         $("#primitive").prop("disabled", false);
         $('#primitive').prop("checked", false);
+        $("#register_form").show();
+
     }
     $("#btn-edit").text("Add");
     $('#info').show();
