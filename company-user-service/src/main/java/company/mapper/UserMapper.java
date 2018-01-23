@@ -14,7 +14,8 @@ public interface UserMapper {
 
     User mapToEntity(UserCmd userCmd) throws Exception;
 
-    @Mappings({ @Mapping(target = "companyId", source = "user.company.id") })
+    @Mapping(target = "companyId", source = "user.company.id")
+    @Mapping(target = "companyName", source = "user.company.name")
     UserDto mapToModel(User user);
 
 }

@@ -1,0 +1,31 @@
+
+.glyphicon {
+    margin-right: 5px;
+}
+
+.glyphicon-new-window {
+    margin-left: 5px;
+}
+
+.panel-body .radio label, .panel-body .checkbox label {
+    display: block;
+}
+
+.panel .panel-heading, thead, th {
+    background-color: #394a59 !important;
+    /*color: #d0d8df!important;*/
+    color: whitesmoke!important;
+}
+
+.btn-primary {
+    background-color: #0080b3 !important;
+}
+
+.well {
+    background-color: #a2b4c3;
+}
+
+/*thead {*/
+/*background-color: #394a59 !important;*/
+/*color: #d0d8df;*/
+/*}*/

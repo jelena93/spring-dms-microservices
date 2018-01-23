@@ -9,6 +9,7 @@ var isSure = false;
 var companyId = getCookie("companyId");
 var documentTypes = null;
 $(document).ready(function () {
+    $("#company-name").html(getCookie("companyName"));
     getProcesses();
     getDocumentTypes();
 });
@@ -132,10 +133,14 @@ function checkData() {
             } else {
                 canEdit = false;
                 if (selectedNode.activity) {
-                    editActivity("/api/process/activity/" + selectedNode.id);
+                    if ($("#register_form").valid()) {
+                        editActivity("/api/process/activity/" + selectedNode.id);
+                    }
                 } else {
                     //     params.primitive = $("#primitive").prop('checked');
-                    editProcess("/api/process/process/" + selectedNode.id);
+                    if ($("#register_form").valid()) {
+                        editProcess("/api/process/process/" + selectedNode.id);
+                    }
                 }
             }
         }
@@ -143,9 +148,13 @@ function checkData() {
         // $("#isActivity").val(selectedNode !== null ? selectedNode.primitive : false);
         // $("#parent").val(selectedNode !== null ? selectedNode.id : null);
         if (selectedNode != null && selectedNode.primitive) {
-            addActivity();
+            if ($("#register_form").valid()) {
+                addActivity();
+            }
         } else {
-            addProcess();
+            if ($("#register_form").valid()) {
+                addProcess();
+            }
         }
     }
 }

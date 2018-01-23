@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
-            <header class="panel-heading"> ${title} for company: ${company.name}</header>
+            <header class="panel-heading"> ${title} for company: <span id="company-name"></span></header>
             <div class="panel-body">
                 <div class="col-lg-4">
                     <tiles:insertAttribute name="process_tree" />
@@ -19,4 +19,3 @@
     </div>
 </div>
 <script src="<c:url value="/resources/js/processes-tree.js" />"></script>
-<%--<script>getProcessesForAddProcess();</script>--%>

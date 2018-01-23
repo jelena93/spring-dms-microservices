@@ -18,8 +18,9 @@ function getRoles() {
                 $("#roles").append('<option value="' + roles[i] + '"' + selected + '>' + roles[i] + '</option>');
             }
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -41,8 +42,9 @@ function search(query) {
                     + '</td></tr>');
             }
         },
-        error: function (textStatus, errorThrown) {
-            alert(textStatus);
+        error: function (request) {
+            console.log(request);
+            showErrorMessage(request.responseText);
         }
     });
 }
@@ -62,7 +64,7 @@ $('#table-companies-set-user').on('click', '.clickable-row', function (event) {
 });
 $('#roles').change(function () {
     var roles = $(this).val();
-    if (roles.length === 1 && roles[0] === "ADMIN") {
+    if (roles === null || roles.length === 1 && roles[0] === "ADMIN") {
         $("#companySection").hide();
         $('label[for="company"]').eq(1).hide();
     } else {
@@ -73,35 +75,38 @@ $('#roles').change(function () {
 function addUser() {
     var roles = $('#roles').val();
     if (roles === null) {
-        return false;
+        return;
     }
     if ((roles.length !== 1 && roles[0] !== "ADMIN") && selectedCompanyId === null) {
         $("#company").val(null);
         search("");
-        return false;
+        return;
     }
-    $.ajax({
-        type: "POST",
-        url: "/api/company/user",
-        contentType: "application/json",
-        dataType: 'json',
-        beforeSend: function (request) {
-            request.setRequestHeader(header, token);
-        },
-        data: JSON.stringify({
-            name: $("#name").val(),
-            surname: $("#surname").val(),
-            username: $("#username").val(),
-            password: $("#password").val(),
-            roles: $("#roles").val(),
-            companyId: selectedCompanyId
-        }),
-        success: function (data) {
-            showSuccessMessage("User successfully added");
-        },
-        error: function (textStatus, errorThrown) {
-            showErrorMessage(textStatus);
-        }
-    });
-    return true;
+    if ($("#register_form").valid()) {
+        $.ajax({
+            type: "POST",
+            url: "/api/company/user",
+            contentType: "application/json",
+            dataType: 'json',
+            beforeSend: function (request) {
+                request.setRequestHeader(header, token);
+            },
+            data: JSON.stringify({
+                name: $("#name").val(),
+                surname: $("#surname").val(),
+                username: $("#username").val(),
+                password: $("#password").val(),
+                roles: $("#roles").val(),
+                companyId: selectedCompanyId
+            }),
+            success: function (data) {
+                showSuccessMessage("User successfully added");
+            },
+            error: function (request) {
+                console.log(request);
+                showErrorMessage(request.responseText);
+            }
+        });
+    }
+
 }

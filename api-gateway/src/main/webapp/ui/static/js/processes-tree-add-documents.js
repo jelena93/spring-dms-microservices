@@ -8,6 +8,7 @@ var outputListDocumentTypes = null;
 var documentTypes;
 var documents;
 $(document).ready(function () {
+    $("#company-name").html(getCookie("companyName"));
     $('#form-document input[type="radio"]').click(function () {
         $("#docType").html("");
         if ($(this).val() === "input") {
@@ -197,17 +198,17 @@ function showDescriptors(descriptors) {
             if (descriptors[i].descriptorValue === null) {
                 if (descriptors[i].paramClass === 'java.util.Date') {
                     html = '<div class="form-group">' +
-                        '<label for="' + descriptors[i].id + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
+                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
                         + '<span class="required">*</span></label><div class="col-lg-8">' +
                         '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
-                        + '" id="' + descriptors[i].id + '" placeholder="Enter ' + descriptors[i].descriptorKey
+                        + '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey
                         + ' in format DD.MM.YYYY" required></div></div>';
                 } else {
                     html = '<div class="form-group">' +
-                        '<label for="' + descriptors[i].id + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
+                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
                         ' <span class="required">*</span></label><div class="col-lg-8">' +
                         '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey +
-                        '" id="' + descriptors[i].id + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
+                        '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
                         '</div></div>';
                 }
                 $("#descriptors").append(html);
@@ -237,6 +238,9 @@ function saveDocument() {
     // }
     // validateDocument();
     // return false;
+    if (!$("#register_form").valid()) {
+        return;
+    }
     var data = new FormData();
     data.append("ownerId", companyId);
     data.append("file", $("#file").prop('files')[0]);

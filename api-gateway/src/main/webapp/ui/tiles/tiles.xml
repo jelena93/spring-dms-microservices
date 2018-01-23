@@ -25,6 +25,7 @@
             <add-attribute value="/resources/css/style-responsive.css"/>
             <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
             <add-attribute value="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+            <add-attribute value="/resources/css/custom.css"/>
         </put-list-attribute>
         <put-list-attribute name="jsList" cascade="true">
             <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"/>

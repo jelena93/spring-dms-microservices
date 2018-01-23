@@ -10,6 +10,7 @@ public class UserDto {
     private String name;
     private String surname;
     private Long companyId;
+    private String companyName;
     private List<Role> roles = new ArrayList<>();
 
     public String getUsername() {
@@ -44,6 +45,14 @@ public class UserDto {
         this.companyId = companyId;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public List<Role> getRoles() {
         return roles;
     }
@@ -55,6 +64,6 @@ public class UserDto {
     @Override
     public String toString() {
         return "UserDto{" + "username='" + username + '\'' + ", name='" + name + '\'' + ", surname='" + surname + '\''
-                + ", companyId=" + companyId + ", roles=" + roles + '}';
+                + ", companyId=" + companyId + ", companyName='" + companyName + '\'' + ", roles=" + roles + '}';
     }
 }

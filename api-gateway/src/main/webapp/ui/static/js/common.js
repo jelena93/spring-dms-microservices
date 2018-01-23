@@ -1,6 +1,7 @@
 $(document).ready(function () {
     if (getCookie("JSESSIONID") === null) {
         eraseCookie("companyId");
+        eraseCookie("companyName");
     }
     if (getCookie("companyId") === null) {
         getUsersCompany();
@@ -14,6 +15,7 @@ function getUsersCompany() {
         success: function (data) {
             if (data.companyId !== null) {
                 setCookie("companyId", data.companyId);
+                setCookie("companyName", data.companyName);
             }
         },
         error: function (request) {
