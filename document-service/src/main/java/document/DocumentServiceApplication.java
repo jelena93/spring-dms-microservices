@@ -2,10 +2,12 @@ package document;
 
 import document.elasticsearch.DocumentIndexer;
 import document.elasticsearch.ElasticClient;
+import document.messaging.DocumentInputChannel;
 import org.apache.tika.Tika;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableSwagger2
+@EnableBinding({ DocumentInputChannel.class })
 public class DocumentServiceApplication {
 
     @Bean

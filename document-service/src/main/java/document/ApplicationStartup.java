@@ -14,7 +14,7 @@ public class ApplicationStartup implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
 
-        documentIndexer.createDocumentIndexIfNotExists();
+//        documentIndexer.createDocumentIndexIfNotExists();
 
     }
 }

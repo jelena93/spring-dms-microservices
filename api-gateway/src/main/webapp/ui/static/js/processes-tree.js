@@ -128,7 +128,7 @@ function checkData() {
             if (!isSure && !selectedNode.activity && !selectedNode.primitive && $("#primitive").prop('checked')) {
                 showPopUp("Setting process to primitive will delete all child nodes of this process, are you sure?");
             } else if (!isSure && !selectedNode.activity && selectedNode.primitive && !$("#primitive").prop('checked')) {
-                showPopUp("Setting process to non primitive will delete all documents from activities, are you sure?");
+                showPopUp("Setting process to non primitive will delete all activities of this process, are you sure?");
             } else {
                 canEdit = false;
                 if (selectedNode.activity) {

@@ -1,4 +1,4 @@
-package descriptor.messaging;
+package descriptor.messaging.output.dto;
 
 public class DocumentMessagingDto {
     private long id;

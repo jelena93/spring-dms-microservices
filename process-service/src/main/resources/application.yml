@@ -18,6 +18,12 @@ spring:
     username: admin
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    stream:
+      bindings:
+        documentDeleteOutput:
+          destination: documentDeleteInput
+          contentType: application/json
   rabbitmq:
       host: localhost
       port: 5672

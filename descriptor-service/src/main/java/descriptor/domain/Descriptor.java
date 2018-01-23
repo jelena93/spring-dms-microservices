@@ -1,7 +1,5 @@
 package descriptor.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -58,9 +55,8 @@ public class Descriptor implements Serializable {
 
     @Column(name = "STRING_VALUE")
     private String stringValue;
-    @Transient
-    @JsonInclude
-    private final String DATE_FORMAT = "dd.MM.yyyy";
+
+    private Long documentId;
 
     public Descriptor() {
     }
@@ -75,7 +71,7 @@ public class Descriptor implements Serializable {
         this.descriptorKey = key;
         this.documentType = documentType;
         this.descriptorType = descriptorType;
-//        setValue(value);
+        setValue(value);
     }
 
     public Long getId() {
@@ -98,10 +94,6 @@ public class Descriptor implements Serializable {
         return documentType;
     }
 
-    public String getDATE_FORMAT() {
-        return DATE_FORMAT;
-    }
-
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
     }
@@ -114,13 +106,13 @@ public class Descriptor implements Serializable {
         this.descriptorType = descriptorType;
     }
 
-//    public String getStringValue() {
-//        if (Date.class.equals(descriptorType.getParamClass())) {
-//            return new SimpleDateFormat(DATE_FORMAT).format(getValue());
-//        } else {
-//            return getValue() + "";
-//        }
-//    }
+    public Long getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(Long documentId) {
+        this.documentId = documentId;
+    }
 
     @Override
     public int hashCode() {
@@ -147,9 +139,9 @@ public class Descriptor implements Serializable {
 
     @Override
     public String toString() {
-        return "Descriptor{" + "id=" + id + ", documentType=" + documentType + ", descriptorKey=" + descriptorKey
-                + ", descriptorType=" + descriptorType + ", longValue=" + longValue + ", doubleValue=" + doubleValue
-                + ", dateValue=" + dateValue + ", stringValue=" + stringValue + ", DATE_FORMAT=" + DATE_FORMAT + '}';
+        return "Descriptor{" + "id=" + id + ", documentType=" + documentType.getName() + ", descriptorKey="
+                + descriptorKey + ", descriptorType=" + descriptorType + ", longValue=" + longValue + ", doubleValue="
+                + doubleValue + ", dateValue=" + dateValue + ", stringValue=" + stringValue + '}';
     }
 
     public Object getValue() {
@@ -203,7 +195,7 @@ public class Descriptor implements Serializable {
                     stringValue = (String) value;
                 } else if (Date.class.equals(paramClass)) {
                     try {
-                        dateValue = new SimpleDateFormat(DATE_FORMAT).parse(value.toString());
+                        dateValue = new SimpleDateFormat("dd.MM.yyyy").parse(value.toString());
                     } catch (ParseException ex) {
                         dateValue = (Date) value;
                     }

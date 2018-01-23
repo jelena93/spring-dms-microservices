@@ -5,9 +5,11 @@ import descriptor.domain.DocumentType;
 import descriptor.dto.DescriptorDto;
 import descriptor.dto.DocumentCmd;
 import descriptor.dto.DocumentTypeDto;
+import descriptor.mapper.DescriptorMapper;
 import descriptor.mapper.DocumentTypeMapper;
-import descriptor.messaging.DocumentMessagingDto;
-import descriptor.messaging.DocumentMessagingService;
+import descriptor.messaging.output.dto.DocumentMessagingDto;
+import descriptor.messaging.output.DocumentOutputMessagingService;
+import descriptor.service.DescriptorService;
 import descriptor.service.DocumentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -35,17 +37,22 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 public class DescriptorServiceController {
     private final DocumentTypeService documentTypeService;
-    private final DocumentMessagingService documentMessagingService;
+    private final DescriptorService descriptorService;
+    private final DocumentOutputMessagingService documentOutputMessagingService;
     private final DocumentTypeMapper documentTypeMapper;
+    private final DescriptorMapper descriptorMapper;
     private final OAuth2RestTemplate auth2RestTemplate;
 
     @Autowired
-    public DescriptorServiceController(DocumentTypeService documentTypeService,
-                                       DocumentMessagingService documentMessagingService,
-                                       DocumentTypeMapper documentTypeMapper, OAuth2RestTemplate auth2RestTemplate) {
+    public DescriptorServiceController(DocumentTypeService documentTypeService, DescriptorService descriptorService,
+                                       DocumentOutputMessagingService documentOutputMessagingService,
+                                       DocumentTypeMapper documentTypeMapper, DescriptorMapper descriptorMapper,
+                                       OAuth2RestTemplate auth2RestTemplate) {
         this.documentTypeService = documentTypeService;
-        this.documentMessagingService = documentMessagingService;
+        this.descriptorService = descriptorService;
+        this.documentOutputMessagingService = documentOutputMessagingService;
         this.documentTypeMapper = documentTypeMapper;
+        this.descriptorMapper = descriptorMapper;
         this.auth2RestTemplate = auth2RestTemplate;
     }
 
@@ -59,12 +66,16 @@ public class DescriptorServiceController {
         headers.setAccept(acceptableMediaTypes);
         DocumentType documentType = documentTypeService.findOne(documentCmd.getDocumentType());
         List<Descriptor> descriptors = documentType.getDescriptors();
-        System.out.println(request.getParameterMap());
-        List<DescriptorDto> descriptorDtos = descriptors.stream().filter(descriptor -> descriptor.getValue() == null).
+        List<DescriptorDto> descriptorDtos = descriptors.stream().filter(descriptor -> descriptor.getDocumentId() == null).
                 map(descriptor -> new DescriptorDto(descriptor.getDescriptorKey(),
                                                     request.getParameter(descriptor.getDescriptorKey()).trim(),
                                                     descriptor.getDescriptorType().getParamClass()))
                                                         .collect(Collectors.toList());
+        List<Descriptor> newDescriptors = descriptors.stream().filter(descriptor -> descriptor.getDocumentId() == null).
+                map(descriptor -> new Descriptor(descriptor.getDescriptorKey(),
+                                                 request.getParameter(descriptor.getDescriptorKey()).trim(),
+                                                 descriptor.getDocumentType(), descriptor.getDescriptorType()))
+                                                     .collect(Collectors.toList());
         documentCmd.setDescriptors(descriptorDtos);
         MultiValueMap<String, Object> valueMap = new LinkedMultiValueMap<>();//
         valueMap.add("file", new ByteArrayResource(documentCmd.getFile().getBytes()));
@@ -74,7 +85,9 @@ public class DescriptorServiceController {
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(valueMap, headers);
         String documentId = auth2RestTemplate.postForObject("http://document-service/", entity, String.class);
         System.out.println("document id " + documentId);
-        documentMessagingService.sendDocumentAdded(
+        newDescriptors.forEach(descriptor -> descriptor.setDocumentId(Long.valueOf(documentId)));
+        descriptorService.save(newDescriptors);
+        documentOutputMessagingService.sendDocumentAdded(
                 new DocumentMessagingDto(Long.valueOf(documentId), documentCmd.isInput(), documentCmd.getActivityId()));
         return documentId;
     }

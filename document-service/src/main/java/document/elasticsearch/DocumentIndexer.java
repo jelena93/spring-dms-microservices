@@ -46,17 +46,10 @@ public class DocumentIndexer {
         }
     }
 
-    public void deleteDocumentIndexes() {
-        boolean exists = elasticClient.getClient().admin().indices().prepareExists("documents").execute().actionGet()
-                                      .isExists();
-        if (exists) {
-            elasticClient.getClient().
-                    admin().indices().delete(new DeleteIndexRequest("documents")).actionGet();
-        }
-    }
-
-    public void deleteDocument(Document document) {
-        elasticClient.getClient().prepareDelete("documents", "documents", String.valueOf(document.getId())).get();
+    public void deleteDocuments(List<Long> documentIds) {
+        documentIds.forEach(documentId -> elasticClient.getClient().prepareDelete("documents", "documents",
+                                                                                  String.valueOf(documentId)).get());
+        System.out.println("deleting documents " + documentIds);
     }
 
     private XContentBuilder buildDocument(Document document) throws Exception {

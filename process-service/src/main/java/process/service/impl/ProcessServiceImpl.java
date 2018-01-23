@@ -7,6 +7,7 @@ import process.domain.Process;
 import process.repository.ProcessRepository;
 import process.service.ProcessService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,6 +44,11 @@ public class ProcessServiceImpl implements ProcessService {
             process.getActivityList().clear();
         }
         processRepository.save(process);
+    }
+
+    @Override
+    public List<Process> findByParent(Process parent) {
+        return processRepository.findByParent(parent);
     }
 
     private void deleteChildrenFromProcess(Process process) {

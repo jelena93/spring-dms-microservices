@@ -15,7 +15,6 @@ public interface DocumentMapper {
 
     DocumentDto mapToModel(Document document);
 
-//    @Mapping(target = "file", ignore = true)
     Document mapToEntity(DocumentCmd documentCmd) throws IOException;
 
     List<DocumentDto> mapToModelList(List<Document> documentList);

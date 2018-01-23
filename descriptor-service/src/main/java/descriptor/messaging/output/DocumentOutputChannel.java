@@ -1,4 +1,4 @@
-package descriptor.messaging;
+package descriptor.messaging.output;
 
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;

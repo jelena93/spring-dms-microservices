@@ -18,24 +18,35 @@ import process.domain.Process;
 import process.dto.TreeDto;
 import process.mapper.ActivityMapper;
 import process.mapper.ProcessMapper;
+import process.messaging.output.DocumentOutputMessagingService;
+import process.messaging.output.dto.DocumentMessagingOutputDto;
 import process.service.ActivityService;
 import process.service.ProcessService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
 public class ProcessServiceController {
 
+    private final ProcessService processService;
+    private final ActivityService activityService;
+    private final DocumentOutputMessagingService documentOutputMessagingService;
+    private final ProcessMapper processMapper;
+    private final ActivityMapper activityMapper;
+
     @Autowired
-    ProcessService processService;
-    @Autowired
-    ActivityService activityService;
-    @Autowired
-    ProcessMapper processMapper;
-    @Autowired
-    ActivityMapper activityMapper;
+    public ProcessServiceController(ProcessService processService, ActivityService activityService,
+                                    DocumentOutputMessagingService documentOutputMessagingService,
+                                    ProcessMapper processMapper, ActivityMapper activityMapper) {
+        this.processService = processService;
+        this.activityService = activityService;
+        this.documentOutputMessagingService = documentOutputMessagingService;
+        this.processMapper = processMapper;
+        this.activityMapper = activityMapper;
+    }
 
     @GetMapping(path = "/all/{ownerId}")
     public List<TreeDto> getProcesses(@PathVariable long ownerId) {
@@ -84,9 +95,43 @@ public class ProcessServiceController {
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
+        List<Long> documentIds = new ArrayList<>();
+        if (processCmd.isPrimitive()) {
+            deleteChildren(process, processService.findByParent(process), documentIds, true);
+        } else {
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
+                                      .collect(Collectors.toList()));
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
+                                      .collect(Collectors.toList()));
+        }
+        System.out.println("a sadaaa " + documentIds);
         processMapper.updateEntityFromModel(processCmd, process);
         processService.update(processCmd, process);
+        if (!documentIds.isEmpty()) {
+            documentOutputMessagingService.sendDeleteDocuments(new DocumentMessagingOutputDto(documentIds));
+        }
         return process;
+    }
+
+    private void deleteChildren(Process process, List<Process> processes, List<Long> documentIds, boolean root) {
+        List<Process> children = getChildren(process, processes);
+        for (Process child : children) {
+            deleteChildren(child, processes, documentIds, false);
+        }
+        if (!root) {
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
+                                      .collect(Collectors.toList()));
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
+                                      .collect(Collectors.toList()));
+        }
+    }
+
+    private List<Process> getChildren(Process p, List<Process> lista) {
+        List<Process> children = new ArrayList<>();
+        for (Process process : lista) {
+            if (p != null && p.equals(process.getParent())) { children.add(process); }
+        }
+        return children;
     }
 
     @GetMapping(path = "/activity/{id}")

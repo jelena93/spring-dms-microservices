@@ -7,7 +7,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import process.messaging.DocumentInputChannel;
+import process.messaging.input.DocumentInputChannel;
+import process.messaging.output.DocumentOutputChannel;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -17,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableSwagger2
-@EnableBinding({ DocumentInputChannel.class })
+@EnableBinding({ DocumentInputChannel.class, DocumentOutputChannel.class })
 public class ProcessServiceApplication {
     @Bean
     public Docket api() {

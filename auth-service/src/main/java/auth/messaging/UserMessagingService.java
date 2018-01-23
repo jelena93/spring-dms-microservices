@@ -9,12 +9,12 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessagingService {
+public class UserMessagingService {
     private final UserService userService;
     private final UserMapper userMapper;
 
     @Autowired
-    public MessagingService(UserService userService, UserMapper userMapper) {
+    public UserMessagingService(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }

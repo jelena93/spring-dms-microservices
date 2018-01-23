@@ -1,6 +1,7 @@
 package descriptor;
 
-import descriptor.messaging.DocumentOutputChannel;
+import descriptor.messaging.input.DocumentInputChannel;
+import descriptor.messaging.output.DocumentOutputChannel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -19,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableSwagger2
-@EnableBinding({ DocumentOutputChannel.class })
+@EnableBinding({ DocumentOutputChannel.class, DocumentInputChannel.class })
 //@EnableCircuitBreaker
 public class DescriptorServiceApplication {
 
