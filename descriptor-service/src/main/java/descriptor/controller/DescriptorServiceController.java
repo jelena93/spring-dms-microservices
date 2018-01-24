@@ -64,12 +64,16 @@ public class DescriptorServiceController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
-        DocumentType documentType = documentTypeService.findOne(documentCmd.getDocumentType());
+        DocumentType documentType = documentTypeService.findOne(documentCmd.getDocumentTypeId());
         List<Descriptor> descriptors = documentType.getDescriptors();
-        List<DescriptorDto> descriptorDtos = descriptors.stream().filter(descriptor -> descriptor.getDocumentId() == null).
-                map(descriptor -> new DescriptorDto(descriptor.getDescriptorKey(),
-                                                    request.getParameter(descriptor.getDescriptorKey()).trim(),
-                                                    descriptor.getDescriptorType().getParamClass()))
+        List<DescriptorDto> descriptorDtos = descriptors.stream()
+                                                        .filter(descriptor -> descriptor.getDocumentId() == null).
+                                                                map(descriptor -> new DescriptorDto(
+                                                                        documentCmd.getDocumentTypeId(),
+                                                                        descriptor.getDescriptorKey(),
+                                                                        request.getParameter(
+                                                                                descriptor.getDescriptorKey()).trim(),
+                                                                        descriptor.getDescriptorType().getParamClass()))
                                                         .collect(Collectors.toList());
         List<Descriptor> newDescriptors = descriptors.stream().filter(descriptor -> descriptor.getDocumentId() == null).
                 map(descriptor -> new Descriptor(descriptor.getDescriptorKey(),

@@ -2,6 +2,7 @@ package descriptor.dto;
 
 public class DescriptorDto {
 
+    private Long documentTypeId;
     private String descriptorKey;
     private String descriptorValue;
     private Class paramClass;
@@ -9,10 +10,19 @@ public class DescriptorDto {
     public DescriptorDto() {
     }
 
-    public DescriptorDto(String descriptorKey, String descriptorValue, Class paramClass) {
+    public DescriptorDto(Long documentTypeId, String descriptorKey, String descriptorValue, Class paramClass) {
+        this.documentTypeId = documentTypeId;
         this.descriptorKey = descriptorKey;
         this.descriptorValue = descriptorValue;
         this.paramClass = paramClass;
+    }
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
     }
 
     public String getDescriptorKey() {
@@ -41,7 +51,7 @@ public class DescriptorDto {
 
     @Override
     public String toString() {
-        return "DescriptorDto{" + "descriptorKey='" + descriptorKey + '\'' + ", descriptorValue='" + descriptorValue
-                + '\'' + ", paramClass=" + paramClass + '}';
+        return "DescriptorDto{" + "documentTypeId=" + documentTypeId + ", descriptorKey='" + descriptorKey + '\''
+                + ", descriptorValue='" + descriptorValue + '\'' + ", paramClass=" + paramClass + '}';
     }
 }

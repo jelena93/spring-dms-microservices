@@ -3,12 +3,16 @@ package document.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import document.command.DocumentCmd;
+import document.command.DocumentValidationCmd;
+import document.domain.Descriptor;
 import document.domain.Document;
 import document.dto.DocumentDto;
+import document.dto.MessageDto;
 import document.elasticsearch.DocumentIndexer;
 import document.elasticsearch.service.DocumentService;
 import document.mapper.DocumentMapper;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.IndexNotFoundException;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -48,37 +53,24 @@ public class DocumentServiceController {
     }
 
     @GetMapping("/search")
-    public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query) {
-        List<DocumentDto> documents = new ArrayList<>();
+    public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query)
+            throws IOException {
         try {
-            SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, 10, 1);
-            System.out.println(searchResponse);
-            ObjectMapper mapper = new ObjectMapper();
-            for (SearchHit hit : searchResponse.getHits()) {
-                documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
-            }
-            System.out.println(searchResponse.getHits());
-        } catch (Exception e) {
-            System.out.println("search " + e.getMessage());
+            return mapToDocumentList(documentService.searchDocumentsForOwner(ownerId, query, 10, 1));
+        } catch (IndexNotFoundException e) {
+            System.out.println("search error" + e.getMessage());
         }
-        return documents;
+        return new ArrayList<>();
     }
 
     @GetMapping("/all")
-    public List<DocumentDto> all() {
-        List<DocumentDto> documents = new ArrayList<>();
+    public List<DocumentDto> all() throws IOException {
         try {
-            SearchResponse searchResponse = documentService.getAllDocuments();
-            System.out.println(searchResponse);
-            ObjectMapper mapper = new ObjectMapper();
-            for (SearchHit hit : searchResponse.getHits()) {
-                documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
-            }
-        } catch (Exception e) {
+            return mapToDocumentList(documentService.getAllDocuments());
+        } catch (IndexNotFoundException e) {
             System.out.println("all " + e.getMessage());
         }
-
-        return documents;
+        return new ArrayList<>();
     }
 
     @PostMapping()
@@ -130,71 +122,51 @@ public class DocumentServiceController {
         return new ResponseEntity<>(documentDto.getFile(), header, HttpStatus.OK);
     }
 
-    //    @RequestMapping(path = "/validation", method = RequestMethod.POST)
-    //    public ResponseEntity<MessageDto> checkIfDocumentExists(HttpServletRequest request, long docType, long
-    // activityID, String inputOutput) throws Exception {
-    //        DocumentType documentType = documentTypeRepository.findOne(docType);
-    //        List<Descriptor> descriptors = documentType.getDescriptors();
-    //        List<Descriptor> existingDescriptors = descriptorRepository.findByDocumentType(docType);
-    //        int numberOfIdenticalDescriptors = 0;
-    //        Long existingDocumentID = null;
-    //        for (Descriptor descriptor : descriptors) {
-    //            String key = descriptor.getDescriptorKey();
-    //            String value = request.getParameter(key).trim();
-    //            descriptor.setValue(value);
-    //            if (descriptor.getValue() == null) {
-    //                throw new Exception("Value for descriptor " + descriptor.getDescriptorKey()
-    //                        + "  is not correct. Expecting descriptor of type " + descriptor.getDescriptorType()
-    // .getStringMessageByParamClass() + ".");
-    //            }
-    //            Descriptor newDescriptor = new Descriptor(key, descriptor.getValue(), docType, descriptor
-    // .getDescriptorType());
-    //            Long id = checkIfFileAlreadyAdded(existingDescriptors, newDescriptor, activityID, inputOutput);
-    //            if (id == null) {
-    //                continue;
-    //            } else if (existingDocumentID == null) {
-    //                existingDocumentID = id;
-    //            } else if (!Objects.equals(id, existingDocumentID)) {
-    //                continue;
-    //            }
-    //            numberOfIdenticalDescriptors += 1;
-    //        }
-    //        if (numberOfIdenticalDescriptors == descriptors.size() && existingDocumentID != null) {
-    //            return new ResponseEntity<>(new MessageDto(MessageDto.MESSAGE_TYPE_QUESTION, existingDocumentID +
-    // ""), HttpStatus.OK);
-    //        }
-    //        return new ResponseEntity<>(new MessageDto(MessageDto.MESSAGE_TYPE_SUCCESS, "ok"), HttpStatus.OK);
-    //    }
+    @PostMapping("/validation")
+    public MessageDto validation(HttpServletRequest request) throws Exception {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Part filePart = request.getPart("file");
+            DocumentValidationCmd documentValidationCmd = new DocumentValidationCmd();
+            documentValidationCmd.setOwnerId(Long.valueOf(request.getParameter("ownerId")));
+            documentValidationCmd.setDocumentTypeId(Long.valueOf(request.getParameter("documentTypeId")));
+            documentValidationCmd.setFileName(filePart.getSubmittedFileName());
+            documentValidationCmd.setDescriptors(
+                    Arrays.asList(mapper.readValue(request.getParameter("descriptors"), Descriptor[].class)));
+            System.out.println("validation  " + documentValidationCmd.toString());
+            //@TODO same name -
+            boolean sameName = false;
+            Long documentId = null;
+            List<DocumentDto> documentsWithSameName = mapToDocumentList(documentService.findByName(
+                    documentValidationCmd.getOwnerId(), documentValidationCmd.getFileName()));
+            System.out.println("documents sameName " + documentsWithSameName);
+            if (!documentsWithSameName.isEmpty()) {
+                //ne mora id
+                documentId = documentsWithSameName.get(0).getId();
+                return new MessageDto("Document with same name already exists. Do you want to rewrite it?", documentId);
+            }
+            //@TODO same descriptors
+            List<DocumentDto> documentsWithSameDescriptors = mapToDocumentList(
+                    documentService.findDocumentsForOwnerByDescriptors(documentValidationCmd, 1, 1));
+            if (!documentsWithSameDescriptors.isEmpty()) {
+                documentId = documentsWithSameDescriptors.get(0).getId();
+                return new MessageDto("Document with same descriptors already exists. Do you want to save rewrite it?",
+                                      documentId);
+            }
+            return new MessageDto("ok", null);
+        } catch (IndexNotFoundException ex) {
+            return new MessageDto("ok", null);
+        }
+    }
 
-    //    private Long checkIfFileAlreadyAdded(List<Descriptor> existingDescriptors, Descriptor newDescriptor, long
-    // activityID, String inputOutput) {
-    //        if (existingDescriptors == null || existingDescriptors.isEmpty()) {
-    //            return null;
-    //        }
-    //        for (Descriptor existingDescriptor : existingDescriptors) {
-    //            if (existingDescriptor.getValue() == null) {
-    //                continue;
-    //            }
-    //            if (existingDescriptor.equals(newDescriptor)
-    //                    || ((newDescriptor.getValue() instanceof Date && (existingDescriptor.getValue() instanceof
-    // Date)) && isTheSameDate(existingDescriptor, newDescriptor))) {
-    //                Activity activity = activityRepository.findOne(activityID);
-    //                if (inputOutput.equals("input")) {
-    //                    for (Document descriptor : activity.getInputList()) {
-    //                        if (descriptor.getDescriptors().contains(existingDescriptor)) {
-    //                            return descriptor.getId();
-    //                        } else if (inputOutput.equals("output")) {
-    //                            for (Document d : activity.getOutputList()) {
-    //                                if (d.getDescriptors().contains(existingDescriptor)) {
-    //                                    return descriptor.getId();
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return null;
-    //    }
-
+    private List<DocumentDto> mapToDocumentList(SearchResponse searchResponse) throws IOException {
+        List<DocumentDto> documents = new ArrayList<>();
+        System.out.println(searchResponse);
+        ObjectMapper mapper = new ObjectMapper();
+        for (SearchHit hit : searchResponse.getHits()) {
+            documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
+        }
+        System.out.println("total hits: " + searchResponse.getHits().getTotalHits());
+        return documents;
+    }
 }

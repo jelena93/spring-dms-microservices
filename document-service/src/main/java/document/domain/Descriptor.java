@@ -4,8 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Descriptor {
+    private Long documentTypeId;
     private String descriptorKey;
     private String descriptorValue;
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
 
     public String getDescriptorKey() {
         return descriptorKey;
@@ -25,7 +34,7 @@ public class Descriptor {
 
     @Override
     public String toString() {
-        return "Descriptor{" + "descriptorKey='" + descriptorKey + '\'' + ", descriptorValue='" + descriptorValue + '\''
-                + '}';
+        return "Descriptor{" + "documentTypeId=" + documentTypeId + ", descriptorKey='" + descriptorKey + '\''
+                + ", descriptorValue='" + descriptorValue + '\'' + '}';
     }
 }

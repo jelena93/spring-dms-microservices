@@ -91,7 +91,7 @@
         </dependency>
     </dependencies>
 
-    <build>w
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

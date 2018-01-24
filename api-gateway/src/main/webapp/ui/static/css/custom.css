@@ -7,14 +7,30 @@
     margin-left: 5px;
 }
 
-.panel-body .radio label, .panel-body .checkbox label {
-    display: block;
-}
+/*.panel-body .radio label, .panel-body .checkbox label {*/
+/*display: block;*/
+/*}*/
 
-.panel .panel-heading, thead, th {
+.panel .panel-heading, .panel-title, .panel-footer, thead, th {
     background-color: #394a59 !important;
     /*color: #d0d8df!important;*/
-    color: whitesmoke!important;
+    color: whitesmoke !important;
+}
+
+.panel-title {
+    font-size: 0.9em;
+}
+
+.btn-default {
+    font-size: 1em;
+}
+
+#activity-info .panel-body {
+    font-size: 0.9em;
+}
+
+.btn-default {
+    padding: 3px 10px;
 }
 
 .btn-primary {
@@ -22,10 +38,5 @@
 }
 
 .well {
-    background-color: #a2b4c3;
+    background-color: #e0e6eb;
 }
-
-/*thead {*/
-/*background-color: #394a59 !important;*/
-/*color: #d0d8df;*/
-/*}*/

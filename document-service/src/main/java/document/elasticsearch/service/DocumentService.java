@@ -2,9 +2,12 @@ package document.elasticsearch.service;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
+import document.command.DocumentValidationCmd;
+import document.domain.Descriptor;
 import document.elasticsearch.ElasticClient;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.metrics.max.MaxAggregationBuilder;
@@ -38,6 +41,13 @@ public class DocumentService {
                             .actionGet();
     }
 
+    public SearchResponse findAll(long ownerId) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
+        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
+                            .actionGet();
+    }
+
     public SearchResponse searchDocumentsForOwner(Long ownerId, String query, int limit, int page) {
         int offset = (page - 1) * limit;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
@@ -51,9 +61,37 @@ public class DocumentService {
         }
         System.out.println(boolQuery);
         return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery)
-                            .setFrom(offset).setSize(limit).execute()
+                            .setFrom(offset).setSize(limit).execute().actionGet();
+    }
 
+    public SearchResponse findByName(Long ownerId, String fileName) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
+        boolQuery.must(QueryBuilders.matchQuery("fileName", fileName));
+        System.out.println(boolQuery);
+        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
                             .actionGet();
     }
 
+    public SearchResponse findDocumentsForOwnerByDescriptors(DocumentValidationCmd d, int limit, int page) {
+        int offset = (page - 1) * limit;
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termQuery("ownerId", d.getOwnerId()));
+        MatchQueryBuilder matchQuery = QueryBuilders.matchQuery("descriptors.documentTypeId", d.getDocumentTypeId());
+        boolQuery.must(matchQuery);
+        for (Descriptor descriptor : d.getDescriptors()) {
+            matchQuery = QueryBuilders.matchQuery("descriptors.descriptorKey", descriptor.getDescriptorKey());
+            boolQuery.must(matchQuery);
+            matchQuery = QueryBuilders.matchQuery("descriptors.descriptorValue", descriptor.getDescriptorValue());
+            boolQuery.must(matchQuery);
+            //            boolQuery.must(QueryBuilders.termQuery("descriptors.documentTypeId", d.getDocumentTypeId()));
+            //            boolQuery.must(QueryBuilders.matchQuery("descriptors.descriptorKey", descriptor
+            // .getDescriptorKey()));
+            //            boolQuery.must(QueryBuilders.matchQuery("descriptors.descriptorValue", descriptor
+            // .getDescriptorValue()));
+        }
+        System.out.println("findDocumentsForOwnerByDescriptors " + boolQuery);
+        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery)
+                            .setFrom(offset).setSize(limit).execute().actionGet();
+    }
 }

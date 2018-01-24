@@ -60,11 +60,14 @@ public class DocumentIndexer {
         builder.field("fileName", document.getFileName());
         List<Descriptor> descriptors = document.getDescriptors();
         builder.startArray("descriptors");
-        for (Descriptor d : descriptors) {
-            builder.startObject();
-            builder.field("descriptorKey", d.getDescriptorKey());
-            builder.field("descriptorValue", d.getDescriptorValue());
-            builder.endObject();
+        if (document.getDescriptors() != null) {
+            for (Descriptor d : descriptors) {
+                builder.startObject();
+                builder.field("documentTypeId", d.getDocumentTypeId());
+                builder.field("descriptorKey", d.getDescriptorKey());
+                builder.field("descriptorValue", d.getDescriptorValue());
+                builder.endObject();
+            }
         }
         builder.endArray();
         builder.field("content", document.getContent());

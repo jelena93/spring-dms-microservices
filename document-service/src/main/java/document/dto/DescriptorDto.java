@@ -5,8 +5,17 @@ import java.io.Serializable;
 public class DescriptorDto implements Serializable {
 
     private static final long serialVersionUID = 8678545558547116374L;
+    private Long documentTypeId;
     private String descriptorKey;
     private String descriptorValue;
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
 
     public String getDescriptorKey() {
         return descriptorKey;

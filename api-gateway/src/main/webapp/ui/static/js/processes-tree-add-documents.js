@@ -230,83 +230,68 @@ function showFormAddDocument() {
 }
 
 function saveDocument() {
-    // if ($("#file").val() === "") {
-    //     return false;
-    // }
-    // if (checked || isSure) {
-    //     return true;
-    // }
-    // validateDocument();
-    // return false;
     if (!$("#register_form").valid()) {
         return;
     }
-    var data = new FormData();
-    data.append("ownerId", companyId);
-    data.append("file", $("#file").prop('files')[0]);
-    data.append("documentType", $("#docType").val());
-    data.append("activityId", selectedNode.id);
-    data.append("input", $("input[name='inputOutput']:checked").val() === "input");
-    var descriptors = $(".descriptors");
-    for (var i = 0; i < descriptors.length; i++) {
-        data.append([descriptors[i].name], descriptors[i].value);
-    }
-    $.ajax({
-        type: "POST",
-        url: "/api/descriptor/upload",
-        data: data,
-        processData: false,
-        enctype: 'multipart/form-data',
-        contentType: false,
-        dataType: 'json',
-        beforeSend: function (request) {
-            request.setRequestHeader(header, token);
-        },
-        success: function (data) {
-            if (data.messageType === "question") {
-                if (data.messageAction === "edit") {
-                    $("#existingDocumentID").val(data.messageData);
-                } else {
-                    $("#existingDocumentID").val(null);
-                }
-                showPopUp(data.messageText);
-            } else if (data.messageType === "alert-success") {
-                checked = true;
-                $("#register_form").submit();
-            } else {
-                console.log(data);
-            }
-        },
-        error: function (request) {
-            console.log(request);
-            showErrorMessage(request.responseText);
+    if (checked || isSure) {
+        var data = new FormData();
+        data.append("ownerId", companyId);
+        data.append("file", $("#file").prop('files')[0]);
+        data.append("documentTypeId", $("#docType").val());
+        data.append("activityId", selectedNode.id);
+        data.append("input", $("input[name='inputOutput']:checked").val() === "input");
+        var descriptors = $(".descriptors");
+        for (var i = 0; i < descriptors.length; i++) {
+            data.append([descriptors[i].name], descriptors[i].value);
         }
-    });
+        $.ajax({
+            type: "POST",
+            url: "/api/descriptor/upload",
+            data: data,
+            processData: false,
+            enctype: 'multipart/form-data',
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function (request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                checked = false;
+                isSure = false;
+                console.log(data);
+            },
+            error: function (request) {
+                console.log(request);
+                showErrorMessage(request.responseText);
+            }
+        });
+    } else {
+        validateDocument();
+    }
 }
 
 function validateDocument() {
     if (selectedNode !== null) {
-        $("#activityId").val(selectedNode.id);
         var docType = $("#docType").val();
         var data = new FormData();
+        data.append("ownerId", companyId);
         data.append("file", $("#file").prop('files')[0]);
-        data.append("docType", docType);
-        data.append("activityId", selectedNode.id);
-        data.append("inputOutput", $("input[name='inputOutput']:checked").val());
+        data.append("documentTypeId", $("#docType").val());
         var descriptors = $(".descriptors");
-        var sendValidationRequest = true;
+        var test = [];
         for (var i = 0; i < descriptors.length; i++) {
-            data.append([descriptors[i].name], descriptors[i].value);
-            if (descriptors[i].descriptorValue === "") {
-                sendValidationRequest = false;
-                break;
-            }
+            test.push({
+                "descriptorKey": descriptors[i].name,
+                "descriptorValue": descriptors[i].value,
+                "documentTypeId": $("#docType").val()
+            });
         }
+        data.append("descriptors", JSON.stringify(test));
+        var sendValidationRequest = true;
         if (sendValidationRequest) {
             documentValidation(data);
         }
     }
-
 }
 
 function documentValidation(params) {
@@ -321,19 +306,17 @@ function documentValidation(params) {
         beforeSend: function (request) {
             request.setRequestHeader(header, token);
         },
+        beforeSend: function (request) {
+            request.setRequestHeader(header, token);
+        },
         success: function (data) {
-            if (data.messageType === "question") {
-                if (data.messageAction === "edit") {
-                    $("#existingDocumentID").val(data.messageData);
-                } else {
-                    $("#existingDocumentID").val(null);
-                }
-                showPopUp(data.messageText);
-            } else if (data.messageType === "alert-success") {
+            console.log(data);
+            if (data.text === "ok") {
                 checked = true;
-                $("#register_form").submit();
+                saveDocument();
             } else {
-                console.log(data);
+                $("#existingDocumentID").val(data.data);
+                showPopUp(data.text);
             }
         },
         error: function (request) {
@@ -363,19 +346,11 @@ function showPopUp(text) {
 function sendRequest() {
     isSure = true;
     $('#modal').modal('hide');
-    $("#register_form").submit();
+    saveDocument();
 }
 
 function closeModal() {
     isSure = false;
     $("#existingDocumentID").val(null);
     $('#modal').modal('hide');
-}
-
-function getFormattedDate(dateString) {
-    var date = new Date(dateString);
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    return day + "." + month + "." + year;
 }

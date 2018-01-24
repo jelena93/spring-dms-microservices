@@ -11,7 +11,7 @@ public class DocumentCmd {
     private Long ownerId;
     private Long activityId;
     private String fileName;
-    private Long documentType;
+    private Long documentTypeId;
     private List<DescriptorDto> descriptors;
     @JsonIgnore
     private MultipartFile file;
@@ -51,12 +51,12 @@ public class DocumentCmd {
         this.fileName = fileName;
     }
 
-    public Long getDocumentType() {
-        return documentType;
+    public Long getDocumentTypeId() {
+        return documentTypeId;
     }
 
-    public void setDocumentType(Long documentType) {
-        this.documentType = documentType;
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
     }
 
     public List<DescriptorDto> getDescriptors() {
@@ -78,6 +78,6 @@ public class DocumentCmd {
     @Override
     public String toString() {
         return "DocumentCmd{" + "input=" + input + ", ownerId=" + ownerId + ", fileName='" + fileName + '\''
-                + ", documentType=" + documentType + ", descriptors=" + descriptors + ", file=" + file + '}';
+                + ", documentTypeId=" + documentTypeId + ", descriptors=" + descriptors + ", file=" + file + '}';
     }
 }

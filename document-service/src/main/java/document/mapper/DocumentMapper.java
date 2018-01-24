@@ -5,6 +5,7 @@ import document.domain.Document;
 import document.dto.DocumentDto;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.io.IOException;
 import java.util.List;

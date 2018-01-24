@@ -11,7 +11,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" onclick="sendRequest()">Yes</button>
-                <button type="button" class="btn btn-default" onclick="closeModal()">No</button>
+                <button type="button" class="btn btn-primary" onclick="closeModal()">No</button>
             </div>
         </div>
     </div>
