@@ -14,14 +14,14 @@
         <div class="form-group" id="form_input_document_types">
             <label for="primitive" class="control-label col-lg-2">Input document types: <span class="required">*</span></label>
             <div class="col-lg-8">
-                <select multiple="true" required class="form-control" id="input_document_types" name="inputActivityDocumentTypes" required>
+                <select multiple="true" required class="form-control" id="input_document_types" name="input_document_types" required>
                 </select>
             </div>
         </div>
         <div class="form-group " id="form_output_document_types" >
             <label for="primitive" class="control-label col-lg-2">Output document types: <span class="required">*</span></label>
             <div class="col-lg-8">
-                <select multiple="true" required class="form-control" id="output_document_types" name="outputActivityDocumentTypes" required>
+                <select multiple="true" required class="form-control" id="output_document_types" name="output_document_types" required>
                 </select>
             </div>
         </div>

@@ -56,6 +56,9 @@ public class ProcessServiceController {
             TreeDto p;
             String icon;
             icon = TreeDto.PROCESS_ICON;
+            if (process.isPrimitive()) {
+                icon = TreeDto.PROCESS_PRIMITIVE_ICON;
+            }
             if (process.getParent() == null) {
                 p = new TreeDto(process.getId(), "#", process.getName(), icon, process.isPrimitive());
             } else {
@@ -159,6 +162,11 @@ public class ProcessServiceController {
         Activity activity = activityService.findOne(id);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
+        }
+        //        @TODO send message
+        if (activity.getInputListDocumentTypes().size() != activityCmd.getInputListDocumentTypes().size()) {
+            for (Long docType : activityCmd.getInputListDocumentTypes()) {
+            }
         }
         activityMapper.updateEntityFromModel(activityCmd, activity);
         activityService.save(activity);

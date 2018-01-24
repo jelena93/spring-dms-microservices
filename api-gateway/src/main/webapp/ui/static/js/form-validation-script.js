@@ -71,10 +71,10 @@ var Script = function () {
                     required: "Please provide a primitive process."
                 },
                 input_document_types: {
-                    required: "Please provide document types for input."
+                    required: "Please provide input document types."
                 },
                 output_document_types: {
-                    required: "Please provide document types for output."
+                    required: "Please provide output document types."
                 }
             }
         });
