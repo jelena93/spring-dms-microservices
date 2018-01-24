@@ -19,7 +19,7 @@ function search(query) {
                     '<span class="icon_folder_download"></span> Download</a>' +
                     '<a class="btn btn-default pull-right" href="/api/document/1/' + data[i].id + '" target="_blank" title="View file">' +
                     '<span class="icon_folder-open"></span> View</a>' +
-                    '<h3 class="list-group-item-heading">' + data[i].fileName + '</h3>';
+                    '<h4 class="list-group-item-heading">' + data[i].fileName + '</h4>';
                 for (var j = 0; j < data[i].descriptors.length; j++) {
                     documentsHtml += '<p class="list-group-item-text">' +
                         '<strong>' + data[i].descriptors[j].descriptorKey + ': </strong>' +

@@ -7,9 +7,9 @@
     margin-left: 5px;
 }
 
-/*.panel-body .radio label, .panel-body .checkbox label {*/
-/*display: block;*/
-/*}*/
+.panel-body .radio label, .panel-body .checkbox label {
+    display: block;
+}
 
 .panel .panel-heading, .panel-title, .panel-footer, thead, th {
     background-color: #394a59 !important;
@@ -39,4 +39,18 @@
 
 .well {
     background-color: #e0e6eb;
+}
+
+hr.hr-style {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+h3, h4 {
+    text-align: center;
+}
+
+h4 {
+    font-style: italic;
 }
