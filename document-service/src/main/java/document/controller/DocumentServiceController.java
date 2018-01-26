@@ -20,21 +20,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/")
@@ -45,22 +36,27 @@ public class DocumentServiceController {
     private final DocumentService documentService;
 
     @Autowired
-    public DocumentServiceController(DocumentMapper documentMapper, DocumentIndexer documentIndexer,
-                                     DocumentService documentService) {
+    public DocumentServiceController(
+            DocumentMapper documentMapper, DocumentIndexer documentIndexer, DocumentService documentService) {
         this.documentMapper = documentMapper;
         this.documentIndexer = documentIndexer;
         this.documentService = documentService;
     }
 
     @GetMapping("/search")
-    public List<DocumentDto> search(@RequestParam Long ownerId, @RequestParam(required = false) String query)
-            throws IOException {
+    public Map<String, Object> search(@RequestParam Long ownerId, @RequestParam(required = false) String query,
+                                      @RequestParam int limit,
+                                      @RequestParam int page) throws IOException {
+        Map<String, Object> map = new HashMap<>();
         try {
-            return mapToDocumentList(documentService.searchDocumentsForOwner(ownerId, query, 10, 1));
+            SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, limit, page);
+            List<DocumentDto> dtos = mapToDocumentList(searchResponse);
+            map.put("documents", dtos);
+            map.put("total", searchResponse.getHits().getTotalHits());
         } catch (IndexNotFoundException e) {
             System.out.println("search error" + e.getMessage());
         }
-        return new ArrayList<>();
+        return map;
     }
 
     @GetMapping("/all")
@@ -95,8 +91,8 @@ public class DocumentServiceController {
         ObjectMapper mapper = new ObjectMapper();
         DocumentDto documentDto = new DocumentDto();
         if (searchResponse.getHits().getHits().length > 0) {
-            documentDto = mapper
-                    .readValue(searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
+            documentDto = mapper.readValue(
+                    searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
         }
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.valueOf(documentDto.getAttachment().getContentType()));
@@ -106,14 +102,13 @@ public class DocumentServiceController {
     }
 
     @GetMapping(path = "/{ownerId}/{documentId}")
-    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId, @PathVariable long documentId)
-            throws IOException {
+    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId, @PathVariable long documentId) throws IOException {
         SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
         DocumentDto documentDto = new DocumentDto();
         ObjectMapper mapper = new ObjectMapper();
         if (searchResponse.getHits().getHits().length > 0) {
-            documentDto = mapper
-                    .readValue(searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
+            documentDto = mapper.readValue(
+                    searchResponse.getHits().getHits()[0].getSourceAsString(), DocumentDto.class);
         }
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.valueOf(documentDto.getAttachment().getContentType()));
@@ -137,8 +132,8 @@ public class DocumentServiceController {
             //@TODO same name -
             boolean sameName = false;
             Long documentId = null;
-            List<DocumentDto> documentsWithSameName = mapToDocumentList(documentService.findByName(
-                    documentValidationCmd.getOwnerId(), documentValidationCmd.getFileName()));
+            List<DocumentDto> documentsWithSameName = mapToDocumentList(
+                    documentService.findByName(documentValidationCmd.getOwnerId(), documentValidationCmd.getFileName()));
             System.out.println("documents sameName " + documentsWithSameName);
             if (!documentsWithSameName.isEmpty()) {
                 //ne mora id
@@ -151,7 +146,7 @@ public class DocumentServiceController {
             if (!documentsWithSameDescriptors.isEmpty()) {
                 documentId = documentsWithSameDescriptors.get(0).getId();
                 return new MessageDto("Document with same descriptors already exists. Do you want to save rewrite it?",
-                                      documentId);
+                        documentId);
             }
             return new MessageDto("ok", null);
         } catch (IndexNotFoundException ex) {

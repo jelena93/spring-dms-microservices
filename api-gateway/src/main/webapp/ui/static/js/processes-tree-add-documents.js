@@ -63,6 +63,7 @@ function getProcesses() {
             "themes": {
                 "variant": "large"
             },
+            "state": {"opened": false},
             "plugins": ["wholerow"]
         }
     }).on('activate_node.jstree', function (e, data) {
@@ -259,6 +260,12 @@ function saveDocument() {
                 checked = false;
                 isSure = false;
                 console.log(data);
+                $("#activity-info").hide();
+                $("#form-document").hide();
+                $("#btn-add-document").hide();
+                selectedNode = null;
+                $('#processes').jstree("deselect_all");
+                $('#processes').jstree(true).refresh();
             },
             error: function (request) {
                 console.log(request);
