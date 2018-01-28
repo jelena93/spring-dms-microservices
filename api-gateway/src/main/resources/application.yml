@@ -18,9 +18,9 @@ zuul:
     process-service: /api/process/**
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**
-    uaa-service:
-         path: /uauser/**
-         url: http://localhost:9999/uaa/user
+    uaa-service: /api/uaa/**
+#         path: /uauser/**
+#         url: http://localhost:9999/uaa/user
 #    uaa-service:
 #      path: /uaa/**
 #      url: http://localhost:9999/uaa/user
@@ -34,4 +34,5 @@ security:
     resource:
       userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false
-  sessions: ALWAYS
+  security:
+    sessions: never

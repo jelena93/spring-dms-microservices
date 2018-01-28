@@ -128,7 +128,7 @@
         </div>
     <#elseif RequestParameters.logout??>
         <div class="alert alert-info" align="center">
-            <strong>Logged out!</strong><br>You have Logged out of Loanstar
+            <strong>Logged out!</strong><br>You have Logged out of DMS
         </div>
     </#if>
         <form class="login-form" action="login" method="post">

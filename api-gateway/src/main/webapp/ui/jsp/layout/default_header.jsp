@@ -12,7 +12,7 @@
     <ul class="nav pull-right top-menu">
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <span class="username">Logged in as ${user}</span>
+                <span class="username">Logged in as ${user.details.principal.username}</span>
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu extended logout">
@@ -20,11 +20,7 @@
                 <li class="eborder-top">
                 </li>
                 <li>
-                    <a href="/uaa/logout"><i class="icon_key_alt"></i> Log Out</a>
-                    <%--<form action="/uaa/logout" method="POST">--%>
-                    <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-                    <%--<button class="btn btn-primary btn-lg btn-block" type="submit">logout</button>--%>
-                    <%--</form>--%>
+                    <a href="/logout"><i class="icon_key_alt"></i> Log Out</a>
                 </li>
             </ul>
         </li>

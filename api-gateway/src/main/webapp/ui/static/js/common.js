@@ -11,11 +11,11 @@ $(document).ready(function () {
 function getUsersCompany() {
     $.ajax({
         type: "GET",
-        url: "/api/company/user/" + user,
+        url: "/api/company/" + company,
         success: function (data) {
             if (data.companyId !== null) {
-                setCookie("companyId", data.companyId);
-                setCookie("companyName", data.companyName);
+                setCookie("companyId", data.id);
+                setCookie("companyName", data.name);
             }
         },
         error: function (request) {

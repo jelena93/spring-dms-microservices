@@ -12,13 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <tiles:insertAttribute name="head"/>
     <tiles:importAttribute name="title" scope="request"/>
-    <sec:authentication var="user" property="principal" scope="request"/>
+    <sec:authentication var="user" property="userAuthentication" scope="request"/>
     <sec:authentication var="authorityList" property="userAuthentication.authorities" scope="request"/>
     <title>${title}</title>
 </head>
 <body>
 <script language=javascript>
-    var user = "${user}";
+    var user = "${user.details.principal.username}";
+    var company = "${user.details.principal.companyId}";
 </script>
 <!-- container section start -->
 <section id="container" class="">

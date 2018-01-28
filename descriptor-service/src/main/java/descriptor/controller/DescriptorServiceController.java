@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,19 +69,19 @@ public class DescriptorServiceController {
         DocumentType documentType = documentTypeService.findOne(documentCmd.getDocumentTypeId());
         List<Descriptor> descriptors = documentType.getDescriptors();
         List<DescriptorDto> descriptorDtos = descriptors.stream()
-                                                        .filter(descriptor -> descriptor.getDocumentId() == null).
-                                                                map(descriptor -> new DescriptorDto(
-                                                                        documentCmd.getDocumentTypeId(),
-                                                                        descriptor.getDescriptorKey(),
-                                                                        request.getParameter(
-                                                                                descriptor.getDescriptorKey()).trim(),
-                                                                        descriptor.getDescriptorType().getParamClass()))
-                                                        .collect(Collectors.toList());
+                .filter(descriptor -> descriptor.getDocumentId() == null).
+                        map(descriptor -> new DescriptorDto(
+                                documentCmd.getDocumentTypeId(),
+                                descriptor.getDescriptorKey(),
+                                request.getParameter(
+                                        descriptor.getDescriptorKey()).trim(),
+                                descriptor.getDescriptorType().getParamClass()))
+                .collect(Collectors.toList());
         List<Descriptor> newDescriptors = descriptors.stream().filter(descriptor -> descriptor.getDocumentId() == null).
                 map(descriptor -> new Descriptor(descriptor.getDescriptorKey(),
-                                                 request.getParameter(descriptor.getDescriptorKey()).trim(),
-                                                 descriptor.getDocumentType(), descriptor.getDescriptorType()))
-                                                     .collect(Collectors.toList());
+                        request.getParameter(descriptor.getDescriptorKey()).trim(),
+                        descriptor.getDocumentType(), descriptor.getDescriptorType()))
+                .collect(Collectors.toList());
         documentCmd.setDescriptors(descriptorDtos);
         MultiValueMap<String, Object> valueMap = new LinkedMultiValueMap<>();//
         valueMap.add("file", new ByteArrayResource(documentCmd.getFile().getBytes()));

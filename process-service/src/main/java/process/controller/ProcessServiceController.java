@@ -1,16 +1,8 @@
 package process.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.*;
 import process.command.ActivityCmd;
 import process.command.ProcessCmd;
 import process.domain.Activity;
@@ -25,6 +17,7 @@ import process.service.ProcessService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,7 +42,8 @@ public class ProcessServiceController {
     }
 
     @GetMapping(path = "/all/{ownerId}")
-    public List<TreeDto> getProcesses(@PathVariable long ownerId) {
+    public List<TreeDto> getProcesses(@PathVariable long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
+        checkUser(ownerId, oAuth2Authentication);
         List<Process> processes = processService.findByOwnerId(ownerId);
         List<TreeDto> data = new ArrayList<>();
         for (Process process : processes) {
@@ -63,7 +57,7 @@ public class ProcessServiceController {
                 p = new TreeDto(process.getId(), "#", process.getName(), icon, process.isPrimitive());
             } else {
                 p = new TreeDto(process.getId(), process.getParent().getId() + "", process.getName(), icon,
-                                process.isPrimitive());
+                        process.isPrimitive());
             }
             data.add(p);
             if (process.isPrimitive() && process.getActivityList() != null) {
@@ -78,8 +72,9 @@ public class ProcessServiceController {
     }
 
     @GetMapping(path = "/process/{id}")
-    public Process showProcess(@PathVariable long id) throws Exception {
+    public Process showProcess(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Process process = processService.findOne(id);
+        checkUser(process.getOwnerId(), oAuth2Authentication);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
@@ -93,8 +88,9 @@ public class ProcessServiceController {
     }
 
     @PutMapping(path = "/process/{id}")
-    public Process editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd) throws Exception {
+    public Process editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         Process process = processService.findOne(id);
+        checkUser(process.getOwnerId(), oAuth2Authentication);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
@@ -103,9 +99,9 @@ public class ProcessServiceController {
             deleteChildren(process, processService.findByParent(process), documentIds, true);
         } else {
             documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
-                                      .collect(Collectors.toList()));
+                    .collect(Collectors.toList()));
             documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
-                                      .collect(Collectors.toList()));
+                    .collect(Collectors.toList()));
         }
         System.out.println("a sadaaa " + documentIds);
         processMapper.updateEntityFromModel(processCmd, process);
@@ -116,30 +112,11 @@ public class ProcessServiceController {
         return process;
     }
 
-    private void deleteChildren(Process process, List<Process> processes, List<Long> documentIds, boolean root) {
-        List<Process> children = getChildren(process, processes);
-        for (Process child : children) {
-            deleteChildren(child, processes, documentIds, false);
-        }
-        if (!root) {
-            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
-                                      .collect(Collectors.toList()));
-            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
-                                      .collect(Collectors.toList()));
-        }
-    }
-
-    private List<Process> getChildren(Process p, List<Process> lista) {
-        List<Process> children = new ArrayList<>();
-        for (Process process : lista) {
-            if (p != null && p.equals(process.getParent())) { children.add(process); }
-        }
-        return children;
-    }
 
     @GetMapping(path = "/activity/{id}")
-    public Activity getActivity(@PathVariable long id) throws Exception {
+    public Activity getActivity(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Activity activity = activityService.findOne(id);
+        checkUser(activity.getProcess().getOwnerId(), oAuth2Authentication);
         System.out.println(activity);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
@@ -148,9 +125,10 @@ public class ProcessServiceController {
     }
 
     @PostMapping(path = "/activity")
-    public Process addActivity(@RequestBody ActivityCmd activityCmd) throws Exception {
+    public Process addActivity(@RequestBody ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         System.out.println("addActivity " + activityCmd);
         Process process = processService.findOne(activityCmd.getProcessId());
+        checkUser(process.getOwnerId(), oAuth2Authentication);
         Activity activity = activityMapper.mapToEntity(activityCmd);
         process.getActivityList().add(activity);
         process = processService.save(process);
@@ -158,23 +136,47 @@ public class ProcessServiceController {
     }
 
     @PutMapping(path = "/activity/{id}")
-    public Activity editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd) throws Exception {
+    public Activity editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         Activity activity = activityService.findOne(id);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
-        //        @TODO send message
-        if (activity.getInputListDocumentTypes().size() != activityCmd.getInputListDocumentTypes().size()) {
-            for (Long docType : activityCmd.getInputListDocumentTypes()) {
-            }
-        }
+        checkUser(activity.getProcess().getOwnerId(), oAuth2Authentication);
         activityMapper.updateEntityFromModel(activityCmd, activity);
         activityService.save(activity);
         return activity;
     }
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
+        Map<String, Object> details = (Map<String, Object>) oAuth2Authentication.getUserAuthentication().getDetails();
+        Map<String, Object> principal = (Map<String, Object>) details.get("principal");
+        System.out.println(principal.get("companyId"));
+        if (ownerId != Long.valueOf(principal.get("companyId").toString())) {
+            throw new Exception("Not allowed");
+        }
     }
+
+    private static void deleteChildren(Process process, List<Process> processes, List<Long> documentIds, boolean root) {
+        List<Process> children = getChildren(process, processes);
+        for (Process child : children) {
+            deleteChildren(child, processes, documentIds, false);
+        }
+        if (!root) {
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
+                    .collect(Collectors.toList()));
+            documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private static List<Process> getChildren(Process p, List<Process> lista) {
+        List<Process> children = new ArrayList<>();
+        for (Process process : lista) {
+            if (p != null && p.equals(process.getParent())) {
+                children.add(process);
+            }
+        }
+        return children;
+    }
+
 }

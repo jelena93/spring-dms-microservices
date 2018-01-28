@@ -13,6 +13,7 @@ import company.service.CompanyService;
 import company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController("/")
 public class CompanyServiceController {
@@ -65,9 +68,10 @@ public class CompanyServiceController {
     //    }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CompanyDto getCompanyById(@PathVariable long id) throws Exception {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
+    public CompanyDto getCompanyById(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Company company = companyService.findOne(id);
+        checkUser(id, oAuth2Authentication);
         if (company == null) {
             throw new Exception("There is no company with id " + id);
         }
@@ -90,8 +94,11 @@ public class CompanyServiceController {
 
     @GetMapping("/user/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
-    public UserDto getUser(@PathVariable String username) {
+    public UserDto getUser(@PathVariable String username, Principal principal) throws Exception {
         UserDto userDto = userMapper.mapToModel(userService.findOne(username));
+        if (!principal.getName().equals(userDto.getUsername())) {
+            throw new Exception("Not allowed to see other users");
+        }
         System.out.println(userDto);
         return userDto;
     }
@@ -111,4 +118,12 @@ public class CompanyServiceController {
         return Role.values();
     }
 
+    private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
+        Map<String, Object> details = (Map<String, Object>) oAuth2Authentication.getUserAuthentication().getDetails();
+        Map<String, Object> principal = (Map<String, Object>) details.get("principal");
+        System.out.println(principal.get("companyId"));
+        if (ownerId != Long.valueOf(principal.get("companyId").toString())) {
+            throw new Exception("Not allowed");
+        }
+    }
 }

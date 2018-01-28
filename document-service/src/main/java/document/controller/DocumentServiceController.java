@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,9 @@ public class DocumentServiceController {
     @GetMapping("/search")
     public Map<String, Object> search(@RequestParam Long ownerId, @RequestParam(required = false) String query,
                                       @RequestParam int limit,
-                                      @RequestParam int page) throws IOException {
+                                      @RequestParam int page,
+                                      OAuth2Authentication oAuth2Authentication) throws Exception {
+        checkUser(ownerId, oAuth2Authentication);
         Map<String, Object> map = new HashMap<>();
         try {
             SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, limit, page);
@@ -59,8 +62,9 @@ public class DocumentServiceController {
         return map;
     }
 
-    @GetMapping("/all")
-    public List<DocumentDto> all() throws IOException {
+    @GetMapping("/{ownerId}/all")
+    public List<DocumentDto> all(@PathVariable long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
+        checkUser(ownerId, oAuth2Authentication);
         try {
             return mapToDocumentList(documentService.getAllDocuments());
         } catch (IndexNotFoundException e) {
@@ -70,10 +74,11 @@ public class DocumentServiceController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> addDocument(HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> addDocument(HttpServletRequest request, OAuth2Authentication oAuth2Authentication) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
         System.out.println(documentCmd);
+        checkUser(documentCmd.getOwnerId(), oAuth2Authentication);
         Document document = documentMapper.mapToEntity(documentCmd);
         Part filePart = request.getPart("file");
         document.setFile(ByteStreams.toByteArray(filePart.getInputStream()));
@@ -85,8 +90,10 @@ public class DocumentServiceController {
     }
 
     @GetMapping("/download/{ownerId}/{documentId}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable long ownerId, @PathVariable long documentId)
-            throws IOException {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable long ownerId,
+                                               @PathVariable long documentId,
+                                               OAuth2Authentication oAuth2Authentication) throws Exception {
+        checkUser(ownerId, oAuth2Authentication);
         SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
         ObjectMapper mapper = new ObjectMapper();
         DocumentDto documentDto = new DocumentDto();
@@ -102,7 +109,10 @@ public class DocumentServiceController {
     }
 
     @GetMapping(path = "/{ownerId}/{documentId}")
-    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId, @PathVariable long documentId) throws IOException {
+    public ResponseEntity<byte[]> showFile(@PathVariable long ownerId,
+                                           @PathVariable long documentId,
+                                           OAuth2Authentication oAuth2Authentication) throws Exception {
+        checkUser(ownerId, oAuth2Authentication);
         SearchResponse searchResponse = documentService.findOne(ownerId, documentId);
         DocumentDto documentDto = new DocumentDto();
         ObjectMapper mapper = new ObjectMapper();
@@ -154,7 +164,7 @@ public class DocumentServiceController {
         }
     }
 
-    private List<DocumentDto> mapToDocumentList(SearchResponse searchResponse) throws IOException {
+    private static List<DocumentDto> mapToDocumentList(SearchResponse searchResponse) throws IOException {
         List<DocumentDto> documents = new ArrayList<>();
         System.out.println(searchResponse);
         ObjectMapper mapper = new ObjectMapper();
@@ -163,5 +173,14 @@ public class DocumentServiceController {
         }
         System.out.println("total hits: " + searchResponse.getHits().getTotalHits());
         return documents;
+    }
+
+    private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
+        Map<String, Object> details = (Map<String, Object>) oAuth2Authentication.getUserAuthentication().getDetails();
+        Map<String, Object> principal = (Map<String, Object>) details.get("principal");
+        System.out.println(principal.get("companyId"));
+        if (ownerId != Long.valueOf(principal.get("companyId").toString())) {
+            throw new Exception("Not allowed");
+        }
     }
 }

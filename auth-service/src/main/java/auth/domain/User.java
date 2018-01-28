@@ -1,16 +1,8 @@
 package auth.domain;
 
-import org.hibernate.validator.constraints.Email;
-
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 //ADMIN, //kreira kompaniju, kreira korisnika i dodeljuje korisnika kompaniji
 //        USER, //kreira procese kompaniji
@@ -27,9 +19,8 @@ public class User {
     @Size(min = 0, max = 500)
     private String password;
 
-    @Email
-    @Size(min = 0, max = 50)
-    private String email;
+    @Column(name = "company_id")
+    private Long companyId;
 
     private boolean activated;
 
@@ -62,12 +53,12 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public boolean isActivated() {
@@ -104,12 +95,18 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         User user = (User) o;
 
-        if (!username.equals(user.username)) { return false; }
+        if (!username.equals(user.username)) {
+            return false;
+        }
 
         return true;
     }
@@ -121,8 +118,14 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\''
-                + ", activated='" + activated + '\'' + ", activationKey='" + activationKey + '\''
-                + ", resetPasswordKey='" + resetPasswordKey + '\'' + ", authorities=" + authorities + '}';
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", companyId=" + companyId +
+                ", activated=" + activated +
+                ", activationKey='" + activationKey + '\'' +
+                ", resetPasswordKey='" + resetPasswordKey + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

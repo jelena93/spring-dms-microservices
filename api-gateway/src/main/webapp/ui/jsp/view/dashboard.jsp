@@ -1,1 +1,1 @@
-<h2>Welcome ${user}</h2>
+<h2>Welcome ${user.details.principal.username}</h2>

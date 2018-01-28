@@ -8,18 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -40,28 +29,31 @@ public class Activity implements Serializable {
     private String name;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "activity_input_document_types", uniqueConstraints = @UniqueConstraint(columnNames = {
-            "activity_id", "document_type_id" }))
+            "activity_id", "document_type_id"}))
     @Column(name = "document_type_id")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Long> inputListDocumentTypes = new ArrayList<>();
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @CollectionTable(name = "activity_output_document_types", uniqueConstraints = @UniqueConstraint(columnNames = {
-            "activity_id", "document_type_id" }))
+            "activity_id", "document_type_id"}))
     @Column(name = "document_type_id")
     private List<Long> outputListDocumentTypes = new ArrayList<>();
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "activity_inputs", uniqueConstraints = @UniqueConstraint(columnNames = { "activity_id",
-            "document_id" }))
+    @CollectionTable(name = "activity_inputs", uniqueConstraints = @UniqueConstraint(columnNames = {"activity_id",
+            "document_id"}))
     @Column(name = "document_id")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Long> inputList = new ArrayList<>();
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    @CollectionTable(name = "activity_outputs", uniqueConstraints = @UniqueConstraint(columnNames = { "activity_id",
-            "document_id" }))
+    @CollectionTable(name = "activity_outputs", uniqueConstraints = @UniqueConstraint(columnNames = {"activity_id",
+            "document_id"}))
     @Column(name = "document_id")
     private List<Long> outputList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "process_id")
+    private Process process;
 
     public Activity() {
     }
@@ -125,6 +117,14 @@ public class Activity implements Serializable {
 
     public void setOutputList(List<Long> outputList) {
         this.outputList = outputList;
+    }
+
+    public Process getProcess() {
+        return process;
+    }
+
+    public void setProcess(Process process) {
+        this.process = process;
     }
 
     @Override
