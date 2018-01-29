@@ -6,7 +6,6 @@ var modeEdit = "edit";
 var modeAdd = "add";
 var mode = modeEdit;
 var isSure = false;
-var companyId = getCookie("companyId");
 var documentTypes = null;
 $(document).ready(function () {
     $("#company-name").html(getCookie("companyName"));
@@ -20,7 +19,7 @@ function getProcesses() {
     }).jstree({
         'core': {
             'data': {
-                url: "/api/process/all/" + companyId,
+                url: "/api/process/all/" + company,
                 'data': function (node) {
                     return {'id': node.id};
                 }
@@ -167,7 +166,7 @@ function addProcess() {
         dataType: 'json',
         data: JSON.stringify({
             name: $("#name").val(),
-            ownerId: companyId,
+            ownerId: company,
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),
@@ -241,7 +240,7 @@ function editProcess(url) {
         dataType: 'json',
         data: JSON.stringify({
             name: $("#name").val(),
-            ownerId: companyId,
+            ownerId: company,
             parentId: selectedNode !== null ? selectedNode.id : null,
             primitive: $("#primitive").prop('checked')
         }),

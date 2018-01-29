@@ -12,7 +12,7 @@
 }
 
 .panel .panel-heading, .panel-title, .panel-footer, thead, th {
-    background-color: #394a59 !important;
+    background-color: #05386B !important;
     /*color: #d0d8df!important;*/
     color: whitesmoke !important;
 }
@@ -53,4 +53,16 @@ h3, h4 {
 
 h4 {
     font-style: italic;
+}
+
+.header-custom {
+    background-color: #05386B;
+}
+
+.sidebar-custom {
+    background-color: #05386B;
+}
+
+.lite {
+    color: #edf5e1 !important;
 }

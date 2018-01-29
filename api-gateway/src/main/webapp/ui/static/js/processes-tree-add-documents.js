@@ -48,13 +48,11 @@ function setDescriptors(docType) {
     });
 }
 
-var companyId = getCookie("companyId");
-
 function getProcesses() {
     $('#processes').jstree({
         'core': {
             'data': {
-                url: "/api/process/all/" + companyId,
+                url: "/api/process/all/" + company,
                 'data': function (node) {
                     return {'id': node.id};
                 }
@@ -103,7 +101,7 @@ function getDocumentTypes() {
 function getDocuments() {
     $.ajax({
         type: "GET",
-        url: "/api/document/all",
+        url: "/api/document/" + company + "/all",
         dataType: 'json',
         success: function (docs) {
             documents = docs.reduce(function (map, obj) {
@@ -236,7 +234,7 @@ function saveDocument() {
     }
     if (checked || isSure) {
         var data = new FormData();
-        data.append("ownerId", companyId);
+        data.append("ownerId", company);
         data.append("file", $("#file").prop('files')[0]);
         data.append("documentTypeId", $("#docType").val());
         data.append("activityId", selectedNode.id);
@@ -266,6 +264,7 @@ function saveDocument() {
                 selectedNode = null;
                 $('#processes').jstree("deselect_all");
                 $('#processes').jstree(true).refresh();
+                getDocuments();
             },
             error: function (request) {
                 console.log(request);
@@ -281,7 +280,7 @@ function validateDocument() {
     if (selectedNode !== null) {
         var docType = $("#docType").val();
         var data = new FormData();
-        data.append("ownerId", companyId);
+        data.append("ownerId", company);
         data.append("file", $("#file").prop('files')[0]);
         data.append("documentTypeId", $("#docType").val());
         var descriptors = $(".descriptors");
