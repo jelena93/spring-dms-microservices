@@ -12,7 +12,8 @@ Website: http://geekslabs.com/
 body {
     color: #797979;
     background: #eeeeee;
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
+    /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     padding: 0px !important;
     margin: 0px !important;
     font-size:14px !important;    

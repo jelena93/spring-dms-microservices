@@ -56,7 +56,7 @@ h4 {
 }
 
 .header-custom {
-    background-color: #05386B;
+    background-color: #5cdb95;
 }
 
 .sidebar-custom {
@@ -65,4 +65,21 @@ h4 {
 
 .lite {
     color: #edf5e1 !important;
+    text-shadow: 1.5px 2px #05386B;
+}
+
+.username {
+    color: #f4f9ec !important;
+    font-weight: 800;
+}
+
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+h3 {
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    text-transform: uppercase;
 }
