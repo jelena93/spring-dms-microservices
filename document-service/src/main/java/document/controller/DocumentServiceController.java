@@ -66,7 +66,7 @@ public class DocumentServiceController {
     public List<DocumentDto> all(@PathVariable long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
         checkUser(ownerId, oAuth2Authentication);
         try {
-            return mapToDocumentList(documentService.getAllDocuments());
+            return mapToDocumentList(documentService.findAll(ownerId));
         } catch (IndexNotFoundException e) {
             System.out.println("all " + e.getMessage());
         }

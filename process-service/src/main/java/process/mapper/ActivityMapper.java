@@ -3,9 +3,9 @@ package process.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import process.command.ActivityCmd;
 import process.domain.Activity;
+import process.dto.ActivityDto;
 
 @Mapper(componentModel = "spring")
 public interface ActivityMapper {
@@ -15,5 +15,7 @@ public interface ActivityMapper {
     @Mapping(target = "inputListDocumentTypes", ignore = true)
     @Mapping(target = "outputListDocumentTypes", ignore = true)
     void updateEntityFromModel(ActivityCmd activityCmd, @MappingTarget Activity activity);
+
+    ActivityDto mapToModel(Activity activity);
 
 }

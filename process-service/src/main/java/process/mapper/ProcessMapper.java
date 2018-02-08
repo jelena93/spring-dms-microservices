@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import process.command.ProcessCmd;
 import process.domain.Process;
+import process.dto.ProcessDto;
 
 @Mapper(componentModel = "spring")
 @DecoratedWith(ProcessMapperDecorator.class)
@@ -17,4 +18,6 @@ public interface ProcessMapper {
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "ownerId", ignore = true)
     void updateEntityFromModel(ProcessCmd locationCmd, @MappingTarget Process process);
+
+    ProcessDto mapToModel(Process process);
 }

@@ -63,10 +63,6 @@ table tr th { color: #688a7e;}
     padding-bottom: 10px;
     padding-top: 10px;
 }
-.lite{
-    color: #0080b3 !important;
-}
-
 /*login page*/
 
 .login-body {
@@ -261,7 +257,7 @@ table tr th { color: #688a7e;}
     width: 180px;
     height: 100%;
     position: fixed;
-    background: #394a59;
+    /*background: #394a59;*/
 }
 
 .nav-collapse.collapse {
@@ -286,7 +282,7 @@ ul.sidebar-menu {
 }
 
 ul.sidebar-menu li ul.sub li{
-    background: #394a59;
+    /*background: #394a59;*/
     margin-bottom: 0;
     margin-left: 0;
     margin-right: 0;
@@ -361,7 +357,7 @@ ul.sidebar-menu li a{
     top: 2px;
 }*/
 ul.sidebar-menu li.active a, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus {
-    background: #2e3b46;
+    /*background: #2e3b46;*/
     color: #fff;
     display: block;
     /*border-radius: 4px;

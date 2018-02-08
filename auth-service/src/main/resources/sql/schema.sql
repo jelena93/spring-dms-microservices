@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS authority;
 DROP TABLE IF EXISTS user_authority;
 DROP TABLE IF EXISTS oauth_access_token;
 DROP TABLE IF EXISTS oauth_refresh_token;
+DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
   username         VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -23,7 +24,6 @@ CREATE TABLE user_authority (
   FOREIGN KEY (username) REFERENCES user (username),
   FOREIGN KEY (authority) REFERENCES authority (name),
   PRIMARY KEY (username, authority)
-#     UNIQUE INDEX user_authority_idx_1 (username, authority)
 );
 
 CREATE TABLE oauth_access_token (

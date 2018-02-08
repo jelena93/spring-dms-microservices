@@ -7,6 +7,8 @@ import process.command.ActivityCmd;
 import process.command.ProcessCmd;
 import process.domain.Activity;
 import process.domain.Process;
+import process.dto.ActivityDto;
+import process.dto.ProcessDto;
 import process.dto.TreeDto;
 import process.mapper.ActivityMapper;
 import process.mapper.ProcessMapper;
@@ -72,13 +74,13 @@ public class ProcessServiceController {
     }
 
     @GetMapping(path = "/process/{id}")
-    public Process showProcess(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
+    public ProcessDto showProcess(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Process process = processService.findOne(id);
         checkUser(process.getOwnerId(), oAuth2Authentication);
         if (process == null) {
             throw new Exception("There is no process with id " + id);
         }
-        return process;
+        return processMapper.mapToModel(process);
     }
 
     @PostMapping(path = "/process")
@@ -114,14 +116,14 @@ public class ProcessServiceController {
 
 
     @GetMapping(path = "/activity/{id}")
-    public Activity getActivity(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
+    public ActivityDto getActivity(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Activity activity = activityService.findOne(id);
         checkUser(activity.getProcess().getOwnerId(), oAuth2Authentication);
         System.out.println(activity);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
-        return activity;
+        return activityMapper.mapToModel(activity);
     }
 
     @PostMapping(path = "/activity")
