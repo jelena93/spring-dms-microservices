@@ -45,8 +45,6 @@ public class CompanyServiceController {
         this.userMapper = userMapper;
     }
 
-    @Autowired
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<CompanyDto> getCompanies() {

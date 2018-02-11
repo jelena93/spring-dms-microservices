@@ -63,7 +63,6 @@ public class AuthServiceApplication extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
-        //        registry.addViewController("/oauth/confirm_access").setViewName("authorize");
     }
 
     public static void main(String[] args) {

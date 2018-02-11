@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,9 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateCustomizer;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -36,8 +36,11 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.util.WebUtils;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -46,7 +49,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableZuulProxy
 @EnableSwagger2
 @EnableOAuth2Sso
-public class GatewayApplication extends SpringBootServletInitializer {
+public class GatewayApplication implements WebApplicationInitializer {
+
+    @Override
+    public void onStartup(ServletContext container) throws ServletException {
+        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+        ctx.setServletContext(container);
+        ServletRegistration.Dynamic servlet = container.addServlet("dispatcher", new DispatcherServlet(ctx));
+        servlet.setLoadOnStartup(1);
+        servlet.addMapping("/");
+    }
 
     @LoadBalanced
     @Bean
@@ -63,15 +75,8 @@ public class GatewayApplication extends SpringBootServletInitializer {
         return registration;
     }
 
-    private static Class<GatewayApplication> applicationClass = GatewayApplication.class;
-
     public static void main(String[] args) {
         SpringApplication.run(GatewayApplication.class, args);
-    }
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(applicationClass);
     }
 
     @Configuration
@@ -95,7 +100,7 @@ public class GatewayApplication extends SpringBootServletInitializer {
             return new OncePerRequestFilter() {
                 @Override
                 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                                FilterChain filterChain) throws ServletException, IOException {
+                        FilterChain filterChain) throws ServletException, IOException {
                     CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
                     if (csrf != null) {
                         Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");

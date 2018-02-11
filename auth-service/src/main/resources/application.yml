@@ -1,22 +1,17 @@
 server:
   port: 9999
   context-path: /uaa
-
 security:
   sessions: never
-
 spring:
   application:
       name: uaa-service
   jpa:
+    show_sql: true
+    format_sql: true
     hibernate:
       use-new-id-generator-mappings: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        hbm2ddl:
-          auto: none
+      ddl-auto: validate
   datasource:
     url: jdbc:mysql://localhost:3306/auth?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: admin
@@ -29,7 +24,6 @@ spring:
       port: 5672
       username: guest
       password: guest
-
 eureka:
   instance:
       hostname: localhost

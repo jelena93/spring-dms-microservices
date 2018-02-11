@@ -29,10 +29,11 @@ security:
     client:
       accessTokenUri: http://localhost:9999/uaa/oauth/token
       userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
-      clientId: ui1
-      clientSecret: ui1-secret
+      clientId: api-gateway
+      clientSecret: api-gateway-secret
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      loadBalanced: true
+      userInfoUri: http://uaa-service/uaa/user
       preferTokenInfo: false
   security:
     sessions: never

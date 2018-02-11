@@ -9,7 +9,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 @RefreshScope
-public class SwaggerConfig {
+public class SwaggerConfiguration {
     @Bean
     public Docket api() {
 

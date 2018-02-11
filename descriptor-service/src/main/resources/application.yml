@@ -9,14 +9,11 @@ spring:
      max-file-size: 1024KB
      max-request-size: 1024KB
   jpa:
+    show_sql: true
+    format_sql: true
     hibernate:
       use-new-id-generator-mappings: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        hbm2ddl:
-          auto: create-drop
+      ddl-auto: create-drop
   datasource:
     url: jdbc:mysql://localhost:3306/descriptor?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: admin
@@ -36,8 +33,8 @@ spring:
 security:
   oauth2:
     client:
-      clientId: ui2
-      clientSecret: ui2-secret
+      clientId: descriptor-service
+      clientSecret: descriptor-service-secret
     resource:
       userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false

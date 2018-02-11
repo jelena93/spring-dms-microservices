@@ -15,8 +15,8 @@ spring:
 security:
   oauth2:
     client:
-      clientId: ui3
-      clientSecret: ui3-secret
+      clientId: document-service
+      clientSecret: document-service-secret
     resource:
       userInfoUri: http://localhost:9999/uaa/user
       preferTokenInfo: false
