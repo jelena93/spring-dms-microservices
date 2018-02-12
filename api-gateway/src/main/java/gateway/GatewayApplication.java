@@ -1,24 +1,13 @@
 package gateway;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -44,11 +33,19 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.util.WebUtils;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableZuulProxy
 @EnableSwagger2
 @EnableOAuth2Sso
+@EnableCircuitBreaker
 public class GatewayApplication implements WebApplicationInitializer {
 
     @Override

@@ -7,9 +7,8 @@
         <artifactId>spring-dms-microservices</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>org</groupId>
+    <name>document-service</name>
     <artifactId>document-service</artifactId>
-    <version>1</version>
     <packaging>jar</packaging>
 
     <properties>

@@ -7,9 +7,8 @@
         <artifactId>spring-dms-microservices</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>org</groupId>
     <artifactId>descriptor-service</artifactId>
-    <version>1</version>
+    <name>descriptor-service</name>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

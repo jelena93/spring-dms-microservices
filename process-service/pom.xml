@@ -7,8 +7,8 @@
         <artifactId>spring-dms-microservices</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>dms</groupId>
     <artifactId>process-service</artifactId>
+    <name>process-service</name>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

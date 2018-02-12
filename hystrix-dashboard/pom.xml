@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>configuration-service</artifactId>
+    <artifactId>hystrix-dashboard</artifactId>
     <packaging>jar</packaging>
-    <name>configuration-service</name>
+    <name>hystrix-dashboard</name>
 
     <parent>
         <groupId>org.dms</groupId>
@@ -22,11 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
+            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
         </dependency>
     </dependencies>
 
