@@ -1,0 +1,11 @@
+server:
+  port: 8084
+spring:
+  cloud:
+    config:
+      enabled: true
+      discovery:
+        enabled: true
+        serviceId: configuration-service
+  application:
+    name: document-service

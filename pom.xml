@@ -17,6 +17,7 @@
     </parent>
 
     <modules>
+        <module>configuration-service</module>
         <module>service-discovery</module>
         <module>auth-service</module>
         <module>api-gateway</module>
