@@ -38,7 +38,7 @@ public class Company implements Serializable {
     @Column(name = "headquarters")
     @NotNull
     private String headquarters;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "company_id")
     private List<User> userList = new ArrayList<>();
 

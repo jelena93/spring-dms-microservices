@@ -58,4 +58,16 @@ public class CompanyDto {
     public void setUserList(List<UserDto> userList) {
         this.userList = userList;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", pib='" + pib + '\'' +
+                ", identificationNumber='" + identificationNumber + '\'' +
+                ", headquarters='" + headquarters + '\'' +
+                ", userList=" + userList +
+                '}';
+    }
 }
