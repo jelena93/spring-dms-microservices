@@ -27,13 +27,12 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/logout")
 public class LogoutController {
 
-    String logoutUrl = "http://uaa-service/uaa/oauth/revoke-token";
+    String logoutUrl = "http://auth-service/uaa/oauth/revoke-token";
     @Autowired
     private RestTemplate restTemplate;
 
     @GetMapping
     public String logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
-        System.out.println("evo meeeeeeeeeeeee");
         Object details = authentication.getDetails();
         if (details.getClass().isAssignableFrom(OAuth2AuthenticationDetails.class)) {
 

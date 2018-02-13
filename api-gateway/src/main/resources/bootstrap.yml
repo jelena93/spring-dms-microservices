@@ -18,10 +18,10 @@ zuul:
     process-service: /api/process/**
     document-service: /api/document/**
     descriptor-service: /api/descriptor/**
-    uaa-service: /api/uaa/**
+    auth-service: /api/uaa/**
 #         path: /uauser/**
 #         url: http://localhost:9999/uaa/user
-#    uaa-service:
+#    auth-service:
 #      path: /uaa/**
 #      url: http://localhost:9999/uaa/user
 security:
@@ -33,7 +33,7 @@ security:
       clientSecret: api-gateway-secret
     resource:
       loadBalanced: true
-      userInfoUri: http://uaa-service/uaa/user
+      userInfoUri: http://auth-service/uaa/user
       preferTokenInfo: false
   security:
     sessions: never

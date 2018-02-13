@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableConfigServer
 public class ConfigurationServiceApplication extends WebMvcConfigurerAdapter {
 
-
     public static void main(String[] args) {
         SpringApplication.run(ConfigurationServiceApplication.class, args);
     }

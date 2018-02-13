@@ -25,7 +25,6 @@
         <module>process-service</module>
         <module>descriptor-service</module>
         <module>document-service</module>
-        <module>hystrix-dashboard</module>
     </modules>
 
     <properties>
@@ -56,7 +55,6 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>

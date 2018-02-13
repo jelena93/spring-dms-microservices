@@ -4,13 +4,8 @@ spring:
   application:
     name: service-discovery
 eureka:
-  instance:
-    hostname: localhost
-    port: ${server.port}
   client:
-    registerWithEureka: false
-    fetchRegistry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-  server:
-    waitTimeInMsWhenSyncEmpty: 0
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+          defaultZone: http://localhost:${server.port}/eureka
