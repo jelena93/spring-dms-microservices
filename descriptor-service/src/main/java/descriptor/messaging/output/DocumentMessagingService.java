@@ -8,7 +8,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DocumentOutputMessagingService {
+public class DocumentMessagingService {
     @Autowired
     @Qualifier(DocumentOutputChannel.DOCUMENT_ADDED_OUTPUT)
     private MessageChannel documentAddedMessageChannel;

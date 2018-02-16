@@ -11,11 +11,14 @@ import process.service.ProcessService;
 @Component
 public class ApplicationStartup implements InitializingBean {
 
-    @Value("${add-to-db}")
-    private boolean addToDb;
+    private final boolean addToDb;
+    private final ProcessService processService;
 
     @Autowired
-    ProcessService processService;
+    public ApplicationStartup(@Value("${addToDb}") boolean addToDb, ProcessService processService) {
+        this.addToDb = addToDb;
+        this.processService = processService;
+    }
 
     @Override
     public void afterPropertiesSet() {
@@ -68,7 +71,7 @@ public class ApplicationStartup implements InitializingBean {
 
             Process otpremanje = new Process("Otpremanje robe", skladistenje, true, 1);
             otpremanje.getActivityList()
-                      .add(new Activity("Azuriranje stanja gotovih proizvoda i formiranje otpremnice"));
+                    .add(new Activity("Azuriranje stanja gotovih proizvoda i formiranje otpremnice"));
             otpremanje.getActivityList().add(new Activity("Isporucivanje robe"));
 
             processService.save(otpremanje);

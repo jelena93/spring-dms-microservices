@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>company-user-service</artifactId>
+    <artifactId>company-service</artifactId>
     <packaging>jar</packaging>
-    <name>company-user-service</name>
+    <name>company-service</name>
 
     <parent>
         <groupId>org.dms</groupId>
@@ -62,10 +62,10 @@
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct-processor.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-stream</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-stream-rabbit</artifactId>

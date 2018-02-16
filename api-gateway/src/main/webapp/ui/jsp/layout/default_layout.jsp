@@ -40,7 +40,7 @@
                 </div>
             </div>
             <tiles:insertAttribute name="message"/>
-            <tiles:insertAttribute name="site_content"/>
+            <tiles:insertAttribute name="content"/>
         </section>
     </section>
     <!--main content end-->

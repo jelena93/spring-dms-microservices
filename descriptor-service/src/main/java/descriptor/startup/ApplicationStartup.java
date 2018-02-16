@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class ApplicationStartup implements InitializingBean {
 
-    @Value("${add-to-db}")
+    @Value("${addToDb}")
     private boolean addToDb;
 
     @Autowired

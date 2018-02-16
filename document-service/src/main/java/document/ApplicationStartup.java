@@ -3,18 +3,20 @@ package document;
 import document.elasticsearch.DocumentIndexer;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ApplicationStartup implements InitializingBean {
 
+    private final DocumentIndexer documentIndexer;
+
     @Autowired
-    DocumentIndexer documentIndexer;
+    public ApplicationStartup(DocumentIndexer documentIndexer) {
+        this.documentIndexer = documentIndexer;
+    }
 
     @Override
-    public void afterPropertiesSet() {
-
-//        documentIndexer.createDocumentIndexIfNotExists();
-
+    public void afterPropertiesSet() throws Exception {
+        documentIndexer.createIndex();
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 
 @Configuration
-public class ViewConfigurationBean {
+public class ViewConfiguration {
 
     @Bean
     public UrlBasedViewResolver viewResolver() {

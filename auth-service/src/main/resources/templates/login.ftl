@@ -132,7 +132,7 @@
         </div>
     </#if>
         <form class="login-form" action="login" method="post">
-            <input type="text" name="username" placeholder="username"/>
+            <input type="text" name="username" placeholder="username" autofocus/>
             <input type="password" name="password" placeholder="password"/>
             <input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>

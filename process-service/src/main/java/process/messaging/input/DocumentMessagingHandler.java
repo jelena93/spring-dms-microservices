@@ -8,11 +8,11 @@ import process.messaging.input.dto.DocumentInputMessagingDto;
 import process.service.ActivityService;
 
 @Service
-public class DocumentInputMessagingService {
+public class DocumentMessagingHandler {
     private final ActivityService activityService;
 
     @Autowired
-    public DocumentInputMessagingService(ActivityService activityService) {
+    public DocumentMessagingHandler(ActivityService activityService) {
         this.activityService = activityService;
     }
 

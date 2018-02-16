@@ -20,7 +20,7 @@ public class ApplicationStartup implements InitializingBean {
     private final UserService userService;
 
     @Autowired
-    public ApplicationStartup(@Value("${add-to-db}") boolean addToDb, CompanyService companyService,
+    public ApplicationStartup(@Value("${addToDb}") boolean addToDb, CompanyService companyService,
                               UserService userService) {
         this.addToDb = addToDb;
         this.companyService = companyService;

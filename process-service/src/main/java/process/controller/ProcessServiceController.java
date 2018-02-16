@@ -12,7 +12,7 @@ import process.dto.ProcessDto;
 import process.dto.TreeDto;
 import process.mapper.ActivityMapper;
 import process.mapper.ProcessMapper;
-import process.messaging.output.DocumentOutputMessagingService;
+import process.messaging.output.DocumentMessagingService;
 import process.messaging.output.dto.DocumentMessagingOutputDto;
 import process.service.ActivityService;
 import process.service.ProcessService;
@@ -28,17 +28,17 @@ public class ProcessServiceController {
 
     private final ProcessService processService;
     private final ActivityService activityService;
-    private final DocumentOutputMessagingService documentOutputMessagingService;
+    private final DocumentMessagingService documentMessagingService;
     private final ProcessMapper processMapper;
     private final ActivityMapper activityMapper;
 
     @Autowired
     public ProcessServiceController(ProcessService processService, ActivityService activityService,
-                                    DocumentOutputMessagingService documentOutputMessagingService,
+                                    DocumentMessagingService documentMessagingService,
                                     ProcessMapper processMapper, ActivityMapper activityMapper) {
         this.processService = processService;
         this.activityService = activityService;
-        this.documentOutputMessagingService = documentOutputMessagingService;
+        this.documentMessagingService = documentMessagingService;
         this.processMapper = processMapper;
         this.activityMapper = activityMapper;
     }
@@ -109,7 +109,7 @@ public class ProcessServiceController {
         processMapper.updateEntityFromModel(processCmd, process);
         processService.update(processCmd, process);
         if (!documentIds.isEmpty()) {
-            documentOutputMessagingService.sendDeleteDocuments(new DocumentMessagingOutputDto(documentIds));
+            documentMessagingService.sendDeleteDocuments(new DocumentMessagingOutputDto(documentIds));
         }
         return process;
     }

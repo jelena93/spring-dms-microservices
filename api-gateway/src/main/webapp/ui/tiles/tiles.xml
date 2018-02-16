@@ -14,7 +14,7 @@
         <put-attribute name="header" value="/ui/jsp/layout/default_header.jsp"/>
         <put-attribute name="left_side_menu" value="/ui/jsp/layout/default_left_side_menu.jsp"/>
         <put-attribute name="modal_question" value="/ui/jsp/view/modal_question.jsp"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/dashboard.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/dashboard.jsp"/>
         <put-attribute name="message" value="/ui/jsp/view/message.jsp" cascade="true"/>
         <put-list-attribute name="cssList" cascade="true">
             <add-attribute value="/resources/css/bootstrap.min.css"/>
@@ -72,19 +72,18 @@
 
     <definition name="add_company" extends="home">
         <put-attribute name="title" value="Add company"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/add_company.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/add_company.jsp"/>
     </definition>
 
     <definition name="search_companies" extends="home">
         <put-attribute name="title" value="Search companies"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/search_companies.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/search_companies.jsp"/>
     </definition>
 
     <definition name="add_user" extends="home">
         <put-attribute name="title" value="Add user"/>
-        <put-attribute name="search_companies" value="/ui/jsp/view/search_companies_set_user.jsp"
-                       cascade="true"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/add_user.jsp"/>
+        <put-attribute name="search_companies" value="/ui/jsp/view/search_companies_set_user.jsp" cascade="true"/>
+        <put-attribute name="content" value="/ui/jsp/view/add_user.jsp"/>
     </definition>
 
     <definition name="add_process" extends="home">
@@ -92,9 +91,8 @@
         <put-attribute name="label_name" value="Parent" cascade="true"/>
         <put-attribute name="input_name" value="parent" cascade="true"/>
         <put-attribute name="process_tree" value="/ui/jsp/view/process_tree.jsp" cascade="true"/>
-        <put-attribute name="process_activity_form" value="/ui/jsp/view/process_activity_form.jsp"
-                       cascade="true"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/add_process.jsp"/>
+        <put-attribute name="process_activity_form" value="/ui/jsp/view/process_activity_form.jsp" cascade="true"/>
+        <put-attribute name="content" value="/ui/jsp/view/add_process.jsp"/>
     </definition>
 
     <definition name="add_document" extends="home">
@@ -104,16 +102,16 @@
         <put-attribute name="process_tree" value="/ui/jsp/view/process_tree.jsp" cascade="true"/>
         <put-attribute name="document" value="/ui/jsp/view/document.jsp" cascade="true"/>
         <put-attribute name="activity_info" value="/ui/jsp/view/activity_info.jsp" cascade="true"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/add_document.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/add_document.jsp"/>
     </definition>
 
     <definition name="company" extends="home">
         <put-attribute name="title" value="Company"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/company.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/company.jsp"/>
     </definition>
 
     <definition name="search_documents" extends="home">
         <put-attribute name="title" value="Search documents"/>
-        <put-attribute name="site_content" value="/ui/jsp/view/search_documents.jsp"/>
+        <put-attribute name="content" value="/ui/jsp/view/search_documents.jsp"/>
     </definition>
 </tiles-definitions>

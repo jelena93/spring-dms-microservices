@@ -1,39 +1,11 @@
-spring:
-  application:
-    name: api-gateway
-  aop:
-      proxy-target-class: true
 server:
   port: 7777
-eureka:
-  instance:
-      hostname: localhost
-      port: 8761
-  client:
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
-zuul:
-  routes:
-    company-user-service: /api/company/**
-    process-service: /api/process/**
-    document-service: /api/document/**
-    descriptor-service: /api/descriptor/**
-    auth-service: /api/uaa/**
-#         path: /uauser/**
-#         url: http://localhost:9999/uaa/user
-#    auth-service:
-#      path: /uaa/**
-#      url: http://localhost:9999/uaa/user
-security:
-  oauth2:
-    client:
-      accessTokenUri: http://localhost:9999/uaa/oauth/token
-      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
-      clientId: api-gateway
-      clientSecret: api-gateway-secret
-    resource:
-      loadBalanced: true
-      userInfoUri: http://auth-service/uaa/user
-      preferTokenInfo: false
-  security:
-    sessions: never
+spring:
+  cloud:
+    config:
+      enabled: true
+      discovery:
+        enabled: true
+        serviceId: configuration-service
+  application:
+    name: api-gateway

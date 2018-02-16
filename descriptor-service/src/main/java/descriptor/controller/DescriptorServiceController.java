@@ -7,7 +7,7 @@ import descriptor.dto.DocumentCmd;
 import descriptor.dto.DocumentTypeDto;
 import descriptor.mapper.DescriptorMapper;
 import descriptor.mapper.DocumentTypeMapper;
-import descriptor.messaging.output.DocumentOutputMessagingService;
+import descriptor.messaging.output.DocumentMessagingService;
 import descriptor.messaging.output.dto.DocumentMessagingDto;
 import descriptor.service.DescriptorService;
 import descriptor.service.DocumentTypeService;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,19 +32,19 @@ import java.util.stream.Collectors;
 public class DescriptorServiceController {
     private final DocumentTypeService documentTypeService;
     private final DescriptorService descriptorService;
-    private final DocumentOutputMessagingService documentOutputMessagingService;
+    private final DocumentMessagingService documentMessagingService;
     private final DocumentTypeMapper documentTypeMapper;
     private final DescriptorMapper descriptorMapper;
     private final OAuth2RestTemplate auth2RestTemplate;
 
     @Autowired
     public DescriptorServiceController(DocumentTypeService documentTypeService, DescriptorService descriptorService,
-                                       DocumentOutputMessagingService documentOutputMessagingService,
+                                       DocumentMessagingService documentMessagingService,
                                        DocumentTypeMapper documentTypeMapper, DescriptorMapper descriptorMapper,
                                        OAuth2RestTemplate auth2RestTemplate) {
         this.documentTypeService = documentTypeService;
         this.descriptorService = descriptorService;
-        this.documentOutputMessagingService = documentOutputMessagingService;
+        this.documentMessagingService = documentMessagingService;
         this.documentTypeMapper = documentTypeMapper;
         this.descriptorMapper = descriptorMapper;
         this.auth2RestTemplate = auth2RestTemplate;
@@ -86,7 +85,7 @@ public class DescriptorServiceController {
         System.out.println("document id " + documentId);
         newDescriptors.forEach(descriptor -> descriptor.setDocumentId(Long.valueOf(documentId)));
         descriptorService.save(newDescriptors);
-        documentOutputMessagingService.sendDocumentAdded(
+        documentMessagingService.sendDocumentAdded(
                 new DocumentMessagingDto(Long.valueOf(documentId), documentCmd.isInput(), documentCmd.getActivityId()));
         return documentId;
     }

@@ -2,29 +2,35 @@ package document.elasticsearch.service;
 
 import document.command.DocumentValidationCmd;
 import document.domain.Descriptor;
-import document.elasticsearch.ElasticClient;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.metrics.max.MaxAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DocumentService {
-
-    private final ElasticClient elasticClient;
+    private final String elasticsearchIndexName;
+    private final String elasticsearchTypeName;
+    private final Client elasticSearchClient;
 
     @Autowired
-    public DocumentService(ElasticClient elasticClient) {
-        this.elasticClient = elasticClient;
+    public DocumentService(@Value("${elasticsearch.indexName}") String elasticsearchIndexName,
+                           @Value("${elasticsearch.typeName}") String elasticsearchTypeName,
+                           Client elasticSearchClient) {
+        this.elasticsearchIndexName = elasticsearchIndexName;
+        this.elasticsearchTypeName = elasticsearchTypeName;
+        this.elasticSearchClient = elasticSearchClient;
     }
 
     public SearchResponse getMaxId() {
         MaxAggregationBuilder aggregation = AggregationBuilders.max("id").field("id");
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").addAggregation(aggregation)
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).addAggregation(aggregation)
                 .execute().actionGet();
     }
 
@@ -32,14 +38,14 @@ public class DocumentService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
         boolQuery.must(QueryBuilders.termQuery("id", documentId));
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
     }
 
     public SearchResponse findAll(long ownerId) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
     }
 
@@ -55,7 +61,7 @@ public class DocumentService {
                     .minimumShouldMatch(1);
         }
         System.out.println(boolQuery);
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery)
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery)
                 .setFrom(offset).setSize(limit).execute().actionGet();
     }
 
@@ -64,7 +70,7 @@ public class DocumentService {
         boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
         boolQuery.must(QueryBuilders.matchQuery("fileName", fileName));
         System.out.println(boolQuery);
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery).execute()
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
     }
 
@@ -81,7 +87,7 @@ public class DocumentService {
             boolQuery.must(matchQuery);
         }
         System.out.println("findDocumentsForOwnerByDescriptors " + boolQuery);
-        return elasticClient.getClient().prepareSearch("documents").setTypes("documents").setQuery(boolQuery)
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery)
                 .setFrom(offset).setSize(limit).execute().actionGet();
     }
 }

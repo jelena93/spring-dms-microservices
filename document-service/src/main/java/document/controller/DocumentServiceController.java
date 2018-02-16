@@ -84,7 +84,7 @@ public class DocumentServiceController {
         document.setFile(ByteStreams.toByteArray(filePart.getInputStream()));
         document.setContent(
                 Base64.getUrlEncoder().encodeToString(StreamUtils.copyToByteArray(filePart.getInputStream())));
-        documentIndexer.indexDocument(document);
+        documentIndexer.save(document);
         System.out.println("saved " + document);
         return new ResponseEntity<>(String.valueOf(document.getId()), HttpStatus.OK);
     }

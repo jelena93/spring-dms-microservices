@@ -8,4 +8,4 @@ spring:
         enabled: true
         serviceId: configuration-service
   application:
-    name: company-user-service
+    name: company-service

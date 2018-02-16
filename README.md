@@ -4,16 +4,21 @@ api-gateway [mvn spring-boot:run]
 
 install elasticsearch ingest-attachment
 
-curl -XPUT 'localhost:9200/_ingest/pipeline/attachment' -d'
+curl -XDELETE localhost:9200/documents
+
+DELETE _ingest/pipeline/attachment
+
+PUT _ingest/pipeline/attachment
 {
-  "description" : "Extract attachment information",
+  "description": "Document attachment pipeline",
   "processors" : [
     {
       "attachment" : {
-        "field" : "content"
+        "field" : "content",
+        "target_field" : "attachment", 
+        "indexed_chars" : -1, 
+        "ignore_missing" : true,  
       }
     }
   ]
-}'
-
-curl -XDELETE localhost:9200/documents
+}

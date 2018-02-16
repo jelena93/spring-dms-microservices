@@ -7,10 +7,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import process.messaging.output.dto.DocumentMessagingOutputDto;
 
-import java.util.List;
-
 @Service
-public class DocumentOutputMessagingService {
+public class DocumentMessagingService {
     @Autowired
     @Qualifier(DocumentOutputChannel.DOCUMENT_DELETE_OUTPUT)
     private MessageChannel documentDeleteMessageChannel;
