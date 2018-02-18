@@ -5,7 +5,6 @@ import descriptor.domain.DocumentType;
 import descriptor.dto.DescriptorDto;
 import descriptor.dto.DocumentCmd;
 import descriptor.dto.DocumentTypeDto;
-import descriptor.mapper.DescriptorMapper;
 import descriptor.mapper.DocumentTypeMapper;
 import descriptor.messaging.output.DocumentMessagingService;
 import descriptor.messaging.output.dto.DocumentMessagingDto;
@@ -34,19 +33,17 @@ public class DescriptorServiceController {
     private final DescriptorService descriptorService;
     private final DocumentMessagingService documentMessagingService;
     private final DocumentTypeMapper documentTypeMapper;
-    private final DescriptorMapper descriptorMapper;
     private final OAuth2RestTemplate auth2RestTemplate;
 
     @Autowired
     public DescriptorServiceController(DocumentTypeService documentTypeService, DescriptorService descriptorService,
                                        DocumentMessagingService documentMessagingService,
-                                       DocumentTypeMapper documentTypeMapper, DescriptorMapper descriptorMapper,
+                                       DocumentTypeMapper documentTypeMapper,
                                        OAuth2RestTemplate auth2RestTemplate) {
         this.documentTypeService = documentTypeService;
         this.descriptorService = descriptorService;
         this.documentMessagingService = documentMessagingService;
         this.documentTypeMapper = documentTypeMapper;
-        this.descriptorMapper = descriptorMapper;
         this.auth2RestTemplate = auth2RestTemplate;
     }
 
@@ -91,19 +88,19 @@ public class DescriptorServiceController {
     }
 
     @GetMapping("/document-type/all")
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_USER')")
     public List<DocumentTypeDto> getAllDocumentTypes() {
         return documentTypeMapper.mapToModelList(documentTypeService.findAll());
     }
 
     @GetMapping("/document-type/{id}")
-    //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
     public DocumentTypeDto getDocumentTypeById(@PathVariable long id) {
         return documentTypeMapper.mapToModel(documentTypeService.findOne(id));
     }
 
     @PostMapping("/document-type")
-    //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
     public DocumentTypeDto addDocumentType(@RequestBody DocumentTypeDto documentTypeDto) {
         DocumentType documentType = documentTypeMapper.mapToEntity(documentTypeDto);
         return documentTypeMapper.mapToModel(documentTypeService.save(documentType));

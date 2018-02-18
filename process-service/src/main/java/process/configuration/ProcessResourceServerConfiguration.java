@@ -1,4 +1,4 @@
-package descriptor.configuration;
+package process.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,11 +9,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
-public class DescriptorResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ProcessResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers("/**").and().authorizeRequests().anyRequest().authenticated();
+        http.requestMatchers().antMatchers("/**").and().authorizeRequests().
+                antMatchers("/**").access("hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')");
     }
 
 }

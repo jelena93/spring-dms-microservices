@@ -10,11 +10,11 @@ import process.messaging.output.dto.DocumentMessagingOutputDto;
 @Service
 public class DocumentMessagingService {
     @Autowired
-    @Qualifier(DocumentOutputChannel.DOCUMENT_DELETE_OUTPUT)
-    private MessageChannel documentDeleteMessageChannel;
+    @Qualifier(DocumentOutputChannel.DOCUMENT_DELETED_OUTPUT)
+    private MessageChannel documentDeletedMessageChannel;
 
     public void sendDeleteDocuments(DocumentMessagingOutputDto documentMessagingOutputDto) {
         System.out.println("sendDeleteDocument " + documentMessagingOutputDto);
-        documentDeleteMessageChannel.send(MessageBuilder.withPayload(documentMessagingOutputDto).build());
+        documentDeletedMessageChannel.send(MessageBuilder.withPayload(documentMessagingOutputDto).build());
     }
 }

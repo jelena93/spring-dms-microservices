@@ -190,7 +190,7 @@ public class DocumentIndexer {
             for (Descriptor d : descriptors) {
                 builder.startObject();
                 builder.field("documentTypeId", d.getDocumentTypeId());
-                builder.field("descriptorKeydescriptorKey", d.getDescriptorKey());
+                builder.field("descriptorKey", d.getDescriptorKey());
                 builder.field("descriptorValue", d.getDescriptorValue());
                 builder.endObject();
             }

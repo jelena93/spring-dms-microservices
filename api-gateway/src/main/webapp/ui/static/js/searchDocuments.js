@@ -2,27 +2,27 @@ var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 var total = 0;
 $(document).ready(function () {
-    search("", "1", false);
+    search("", "1");
 });
 
-function pagination(currentPage, search) {
+function pagination(currentPage) {
     // @TODO check pagination
     console.log("current " + currentPage + ", total " + total);
     $('#pagination-demo').twbsPagination({
-        totalPages: currentPage - total,
+        totalPages: total,
         page: currentPage,
         visiblePages: "1",
         onPageClick: function (event, page) {
             console.log("clicked page " + page);
             var query = $("#input-search-docs").val();
-            if (search) {
+            // if (search) {
                 search(query, page);
-            }
+            // }
         }
     });
 }
 
-function search(query, page, search) {
+function search(query, page) {
     console.log("page " + page + ", total " + total);
     $.ajax({
         type: "GET",
@@ -30,8 +30,9 @@ function search(query, page, search) {
         data: {ownerId: 1, query: query, limit: 2, page: page},
         dataType: 'json',
         success: function (data) {
+            console.log(data);
             var documentsHtml = "";
-            if (data.length > 0) {
+            if (data.total > 0) {
                 total = data.total;
                 for (var i = 0; i < data.documents.length; i++) {
                     documentsHtml += '<ul class="list-group">' +
@@ -49,7 +50,7 @@ function search(query, page, search) {
                     documentsHtml += ' </li> </ul>';
                 }
             }
-            pagination(page, search);
+            pagination(page)
             $("#documents").html(documentsHtml);
         },
         error: function (request) {

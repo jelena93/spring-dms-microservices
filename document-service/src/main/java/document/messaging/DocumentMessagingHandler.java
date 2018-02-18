@@ -13,9 +13,9 @@ public class DocumentMessagingHandler {
     @Autowired
     public DocumentMessagingHandler(DocumentIndexer documentIndexer) {this.documentIndexer = documentIndexer;}
 
-    @StreamListener(DocumentInputChannel.DOCUMENT_DELETE_INPUT)
-    public void handleDocumentDelete(DocumentInputMessagingDto documentInputMessagingDto) {
-        System.out.println("handleDocumentDelete " + documentInputMessagingDto);
+    @StreamListener(DocumentInputChannel.DOCUMENT_DELETED_INPUT)
+    public void handleDocumentDeleted(DocumentInputMessagingDto documentInputMessagingDto) {
+        System.out.println("handleDocumentDeleted " + documentInputMessagingDto);
         documentIndexer.delete(documentInputMessagingDto.getDocumentId());
     }
 }

@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+
 @Service
 public class DocumentService {
     private final String elasticsearchIndexName;
@@ -35,24 +38,24 @@ public class DocumentService {
     }
 
     public SearchResponse findOne(long ownerId, long documentId) {
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
-        boolQuery.must(QueryBuilders.termQuery("id", documentId));
+        BoolQueryBuilder boolQuery = boolQuery();
+        boolQuery.must(termQuery("ownerId", ownerId));
+        boolQuery.must(termQuery("id", documentId));
         return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
     }
 
     public SearchResponse findAll(long ownerId) {
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
+        BoolQueryBuilder boolQuery = boolQuery();
+        boolQuery.must(termQuery("ownerId", ownerId));
         return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
     }
 
     public SearchResponse searchDocumentsForOwner(Long ownerId, String query, int limit, int page) {
         int offset = (page - 1) * limit;
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
+        BoolQueryBuilder boolQuery = boolQuery();
+        boolQuery.must(termQuery("ownerId", ownerId));
         if (query != null && !query.isEmpty()) {
             boolQuery.should(QueryBuilders.queryStringQuery('*' + query + '*').field("fileName"))
                     .should(QueryBuilders.queryStringQuery('*' + query + '*').field("attachment.content"))
@@ -66,9 +69,13 @@ public class DocumentService {
     }
 
     public SearchResponse findByName(Long ownerId, String fileName) {
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("ownerId", ownerId));
-        boolQuery.must(QueryBuilders.matchQuery("fileName", fileName));
+        System.out.println("fileName " + fileName);
+//        QueryBuilder builder = boolQuery()
+//                .must(termQuery("test", "test"))
+//                .filter(boolQuery().must(termQuery("test", "test")));
+        BoolQueryBuilder boolQuery = boolQuery();
+        boolQuery.must(termQuery("ownerId", ownerId));
+        boolQuery.must(termQuery("fileName", fileName));
         System.out.println(boolQuery);
         return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery).execute()
                 .actionGet();
@@ -76,8 +83,8 @@ public class DocumentService {
 
     public SearchResponse findDocumentsForOwnerByDescriptors(DocumentValidationCmd d, int limit, int page) {
         int offset = (page - 1) * limit;
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("ownerId", d.getOwnerId()));
+        BoolQueryBuilder boolQuery = boolQuery();
+        boolQuery.must(termQuery("ownerId", d.getOwnerId()));
         MatchQueryBuilder matchQuery = QueryBuilders.matchQuery("descriptors.documentTypeId", d.getDocumentTypeId());
         boolQuery.must(matchQuery);
         for (Descriptor descriptor : d.getDescriptors()) {

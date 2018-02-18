@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -27,8 +26,6 @@ public class DocumentServiceApplication {
     }
 
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext run = SpringApplication.run(DocumentServiceApplication.class, args);
-//        DocumentIndexer documentIndexer = (DocumentIndexer) run.getBean("documentIndexer");
-//        documentIndexer.createIndex();
+        SpringApplication.run(DocumentServiceApplication.class, args);
     }
 }

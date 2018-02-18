@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
     getProcesses();
     getDocumentTypes();
-    getDocuments();
+    getDocuments(null);
 });
 
 function setDescriptors(docType) {
@@ -98,7 +98,7 @@ function getDocumentTypes() {
     });
 }
 
-function getDocuments() {
+function getDocuments(activity) {
     $.ajax({
         type: "GET",
         url: "/api/document/" + company + "/all",
@@ -109,7 +109,11 @@ function getDocuments() {
                 return map;
             }, {});
 
+            console.log('documents:');
             console.log(documents);
+            if (activity != null) {
+                displayActivityInfo(activity);
+            }
         },
         error: function (request) {
             console.log(request);
@@ -124,7 +128,7 @@ function getActivityInfo(id) {
         url: "/api/process/activity" + "/" + id,
         dataType: 'json',
         success: function (data) {
-            displayActivityInfo(data);
+            getDocuments(data);
         },
         error: function (request) {
             console.log(request);
@@ -264,7 +268,6 @@ function saveDocument() {
                 selectedNode = null;
                 $('#processes').jstree("deselect_all");
                 $('#processes').jstree(true).refresh();
-                getDocuments();
             },
             error: function (request) {
                 console.log(request);
@@ -301,6 +304,7 @@ function validateDocument() {
 }
 
 function documentValidation(params) {
+    console.log(params);
     $.ajax({
         type: "POST",
         url: "/api/document/validation",
@@ -309,9 +313,6 @@ function documentValidation(params) {
         enctype: 'multipart/form-data',
         contentType: false,
         dataType: 'json',
-        beforeSend: function (request) {
-            request.setRequestHeader(header, token);
-        },
         beforeSend: function (request) {
             request.setRequestHeader(header, token);
         },
