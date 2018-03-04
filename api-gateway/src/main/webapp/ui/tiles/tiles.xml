@@ -38,28 +38,6 @@
             <add-attribute value="/resources/js/common.js"/>
         </put-list-attribute>
     </definition>
-    <!-- Login Page -->
-    <definition name="login" template="/ui/jsp/layout/login_layout.jsp">
-        <put-attribute name="shortcut_icon" value="/resources/img/favicon.jpg" cascade="true"/>
-        <put-attribute name="head" value="/ui/jsp/layout/default_head.jsp"/>
-        <put-attribute name="title" value="Login" cascade="true"/>
-        <put-list-attribute name="cssList" cascade="true">
-            <add-attribute value="/resources/css/bootstrap.min.css"/>
-            <add-attribute value="/resources/css/bootstrap-theme.css"/>
-            <add-attribute value="/resources/css/elegant-icons-style.css"/>
-            <add-attribute value="/resources/css/font-awesome.css"/>
-            <add-attribute value="/resources/css/style.css"/>
-            <add-attribute value="/resources/css/style-responsive.css"/>
-        </put-list-attribute>
-        <put-list-attribute name="jsList" cascade="true">
-            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"/>
-            <add-attribute value="/resources/js/bootstrap.min.js"/>
-            <add-attribute value="/resources/js/jquery.scrollTo.min.js"/>
-            <add-attribute value="/resources/js/scripts.js"/>
-            <add-attribute value="/resources/js/jquery.validate.min.js"/>
-            <add-attribute value="/resources/js/form-validation-script.js"/>
-        </put-list-attribute>
-    </definition>
 
     <definition name="error" template="/ui/jsp/layout/error_layout.jsp">
         <put-attribute name="title" value="Error"/>
