@@ -66,8 +66,6 @@
     </definition>
 
     <definition name="home" extends="default_layout">
-        <put-attribute name="active_role" value="ADMIN" cascade="true"/>
-        <put-attribute name="search_documents" value="/ui/jsp/view/search_documents.jsp" cascade="true"/>
     </definition>
 
     <definition name="add_company" extends="home">

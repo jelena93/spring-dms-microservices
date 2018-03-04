@@ -97,15 +97,14 @@ public class ProcessServiceController {
             throw new Exception("There is no process with id " + id);
         }
         List<Long> documentIds = new ArrayList<>();
-        if (processCmd.isPrimitive()) {
+        if (processCmd.isPrimitive() && !process.isPrimitive()) {
             deleteChildren(process, processService.findByParent(process), documentIds, true);
-        } else {
+        } else if (!processCmd.isPrimitive() && process.isPrimitive()) {
             documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getInputList().stream())
                     .collect(Collectors.toList()));
             documentIds.addAll(process.getActivityList().stream().flatMap(a -> a.getOutputList().stream())
                     .collect(Collectors.toList()));
         }
-        System.out.println("a sadaaa " + documentIds);
         processMapper.updateEntityFromModel(processCmd, process);
         processService.update(processCmd, process);
         if (!documentIds.isEmpty()) {

@@ -48,7 +48,7 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
                 .withClient("api-gateway")
                 .secret("api-gateway-secret")
                 .authorizedGrantTypes("authorization_code", "refresh_token")
-                .scopes("read")
+                .scopes("read", "write")
                 .autoApprove(true);
     }
 }

@@ -4,16 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>service-discovery</artifactId>
+    <name>service-discovery</name>
     <packaging>jar</packaging>
 
-    <name>service-discovery</name>
     <parent>
         <groupId>org.dms</groupId>
         <artifactId>spring-dms-microservices</artifactId>
         <version>1.0.0</version>
     </parent>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
     </properties>
 

@@ -4,16 +4,10 @@ spring:
   application:
     name: configuration-service
   cloud:
-    bus:
-      enabled: false
     config:
       server:
         git:
           uri: https://github.com/jelena93/spring-dms-microservices-configuration
-          force-pull: true
-      fail-fast: true
-      retry:
-        max-attempts: 3
 eureka:
   instance:
       hostname: localhost
