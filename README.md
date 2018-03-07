@@ -2,6 +2,8 @@ spring-dms-microservices
 
 api-gateway [mvn spring-boot:run]
 
+http://localhost:8888/app-name/profile
+
 install elasticsearch ingest-attachment
 
 curl -XDELETE localhost:9200/documents

@@ -12,16 +12,7 @@
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                 <span class="username">Logged in as ${user.details.principal.username}</span>
-                <b class="caret"></b>
             </a>
-            <ul class="dropdown-menu extended logout">
-                <div class="log-arrow-up"></div>
-                <li class="eborder-top">
-                </li>
-                <li>
-                    <a href="/logout"><i class="icon_key_alt"></i> Log Out</a>
-                </li>
-            </ul>
         </li>
     </ul>
 </div>
