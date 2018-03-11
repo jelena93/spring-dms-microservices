@@ -6,11 +6,19 @@ var modeEdit = "edit";
 var modeAdd = "add";
 var mode = modeEdit;
 var isSure = false;
-var documentTypes = null;
+var documentTypes;
+
 $(document).ready(function () {
     $("#company-name").html(getCookie("companyName"));
+    $("#input_document_types").html('');
+    $("#output_document_types").html('');
+    console.log(documentTypes.length);
+    for (var i = 0; i < documentTypes.length; i++) {
+//        console.log(documentTypes[i]);
+        $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+        $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+    }
     getProcesses();
-    getDocumentTypes();
 });
 
 function getProcesses() {
@@ -51,27 +59,27 @@ function getProcesses() {
     });
 }
 
-function getDocumentTypes() {
-    $.ajax({
-        type: "GET",
-        url: "/api/descriptor/document-type/all",
-        dataType: 'json',
-        success: function (docTypes) {
-            console.log(docTypes);
-            documentTypes = docTypes;
-            $("#input_document_types").html('');
-            $("#output_document_types").html('');
-            for (var i = 0; i < documentTypes.length; i++) {
-                $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
-                $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
-            }
-        },
-        error: function (request) {
-            console.log(request);
-            showErrorMessage(request.responseText);
-        }
-    });
-}
+//function getDocumentTypes() {
+//    $.ajax({
+//        type: "GET",
+//        url: "/api/descriptor/document-type/all",
+//        dataType: 'json',
+//        success: function (docTypes) {
+//            console.log(docTypes);
+//            documentTypes = docTypes;
+//            $("#input_document_types").html('');
+//            $("#output_document_types").html('');
+//            for (var i = 0; i < documentTypes.length; i++) {
+//                $("#input_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+//                $("#output_document_types").append("<option value='" + documentTypes[i].id + "'>" + documentTypes[i].name + "</option>");
+//            }
+//        },
+//        error: function (request) {
+//            console.log(request);
+//            showErrorMessage(request.responseText);
+//        }
+//    });
+//}
 
 function getInfo(url) {
     $.ajax({
@@ -146,7 +154,7 @@ function checkData() {
     } else if (mode === modeAdd) {
         // $("#isActivity").val(selectedNode !== null ? selectedNode.primitive : false);
         // $("#parent").val(selectedNode !== null ? selectedNode.id : null);
-        if (selectedNode != null && selectedNode.primitive) {
+        if (selectedNode !== null && selectedNode.primitive) {
             if ($("#register_form").valid()) {
                 addActivity();
             }

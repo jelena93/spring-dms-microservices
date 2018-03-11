@@ -20,4 +20,4 @@
         </tbody>
     </table>
 </section>
-<script src="<c:url value="/resources/js/searchCompanies.js" />"></script>
+<script src="<c:url value="/resources/js/companySearch.js" />"></script>

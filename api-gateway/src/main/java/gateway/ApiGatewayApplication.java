@@ -6,13 +6,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -22,7 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableZuulProxy
 @EnableSwagger2
 @EnableOAuth2Sso
-//@EnableCircuitBreaker
+@EnableCircuitBreaker
 public class ApiGatewayApplication implements WebApplicationInitializer {
 
     @Override
@@ -36,8 +39,8 @@ public class ApiGatewayApplication implements WebApplicationInitializer {
 
     @LoadBalanced
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public OAuth2RestTemplate auth2RestTemplate(OAuth2ProtectedResourceDetails resourceDetails, OAuth2ClientContext clientContext) {
+        return new OAuth2RestTemplate(resourceDetails, clientContext);
     }
 
     @Bean
@@ -51,6 +54,5 @@ public class ApiGatewayApplication implements WebApplicationInitializer {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApplication.class, args);
     }
-
 
 }

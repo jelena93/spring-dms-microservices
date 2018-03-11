@@ -36,10 +36,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="roles" class="control-label col-lg-2">Roles <span
-                                    class="required">*</span></label>
+                            <label for="roles" class="control-label col-lg-2">Roles <span class="required">*</span></label>
                             <div class="col-lg-10">
                                 <select multiple class="form-control" name="roles" id="roles">
+                                    <c:forEach var="role" items="${roles}">
+                                        <option value="${role}">${role}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -61,4 +63,4 @@
         </section>
     </div>
 </div>
-<script src="<c:url value="/resources/js/searchCompaniesSetUser.js" />"></script>
+<script src="<c:url value="/resources/js/userAdd.js" />"></script>

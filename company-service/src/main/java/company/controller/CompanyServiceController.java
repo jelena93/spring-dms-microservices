@@ -55,11 +55,6 @@ public class CompanyServiceController {
         return companyMapper.mapToModelList(companyService.search(query));
     }
 
-    //    @GetMapping({ "/swagger", "/docs" })
-    //    public String redirectSwagger() {
-    //        return "redirect:/swagger-ui.html";
-    //    }
-
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_UPLOADER')")
     public CompanyDto getCompanyById(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {

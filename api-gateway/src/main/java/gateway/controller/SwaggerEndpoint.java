@@ -10,10 +10,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @RefreshScope
 public class SwaggerEndpoint {
 
-    @GetMapping({ "", "/swagger", "/docs" })
+    @GetMapping({"", "/swagger", "/docs"})
     public String redirectSwagger() {
         return "redirect:/swagger-ui.html";
     }
 
 }
-
