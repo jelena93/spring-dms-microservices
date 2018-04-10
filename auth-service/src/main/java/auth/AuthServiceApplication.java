@@ -22,8 +22,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -43,21 +41,20 @@ public class AuthServiceApplication extends WebMvcConfigurerAdapter {
 
     @PostMapping(value = "/oauth/revoke-token")
     @ResponseBody
-    public Map<String, String> logout(HttpServletRequest request, HttpServletResponse httpServletResponse) {
-        Map<String, String> ret = new HashMap<>();
+    public void logout(HttpServletRequest request, HttpServletResponse httpServletResponse) {
         String authHeader = request.getHeader("Authorization");
         System.out.println("authHeader " + authHeader);
         if (authHeader != null) {
             String tokenValue = authHeader.split(" ")[1];
             System.out.println("token " + tokenValue);
             OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+            System.out.println("access " + accessToken);
 //            tokenStore.removeRefreshToken(accessToken.getRefreshToken());
             tokenStore.removeAccessToken(accessToken);
-            ret.put("access_token", tokenValue);
+            System.out.println("prisaoo");
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             new SecurityContextLogoutHandler().logout(request, httpServletResponse, authentication);
         }
-        return ret;
     }
 
     @Override

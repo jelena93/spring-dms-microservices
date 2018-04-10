@@ -1,12 +1,11 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 var selectedNode = null;
-var checked = false;
-var isSure = false;
 var inputListDocumentTypes = null;
 var outputListDocumentTypes = null;
 var documentTypes;
 var documents;
+
 $(document).ready(function () {
     $("#company-name").html(getCookie("companyName"));
     $('#form-document input[type="radio"]').click(function () {
@@ -111,7 +110,7 @@ function getDocuments(activity) {
 
             console.log('documents:');
             console.log(documents);
-            if (activity != null) {
+            if (activity !== null) {
                 displayActivityInfo(activity);
             }
         },
@@ -142,49 +141,53 @@ function displayActivityInfo(activity) {
     console.log(activity)
     for (var i = 0; i < activity.inputList.length; i++) {
         inputList += '<div class="panel-group" id="accordion">' +
-            '<div class="panel panel-default">' +
-            '<div class="panel-heading">' +
-            '<h4 class="panel-title">' +
-            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.inputList[i]].id + '">' + documents[activity.inputList[i]].fileName + '</a>' +
-            '</h4>' +
-            '</div>' +
-            '<div id="colapse' + documents[activity.inputList[i]].id + '" class="panel-collapse collapse">' +
-            '<div class="panel-body">';
+                '<div class="panel panel-default">' +
+                '<div class="panel-heading">' +
+                '<h4 class="panel-title">' +
+                '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.inputList[i]].id + '">' + documents[activity.inputList[i]].fileName + '</a>' +
+                '</h4>' +
+                '</div>' +
+                '<div id="colapse' + documents[activity.inputList[i]].id + '" class="panel-collapse collapse">' +
+                '<div class="panel-body">';
         for (var j = 0; j < documents[activity.inputList[i]].descriptors.length; j++) {
             inputList += '<p><strong>' + documents[activity.inputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
-                documents[activity.inputList[i]].descriptors[j].descriptorValue + '</p>';
+                    documents[activity.inputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         inputList += "</div><div class='panel-footer clearfix'>";
         inputList += "<a class='btn btn-default' target='_blank' href='/api/document/1/" + documents[activity.inputList[i]].id
-            + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
-            "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.inputList[i]].id +
-            "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
+                + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
+                "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.inputList[i]].id +
+                "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
         inputList += '</div></div></div></div> ';
     }
     $('#inputList').html(inputList);
     var outputList = "";
     for (var i = 0; i < activity.outputList.length; i++) {
         outputList += '<div class="panel-group" id="accordion">' +
-            '<div class="panel panel-default">' +
-            '<div class="panel-heading">' +
-            '<h4 class="panel-title">' +
-            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.outputList[i]].id + '">' + documents[activity.outputList[i]].fileName + '</a>' +
-            '</h4>' +
-            '</div>' +
-            '<div id="colapse' + documents[activity.outputList[i]].id + '" class="panel-collapse collapse">' +
-            '<div class="panel-body">';
+                '<div class="panel panel-default">' +
+                '<div class="panel-heading">' +
+                '<h4 class="panel-title">' +
+                '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.outputList[i]].id + '">' + documents[activity.outputList[i]].fileName + '</a>' +
+                '</h4>' +
+                '</div>' +
+                '<div id="colapse' + documents[activity.outputList[i]].id + '" class="panel-collapse collapse">' +
+                '<div class="panel-body">';
         for (var j = 0; j < documents[activity.outputList[i]].descriptors.length; j++) {
             outputList += '<p><strong>' + documents[activity.outputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
-                documents[activity.outputList[i]].descriptors[j].descriptorValue + '</p>';
+                    documents[activity.outputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         outputList += "</div><div class='panel-footer'>";
         outputList += "<a target='_blank' href='/api/document/1/" + documents[activity.outputList[i]].id + "'>View file </a>" +
-            "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.outputList[i]].id +
-            "' title='Download'><span class='icon_cloud-download'></span> Download file</a>";
+                "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.outputList[i]].id +
+                "' title='Download'><span class='icon_cloud-download'></span> Download file</a>";
         outputList += '</div></div></div></div> ';
     }
     inputListDocumentTypes = activity.inputListDocumentTypes;
     outputListDocumentTypes = activity.outputListDocumentTypes;
+    if (inputListDocumentTypes.length === 0 && outputListDocumentTypes.length === 0) {
+        showErrorMessage({"message": "Activity doesn't have document types"});
+        return;
+    }
     $('#outputList').html(outputList);
     $("#form-document").hide();
     $("#activity-info").show();
@@ -201,18 +204,18 @@ function showDescriptors(descriptors) {
             if (descriptors[i].descriptorValue === null) {
                 if (descriptors[i].paramClass === 'java.util.Date') {
                     html = '<div class="form-group">' +
-                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
-                        + '<span class="required">*</span></label><div class="col-lg-8">' +
-                        '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
-                        + '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey
-                        + ' in format DD.MM.YYYY" required></div></div>';
+                            '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
+                            + '<span class="required"> *</span></label><div class="col-lg-8">' +
+                            '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
+                            + '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey
+                            + ' in format DD.MM.YYYY" required></div></div>';
                 } else {
                     html = '<div class="form-group">' +
-                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
-                        ' <span class="required">*</span></label><div class="col-lg-8">' +
-                        '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey +
-                        '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
-                        '</div></div>';
+                            '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
+                            ' <span class="required">*</span></label><div class="col-lg-8">' +
+                            '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey +
+                            '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
+                            '</div></div>';
                 }
                 $("#descriptors").append(html);
             }
@@ -221,6 +224,10 @@ function showDescriptors(descriptors) {
 }
 
 function showFormAddDocument() {
+    if (documentTypes[inputListDocumentTypes[0]] === undefined) {
+        showErrorMessage({"message": "Activity doesn't have document types"});
+        return;
+    }
     $("#activity-info").hide();
     $("#btn-add-document").hide();
     $("#docTypeLabel").text("Input document types");
@@ -228,87 +235,28 @@ function showFormAddDocument() {
     for (var i = 0; i < inputListDocumentTypes.length; i++) {
         $("#docType").append('<option value="' + documentTypes[inputListDocumentTypes[i]].id + '">' + documentTypes[inputListDocumentTypes[i]].name + '</option>');
     }
+    $("#inputOption").prop("checked", true);
+    $("#file").val("");
     showDescriptors(documentTypes[inputListDocumentTypes[0]].descriptors);
     $("#form-document").show();
 }
 
 function saveDocument() {
-    if (!$("#register_form").valid()) {
-        return;
+//    if ($("#register_form").valid()) {
+    var data = new FormData();
+    data.append("ownerId", company);
+    data.append("file", $("#file").prop('files')[0]);
+    data.append("documentTypeId", $("#docType").val());
+    data.append("activityId", selectedNode.id);
+    data.append("input", $("input[name='inputOutput']:checked").val() === "input");
+    var descriptors = $(".descriptors");
+    for (var i = 0; i < descriptors.length; i++) {
+        data.append([descriptors[i].name], descriptors[i].value);
     }
-    if (checked || isSure) {
-        var data = new FormData();
-        data.append("ownerId", company);
-        data.append("file", $("#file").prop('files')[0]);
-        data.append("documentTypeId", $("#docType").val());
-        data.append("activityId", selectedNode.id);
-        data.append("input", $("input[name='inputOutput']:checked").val() === "input");
-        var descriptors = $(".descriptors");
-        for (var i = 0; i < descriptors.length; i++) {
-            data.append([descriptors[i].name], descriptors[i].value);
-        }
-        $.ajax({
-            type: "POST",
-            url: "/api/descriptor/upload",
-            data: data,
-            processData: false,
-            enctype: 'multipart/form-data',
-            contentType: false,
-            dataType: 'json',
-            beforeSend: function (request) {
-                request.setRequestHeader(header, token);
-            },
-            success: function (data) {
-                checked = false;
-                isSure = false;
-                console.log(data);
-                $("#activity-info").hide();
-                $("#form-document").hide();
-                $("#btn-add-document").hide();
-                selectedNode = null;
-                $('#processes').jstree("deselect_all");
-                $('#processes').jstree(true).refresh();
-            },
-            error: function (request) {
-                console.log(request);
-                showErrorMessage(request.responseText);
-            }
-        });
-    } else {
-        validateDocument();
-    }
-}
-
-function validateDocument() {
-    if (selectedNode !== null) {
-        var docType = $("#docType").val();
-        var data = new FormData();
-        data.append("ownerId", company);
-        data.append("file", $("#file").prop('files')[0]);
-        data.append("documentTypeId", $("#docType").val());
-        var descriptors = $(".descriptors");
-        var test = [];
-        for (var i = 0; i < descriptors.length; i++) {
-            test.push({
-                "descriptorKey": descriptors[i].name,
-                "descriptorValue": descriptors[i].value,
-                "documentTypeId": $("#docType").val()
-            });
-        }
-        data.append("descriptors", JSON.stringify(test));
-        var sendValidationRequest = true;
-        if (sendValidationRequest) {
-            documentValidation(data);
-        }
-    }
-}
-
-function documentValidation(params) {
-    console.log(params);
     $.ajax({
         type: "POST",
-        url: "/api/document/validation",
-        data: params,
+        url: "/api/descriptor/upload",
+        data: data,
         processData: false,
         enctype: 'multipart/form-data',
         contentType: false,
@@ -317,47 +265,28 @@ function documentValidation(params) {
             request.setRequestHeader(header, token);
         },
         success: function (data) {
+//                checked = false;
+//                isSure = false;
             console.log(data);
-            if (data.text === "ok") {
-                checked = true;
-                saveDocument();
-            } else {
-                $("#existingDocumentID").val(data.data);
-                showPopUp(data.text);
-            }
+            $("#activity-info").hide();
+            $("#form-document").hide();
+            $("#btn-add-document").hide();
+            selectedNode = null;
+            $('#processes').jstree("deselect_all");
+            $('#processes').jstree(true).refresh();
+            showSuccessMessage("Document successfully added");
         },
         error: function (request) {
             console.log(request);
             showErrorMessage(request.responseText);
         }
     });
+//    } 
 }
-
 function reset(data) {
     $("#activity-info").hide();
     $("#form-document").hide();
     $("#btn-add-document").hide();
     selectedNode = null;
     data.instance.deselect_node(data.node, true);
-}
-
-function showPopUp(text) {
-    $("#modal-question-text").text(text);
-    $("#modal").modal({
-        show: true,
-        backdrop: 'static',
-        keyboard: false
-    });
-}
-
-function sendRequest() {
-    isSure = true;
-    $('#modal').modal('hide');
-    saveDocument();
-}
-
-function closeModal() {
-    isSure = false;
-    $("#existingDocumentID").val(null);
-    $('#modal').modal('hide');
 }

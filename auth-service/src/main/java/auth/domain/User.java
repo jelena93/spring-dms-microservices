@@ -4,10 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-//ADMIN, //kreira kompaniju, kreira korisnika i dodeljuje korisnika kompaniji
-//        USER, //kreira procese kompaniji
-//        UPLOADER //uploaduje dokumenta i unosi deskriptore
-
 @Entity
 public class User {
 
@@ -21,16 +17,6 @@ public class User {
 
     @Column(name = "company_id")
     private Long companyId;
-
-    private boolean activated;
-
-    @Size(min = 0, max = 100)
-    @Column(name = "activationkey")
-    private String activationKey;
-
-    @Size(min = 0, max = 100)
-    @Column(name = "resetpasswordkey")
-    private String resetPasswordKey;
 
     @ManyToMany
     @JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "username"), inverseJoinColumns =
@@ -59,30 +45,6 @@ public class User {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetPasswordKey() {
-        return resetPasswordKey;
-    }
-
-    public void setResetPasswordKey(String resetPasswordKey) {
-        this.resetPasswordKey = resetPasswordKey;
     }
 
     public List<Authority> getAuthorities() {
@@ -122,9 +84,6 @@ public class User {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", companyId=" + companyId +
-                ", activated=" + activated +
-                ", activationKey='" + activationKey + '\'' +
-                ", resetPasswordKey='" + resetPasswordKey + '\'' +
                 ", authorities=" + authorities +
                 '}';
     }

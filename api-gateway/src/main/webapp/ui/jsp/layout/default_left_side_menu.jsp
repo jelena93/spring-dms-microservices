@@ -16,7 +16,7 @@
                     <span class="menu-arrow arrow_carrot-right"></span>
                 </a>
                 <ul class="sub">
-                    <li><a class="" href="${pageContext.request.contextPath}/company/search">Search company</a></li>
+                    <li><a class="" href="${pageContext.request.contextPath}/company/search">Search companies</a></li>
                     <li><a class="" href="${pageContext.request.contextPath}/company/add">Add company</a></li>
                 </ul>
             </li>
@@ -28,6 +28,7 @@
                 </a>
                 <ul class="sub">
                     <li><a class="" href="${pageContext.request.contextPath}/user/add">Add user</a></li>
+                    <li><a class="" href="${pageContext.request.contextPath}/user/search">Search users</a></li>
                 </ul>
             </li>
         </sec:authorize>
@@ -39,7 +40,7 @@
                     <span class="menu-arrow arrow_carrot-right"></span>
                 </a>
                 <ul class="sub">
-                    <li><a class="" href="${pageContext.request.contextPath}/process/add">Add process / Activity</a>
+                    <li><a class="" href="${pageContext.request.contextPath}/process/add">Add process / activity</a>
                     </li>
                 </ul>
             </li>

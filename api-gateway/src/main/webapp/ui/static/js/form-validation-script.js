@@ -38,43 +38,43 @@ var Script = function () {
             },
             messages: {
                 name: {
-                    required: "Please enter a name."
+                    required: "Name is required"
                 },
                 surname: {
-                    required: "Please enter a surname."
+                    required: "Surname is required"
                 },
                 username: {
-                    required: "Please enter a username."
+                    required: "Username is required"
                 },
                 password: {
-                    required: "Please provide a password."
+                    required: "Password is required"
                 },
                 roles: {
-                    required: "Please select a role."
+                    required: "Role is required"
                 },
                 pib: {
-                    required: "Please provide a pib."
+                    required: "Pib is required"
                 },
                 identificationNumber: {
-                    required: "Please provide an identification number."
+                    required: "Identification number is required"
                 },
                 headquarters: {
-                    required: "Please provide headquarters."
+                    required: "Headquarters is required"
                 },
                 file: {
-                    required: "Please provide document."
+                    required: "Document is required"
                 },
                 company: {
-                    required: "Please provide a company."
+                    required: "Company is required"
                 },
                 processId: {
-                    required: "Please provide a primitive process."
+                    required: "Process is required"
                 },
                 input_document_types: {
-                    required: "Please provide input document types."
+                    required: "Input document type is required"
                 },
                 output_document_types: {
-                    required: "Please provide output document types."
+                    required: "Output document types is required"
                 }
             }
         });

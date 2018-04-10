@@ -9,9 +9,7 @@ CREATE TABLE user (
   username         VARCHAR(50) NOT NULL PRIMARY KEY,
   password         VARCHAR(500),
   activated        BOOLEAN     DEFAULT FALSE,
-  company_id       BIGINT(20),
-  activationkey    VARCHAR(50) DEFAULT NULL,
-  resetpasswordkey VARCHAR(50) DEFAULT NULL
+  company_id       BIGINT(20)
 );
 
 CREATE TABLE authority (

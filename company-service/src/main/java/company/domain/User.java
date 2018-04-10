@@ -19,15 +19,20 @@ public class User implements Serializable {
     private String username;
     @Column(name = "password")
     @NotNull
+
     private String password;
     @NotNull
     @Column(name = "name")
     private String name;
+
     @NotNull
     @Column(name = "surname")
     private String surname;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
     private Company company;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user")})

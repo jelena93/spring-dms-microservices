@@ -37,13 +37,13 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public void update(ProcessCmd processCmd, Process process) {
+    public Process update(ProcessCmd processCmd, Process process) {
         if (processCmd.isPrimitive()) {
             deleteChildrenFromProcess(process);
         } else {
             process.getActivityList().clear();
         }
-        processRepository.save(process);
+        return processRepository.save(process);
     }
 
     @Override

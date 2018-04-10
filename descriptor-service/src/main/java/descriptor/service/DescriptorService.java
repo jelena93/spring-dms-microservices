@@ -10,4 +10,6 @@ public interface DescriptorService {
 
     void removeByDocumentIdIn(List<Long> documentIds);
 
+    List<Descriptor> findDefaultDescriptorsForDocumentType(long documentTypeId);
+
 }

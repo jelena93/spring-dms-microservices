@@ -10,21 +10,20 @@
                     <div class="form-group ">
                         <label for="id" class="control-label col-lg-2">Id <span class="required">*</span></label>
                         <div class="col-lg-10">
-                            <input class=" form-control" id="id" name="id" type="number" value="${company.id}"
-                                   readonly/>
+                            <input class=" form-control" id="id" name="id" type="number" value="${company.id}" readonly/>
                         </div>
                     </div>
                     <div class="form-group ">
                         <label for="name" class="control-label col-lg-2">Name <span class="required">*</span></label>
                         <div class="col-lg-10">
-                            <input class=" form-control" id="name" name="name" type="text" value="${company.name}"/>
+                            <input class=" form-control" id="name" name="name" type="text" value="${company.name}" disabled/>
                         </div>
                     </div>
                     <div class="form-group ">
                         <label for="pib" class="control-label col-lg-2">Pib <span class="required">*</span></label>
                         <div class="col-lg-10">
                             <input class=" form-control" id="pib" name="pib" value="${company.pib}" type="number"
-                                   minlength="9" maxlength="9"/>
+                                   minlength="9" maxlength="9" disabled/>
                         </div>
                     </div>
                     <div class="form-group ">
@@ -33,7 +32,7 @@
                         <div class="col-lg-10">
                             <input class="form-control " id="identificationNumber"
                                    value="${company.identificationNumber}" name="identificationNumber" type="number"
-                                   minlength="8" maxlength="8"/>
+                                   minlength="8" maxlength="8" disabled/>
                         </div>
                     </div>
                     <div class="form-group ">
@@ -41,7 +40,7 @@
                                 class="required">*</span></label>
                         <div class="col-lg-10">
                             <input class="form-control " id="headquarters" value="${company.headquarters}"
-                                   name="headquarters" type="text"/>
+                                   name="headquarters" type="text" disabled/>
                         </div>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -74,13 +73,20 @@
             <div class="panel-body">
                 <table class="table" id="company-users">
                     <thead>
-                    <tr>
-                        <th><i class="icon_profile"></i>Username</th>
-                        <th><i class="icon_profile"></i>Name</th>
-                        <th><i class="icon_profile"></i>Surname</th>
-                    </tr>
+                        <tr>
+                            <th><i class="icon_profile"></i>Username</th>
+                            <th><i class="icon_profile"></i>Name</th>
+                            <th><i class="icon_profile"></i>Surname</th>
+                        </tr>
                     </thead>
                     <tbody>
+                        <c:forEach var="u" items="${company.userList}">
+                            <tr>
+                                <td>${u.username}</td>
+                                <td>${u.name}</td>
+                                <td>${u.surname}</td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

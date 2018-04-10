@@ -51,15 +51,6 @@ function search(query) {
 }
 
 function addUser() {
-    var roles = $('#roles').val();
-    if (roles === null) {
-        return;
-    }
-    if ((roles.length !== 1 && roles[0] !== "ADMIN") && selectedCompanyId === null) {
-        $("#company").val(null);
-        search("");
-        return;
-    }
     if ($("#register_form").valid()) {
         $.ajax({
             type: "POST",

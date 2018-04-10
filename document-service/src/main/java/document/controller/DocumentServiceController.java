@@ -3,30 +3,32 @@ package document.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import document.command.DocumentCmd;
-import document.command.DocumentValidationCmd;
-import document.domain.Descriptor;
 import document.domain.Document;
 import document.dto.DocumentDto;
-import document.dto.MessageDto;
 import document.elasticsearch.DocumentIndexer;
+import document.elasticsearch.ElasticSearchMapper;
 import document.elasticsearch.service.DocumentService;
 import document.mapper.DocumentMapper;
+import document.validator.DocumentValidator;
+import org.apache.commons.codec.binary.Base64;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.IndexNotFoundException;
-import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -35,13 +37,16 @@ public class DocumentServiceController {
     private final DocumentMapper documentMapper;
     private final DocumentIndexer documentIndexer;
     private final DocumentService documentService;
+    private final DocumentValidator documentValidator;
 
     @Autowired
     public DocumentServiceController(
-            DocumentMapper documentMapper, DocumentIndexer documentIndexer, DocumentService documentService) {
+            DocumentMapper documentMapper, DocumentIndexer documentIndexer, DocumentService documentService,
+            DocumentValidator documentValidator) {
         this.documentMapper = documentMapper;
         this.documentIndexer = documentIndexer;
         this.documentService = documentService;
+        this.documentValidator = documentValidator;
     }
 
     @GetMapping("/search")
@@ -53,7 +58,7 @@ public class DocumentServiceController {
         Map<String, Object> map = new HashMap<>();
         try {
             SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, limit, page);
-            List<DocumentDto> dtos = mapToDocumentList(searchResponse);
+            List<DocumentDto> dtos = ElasticSearchMapper.mapToDocumentList(searchResponse);
             map.put("documents", dtos);
             map.put("total", searchResponse.getHits().getTotalHits());
         } catch (IndexNotFoundException e) {
@@ -66,27 +71,40 @@ public class DocumentServiceController {
     public List<DocumentDto> all(@PathVariable long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
         checkUser(ownerId, oAuth2Authentication);
         try {
-            return mapToDocumentList(documentService.findAll(ownerId));
+            return ElasticSearchMapper.mapToDocumentList(documentService.findAll(ownerId));
         } catch (IndexNotFoundException e) {
             System.out.println("all " + e.getMessage());
         }
         return new ArrayList<>();
     }
 
-    @PostMapping()
-    public ResponseEntity<String> addDocument(HttpServletRequest request, OAuth2Authentication oAuth2Authentication) throws Exception {
+    @PostMapping
+    public ResponseEntity<Long> addDocument(HttpServletRequest request, OAuth2Authentication oAuth2Authentication) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         DocumentCmd documentCmd = mapper.readValue(request.getParameter("documentCmd"), DocumentCmd.class);
         System.out.println(documentCmd);
         checkUser(documentCmd.getOwnerId(), oAuth2Authentication);
+
         Document document = documentMapper.mapToEntity(documentCmd);
+
         Part filePart = request.getPart("file");
         document.setFile(ByteStreams.toByteArray(filePart.getInputStream()));
-        document.setContent(
-                Base64.getUrlEncoder().encodeToString(StreamUtils.copyToByteArray(filePart.getInputStream())));
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        InputStream input = filePart.getInputStream();
+        int read = -1;
+        while ((read = input.read()) != -1) {
+            output.write(read);
+        }
+        input.close();
+        String content = Base64.encodeBase64String(output.toByteArray());
+        document.setContent(content);
+
+        documentValidator.validate(document);
+
         documentIndexer.save(document);
-        System.out.println("saved " + document);
-        return new ResponseEntity<>(String.valueOf(document.getId()), HttpStatus.OK);
+        System.out.println("sending " + document.getId());
+        return new ResponseEntity<>(document.getId(), HttpStatus.OK);
     }
 
     @GetMapping("/download/{ownerId}/{documentId}")
@@ -125,54 +143,6 @@ public class DocumentServiceController {
         header.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + documentDto.getFileName());
         header.setContentLength(documentDto.getFile().length);
         return new ResponseEntity<>(documentDto.getFile(), header, HttpStatus.OK);
-    }
-
-    @PostMapping("/validation")
-    public MessageDto validation(HttpServletRequest request) throws Exception {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Part filePart = request.getPart("file");
-            DocumentValidationCmd documentValidationCmd = new DocumentValidationCmd();
-            documentValidationCmd.setOwnerId(Long.valueOf(request.getParameter("ownerId")));
-            documentValidationCmd.setDocumentTypeId(Long.valueOf(request.getParameter("documentTypeId")));
-            documentValidationCmd.setFileName(filePart.getSubmittedFileName());
-            documentValidationCmd.setDescriptors(
-                    Arrays.asList(mapper.readValue(request.getParameter("descriptors"), Descriptor[].class)));
-            System.out.println("validation  " + documentValidationCmd.toString());
-            //@TODO same name -
-            boolean sameName = false;
-            Long documentId = null;
-            List<DocumentDto> documentsWithSameName = mapToDocumentList(
-                    documentService.findByName(documentValidationCmd.getOwnerId(), documentValidationCmd.getFileName()));
-            System.out.println("documents sameName " + documentsWithSameName);
-            if (!documentsWithSameName.isEmpty()) {
-                //ne mora id
-                documentId = documentsWithSameName.get(0).getId();
-                return new MessageDto("Document with same name already exists. Do you want to rewrite it?", documentId);
-            }
-            //@TODO same descriptors
-            List<DocumentDto> documentsWithSameDescriptors = mapToDocumentList(
-                    documentService.findDocumentsForOwnerByDescriptors(documentValidationCmd, 1, 1));
-            if (!documentsWithSameDescriptors.isEmpty()) {
-                documentId = documentsWithSameDescriptors.get(0).getId();
-                return new MessageDto("Document with same descriptors already exists. Do you want to save rewrite it?",
-                        documentId);
-            }
-            return new MessageDto("ok", null);
-        } catch (IndexNotFoundException ex) {
-            return new MessageDto("ok", null);
-        }
-    }
-
-    private static List<DocumentDto> mapToDocumentList(SearchResponse searchResponse) throws IOException {
-        List<DocumentDto> documents = new ArrayList<>();
-        System.out.println(searchResponse);
-        ObjectMapper mapper = new ObjectMapper();
-        for (SearchHit hit : searchResponse.getHits()) {
-            documents.add(mapper.readValue(hit.getSourceAsString(), DocumentDto.class));
-        }
-        System.out.println("total hits: " + searchResponse.getHits().getTotalHits());
-        return documents;
     }
 
     private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {

@@ -3,8 +3,23 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <script language=javascript>
-    var documentTypes = "${documentTypes}";
-    </script>
+    var documentTypes = [];
+    <c:forEach items="${documentTypes}" var="doc">
+    var documentType = [];
+    documentType.id = "${doc.id}";
+    documentType.name = "${doc.name}";
+    documentType.descriptors = [];
+        <c:forEach items="${documentTypes}" var="d">
+    var doc = [];
+    doc.documentTypeId = "{d.documentTypeId}";
+    doc.descriptorKey = "{d.descriptorKey}";
+    doc.descriptorValue = "{d.descriptorValue}";
+    doc.paramClass = "{d.paramClass}";
+    documentType.descriptors.push(doc);
+        </c:forEach>
+    documentTypes.push(documentType);
+    </c:forEach>
+</script>
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">

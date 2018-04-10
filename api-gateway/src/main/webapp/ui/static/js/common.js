@@ -36,8 +36,10 @@ function getCookie(name) {
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        while (c.charAt(0) == ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
@@ -63,11 +65,20 @@ function showErrorMessage(data) {
     $("#message-box").removeClass("alert-success");
     $("#message-box").removeClass("alert-danger");
     $("#message-box").addClass("alert-danger");
+    console.log(data);
     try {
-        // var message = jQuery.parseJSON(data);
-        $("#message-text").text(JSON.stringify(data));
+        data = jQuery.parseJSON(data);
+        var text = data.message;
+        if (data.errors !== undefined) {
+            for (var i = 0; i < data.errors.length; i++) {
+                text += "<br />" + data.errors[i];
+            }
+        } else if (data.error !== undefined) {
+            text += "<br />" + data.error;
+        }
+        $("#message-text").html(text);
     } catch (e) {
-        $("#message-text").text(data);
+        $("#message-text").html(data);
     }
     $("#message-box-container").show();
 }

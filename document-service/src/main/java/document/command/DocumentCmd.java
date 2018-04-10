@@ -1,28 +1,19 @@
 package document.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import document.domain.Descriptor;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DocumentCmd {
 
-    private Long id;
     private Long ownerId;
     private String fileName;
-    private List<Descriptor> descriptors;
+    private Long documentTypeId;
+    private List<DescriptorCmd> descriptors = new ArrayList<>();
 
     public DocumentCmd() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getOwnerId() {
@@ -41,17 +32,29 @@ public class DocumentCmd {
         this.fileName = fileName;
     }
 
-    public List<Descriptor> getDescriptors() {
+    public List<DescriptorCmd> getDescriptors() {
         return descriptors;
     }
 
-    public void setDescriptors(List<Descriptor> descriptors) {
+    public void setDescriptors(List<DescriptorCmd> descriptors) {
         this.descriptors = descriptors;
+    }
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
     }
 
     @Override
     public String toString() {
-        return "DocumentCmd{" + "id=" + id + ", ownerId=" + ownerId + ", fileName='" + fileName + ", descriptors="
-                + descriptors + '}';
+        return "DocumentCmd{" +
+                "ownerId=" + ownerId +
+                ", documentTypeId=" + documentTypeId +
+                ", fileName='" + fileName + '\'' +
+                ", descriptors=" + descriptors +
+                '}';
     }
 }

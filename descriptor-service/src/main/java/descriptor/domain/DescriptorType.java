@@ -1,13 +1,7 @@
 package descriptor.domain;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "descriptor_type")
@@ -36,9 +30,11 @@ public class DescriptorType {
 
     public String getStringMessageByParamClass() {
         if (Integer.class.equals(paramClass)) { return "integer"; } else if (Double.class.equals(paramClass)) {
-            return "decimal number";
+            return "decimal";
         } else if (Date.class.equals(paramClass)) {
             return "date";
+        }else if (String.class.equals(paramClass)) {
+            return "string";
         }
         return "N/A";
     }

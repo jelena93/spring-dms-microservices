@@ -2,14 +2,14 @@ package process.domain;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "activity")
@@ -24,33 +24,42 @@ public class Activity implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "seq_gen")
     @Column(name = "id")
     private Long id;
+
     @NotNull
-    @Column(name = "name")
+    @NotEmpty
+    @Column(name = "name", unique = true)
     private String name;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "activity_input_document_types", uniqueConstraints = @UniqueConstraint(columnNames = {
             "activity_id", "document_type_id"}))
     @Column(name = "document_type_id")
     @Fetch(value = FetchMode.SUBSELECT)
+    @NotEmpty
     private List<Long> inputListDocumentTypes = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @CollectionTable(name = "activity_output_document_types", uniqueConstraints = @UniqueConstraint(columnNames = {
             "activity_id", "document_type_id"}))
     @Column(name = "document_type_id")
+    @NotEmpty
     private List<Long> outputListDocumentTypes = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "activity_inputs", uniqueConstraints = @UniqueConstraint(columnNames = {"activity_id",
             "document_id"}))
     @Column(name = "document_id")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Long> inputList = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @CollectionTable(name = "activity_outputs", uniqueConstraints = @UniqueConstraint(columnNames = {"activity_id",
             "document_id"}))
     @Column(name = "document_id")
     private List<Long> outputList = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "process_id")
     private Process process;

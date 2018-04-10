@@ -1,30 +1,20 @@
 package process.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "process")
 public class Process implements Serializable {
 
     private static final long serialVersionUID = 5211102732754088501L;
+
     @Id
     @Basic(optional = false)
     @NotNull
@@ -33,17 +23,23 @@ public class Process implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "seq_gen")
     @Column(name = "id")
     private Long id;
+
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
+    @NotEmpty
     private String name;
+
     @NotNull
     @Column(name = "owner_id")
     private long ownerId;
+
     @JoinColumn(name = "parent")
     @ManyToOne
     private Process parent;
+
     @Column(name = "primitive")
     private boolean primitive;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "process_id")
     private List<Activity> activityList = new ArrayList<>();

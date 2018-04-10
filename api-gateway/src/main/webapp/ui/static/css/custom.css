@@ -12,8 +12,7 @@
 }
 
 .panel .panel-heading, .panel-title, .panel-footer, thead, th {
-    background-color: #05386B !important;
-    /*color: #d0d8df!important;*/
+    background-color: #00324d !important;
     color: whitesmoke !important;
 }
 
@@ -60,12 +59,12 @@ h4 {
 }
 
 .sidebar-custom {
-    background-color: #05386B;
+    background-color: #00324d;
 }
 
 .lite {
     color: #edf5e1 !important;
-    text-shadow: 1.5px 2px #05386B;
+    text-shadow: 1.5px 2px #00324d;
 }
 
 .username {

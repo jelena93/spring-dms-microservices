@@ -1,17 +1,22 @@
 package document.elasticsearch.service;
 
-import document.command.DocumentValidationCmd;
 import document.domain.Descriptor;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.metrics.max.MaxAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
@@ -70,9 +75,6 @@ public class DocumentService {
 
     public SearchResponse findByName(Long ownerId, String fileName) {
         System.out.println("fileName " + fileName);
-//        QueryBuilder builder = boolQuery()
-//                .must(termQuery("test", "test"))
-//                .filter(boolQuery().must(termQuery("test", "test")));
         BoolQueryBuilder boolQuery = boolQuery();
         boolQuery.must(termQuery("ownerId", ownerId));
         boolQuery.must(termQuery("fileName", fileName));
@@ -81,20 +83,31 @@ public class DocumentService {
                 .actionGet();
     }
 
-    public SearchResponse findDocumentsForOwnerByDescriptors(DocumentValidationCmd d, int limit, int page) {
-        int offset = (page - 1) * limit;
-        BoolQueryBuilder boolQuery = boolQuery();
-        boolQuery.must(termQuery("ownerId", d.getOwnerId()));
-        MatchQueryBuilder matchQuery = QueryBuilders.matchQuery("descriptors.documentTypeId", d.getDocumentTypeId());
-        boolQuery.must(matchQuery);
-        for (Descriptor descriptor : d.getDescriptors()) {
-            matchQuery = QueryBuilders.matchQuery("descriptors.descriptorKey", descriptor.getDescriptorKey());
-            boolQuery.must(matchQuery);
-            matchQuery = QueryBuilders.matchQuery("descriptors.descriptorValue", descriptor.getDescriptorValue());
-            boolQuery.must(matchQuery);
+    public SearchResponse findDocumentsForOwnerByDescriptors(Descriptor descriptor) {
+        Map<String, String> propertyValues = new HashMap<>();
+
+        propertyValues.put("descriptors.documentTypeId", descriptor.getDocumentTypeId() + "");
+        propertyValues.put("descriptors.descriptorKey", descriptor.getDescriptorKey());
+        propertyValues.put("descriptors.descriptorValue", descriptor.getDescriptorValue());
+
+        NestedQueryBuilder nestedQueryBuilder = nestedBoolQuery(propertyValues, "descriptors");
+        System.out.println(nestedQueryBuilder.query());
+        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(nestedQueryBuilder)
+                .execute().actionGet();
+    }
+
+    private static NestedQueryBuilder nestedBoolQuery(final Map<String, String> propertyValues, final String nestedPath) {
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        Iterator<String> iterator = propertyValues.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            String propertyName = iterator.next();
+            String propertValue = propertyValues.get(propertyName);
+            MatchQueryBuilder matchQuery = QueryBuilders.matchQuery(propertyName, propertValue);
+            boolQueryBuilder.must(matchQuery);
         }
-        System.out.println("findDocumentsForOwnerByDescriptors " + boolQuery);
-        return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery)
-                .setFrom(offset).setSize(limit).execute().actionGet();
+
+        return QueryBuilders.nestedQuery(nestedPath, boolQueryBuilder, ScoreMode.Total);
     }
 }

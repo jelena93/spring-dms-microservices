@@ -2,7 +2,6 @@ package auth.service;
 
 import auth.domain.User;
 import auth.dto.UserDetails;
-import auth.exception.UserNotActivatedException;
 import auth.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +34,6 @@ public class UserDetailsService implements org.springframework.security.core.use
 
         if (user == null) {
             throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
-        } else if (!user.isActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " is not activated");
         }
 
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
@@ -45,7 +42,7 @@ public class UserDetailsService implements org.springframework.security.core.use
                 .collect(Collectors.toList());
 
         return new UserDetails(user.getUsername(), user.getPassword(),
-                user.getCompanyId(), user.isActivated(), grantedAuthorities);
+                user.getCompanyId(), true, grantedAuthorities);
 
     }
 

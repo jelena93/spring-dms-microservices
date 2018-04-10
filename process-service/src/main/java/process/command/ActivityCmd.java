@@ -1,44 +1,38 @@
 package process.command;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityCmd {
+    @NotEmpty(message = "{validation.activity.name.empty}")
+    @NotNull(message = "{validation.activity.name.null}")
     private String name;
+
     private Long processId;
+
+    @NotEmpty(message = "{validation.activity.inputListDocumentTypes.empty}")
     private List<Long> inputListDocumentTypes = new ArrayList<>();
+
+    @NotEmpty(message = "{validation.activity.outputListDocumentTypes.empty}")
     private List<Long> outputListDocumentTypes = new ArrayList<>();
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Long getProcessId() {
         return processId;
-    }
-
-    public void setProcessId(Long processId) {
-        this.processId = processId;
     }
 
     public List<Long> getInputListDocumentTypes() {
         return inputListDocumentTypes;
     }
 
-    public void setInputListDocumentTypes(List<Long> inputListDocumentTypes) {
-        this.inputListDocumentTypes = inputListDocumentTypes;
-    }
-
     public List<Long> getOutputListDocumentTypes() {
         return outputListDocumentTypes;
-    }
-
-    public void setOutputListDocumentTypes(List<Long> outputListDocumentTypes) {
-        this.outputListDocumentTypes = outputListDocumentTypes;
     }
 
     @Override

@@ -23,8 +23,13 @@ public class ProcessController {
     @GetMapping(path = "/add")
     public ModelAndView addProcess() {
         ModelAndView mv = new ModelAndView("add_process");
-        List<DocumentTypeDto> list = auth2RestTemplate.getForObject("http://descriptor-service/document-type/all", List.class);
-        mv.addObject("documentTypes", list);
+        try {
+            List<DocumentTypeDto> list = auth2RestTemplate.getForObject("http://descriptor-service/document-type/all", List.class);
+            mv.addObject("documentTypes", list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return mv;
     }
 

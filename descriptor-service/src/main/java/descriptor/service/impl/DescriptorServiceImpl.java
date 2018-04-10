@@ -19,7 +19,7 @@ public class DescriptorServiceImpl implements DescriptorService {
 
     @Override
     public List<Descriptor> save(List<Descriptor> descriptorList) {
-        System.out.println("saving descriptors " + descriptorList.size() + "\n" + descriptorList);
+        System.out.println("saving descriptors " + descriptorList.size() + '\n' + descriptorList);
         return descriptorRepository.save(descriptorList);
     }
 
@@ -27,5 +27,10 @@ public class DescriptorServiceImpl implements DescriptorService {
     public void removeByDocumentIdIn(List<Long> documentIds) {
         descriptorRepository.deleteByDocumentIdIn(documentIds);
         System.out.println("removing descriptors with doc ids " + documentIds);
+    }
+
+    @Override
+    public List<Descriptor> findDefaultDescriptorsForDocumentType(long documentTypeId) {
+        return descriptorRepository.findByDocumentTypeIdAndDocumentIdIsNull(documentTypeId);
     }
 }

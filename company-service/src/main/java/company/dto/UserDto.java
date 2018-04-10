@@ -9,6 +9,7 @@ public class UserDto {
     private String username;
     private String name;
     private String surname;
+    private String company;
     private List<Role> roles = new ArrayList<>();
 
     public String getUsername() {
@@ -35,6 +36,13 @@ public class UserDto {
         this.surname = surname;
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
     public List<Role> getRoles() {
         return roles;
@@ -50,6 +58,7 @@ public class UserDto {
                 "username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", company='" + company + '\'' +
                 ", roles=" + roles +
                 '}';
     }

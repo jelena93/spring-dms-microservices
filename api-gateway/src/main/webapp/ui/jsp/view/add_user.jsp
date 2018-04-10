@@ -53,7 +53,7 @@
                         </div>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
+                            <div class="col-lg-offset-10 col-lg-2">
                                 <button class="btn btn-primary" type="button" onclick="addUser()">${title}</button>
                             </div>
                         </div>

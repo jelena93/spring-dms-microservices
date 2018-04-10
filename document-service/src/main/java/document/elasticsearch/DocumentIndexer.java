@@ -8,6 +8,9 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,6 +76,7 @@ public class DocumentIndexer {
 
 
     public void save(Document document) throws Exception {
+        System.out.println("save document " + document);
         elasticSearchClient.prepareIndex(elasticsearchIndexName, elasticsearchTypeName, String.valueOf(document.getId()))
                 .setPipeline(elasticsearchPipelineName).setSource(buildDocument(document)).get();
     }
@@ -80,6 +84,14 @@ public class DocumentIndexer {
     private boolean checkIfIndexExists() {
         return elasticSearchClient.admin().indices().prepareExists(elasticsearchIndexName).execute().actionGet()
                 .isExists();
+    }
+
+    public void deleteAll() {
+        BulkByScrollResponse response = DeleteByQueryAction.INSTANCE.newRequestBuilder(elasticSearchClient)
+                .filter(QueryBuilders.matchAllQuery())
+                .source(elasticsearchIndexName)
+                .get();
+        System.out.println("deleteAll " + response);
     }
 
     public void delete(List<Long> documentIds) {
@@ -96,22 +108,22 @@ public class DocumentIndexer {
                         .field("number_of_shards", elasticsearchNumberOfShards)
                         .field("number_of_replicas", elasticsearchNumberOfReplicas)
 
-                        .startObject("analysis")
-                        .startObject("analyzer")
-                        .startObject("autocomplete")
-                        .field("type", "custom")
-                        .field("tokenizer", "standard")
-                        .field("filter", new String[]{"lowercase", "autocomplete_filter"})
-                        .endObject()
-                        .endObject()
-                        .startObject("filter")
-                        .startObject("autocomplete_filter")
-                        .field("type", "edge_ngram")
-                        .field("min_gram", "1")
-                        .field("max_gram", "20")
-                        .endObject()
-                        .endObject()
-                        .endObject()
+//                        .startObject("analysis")
+//                        .startObject("analyzer")
+//                        .startObject("autocomplete")
+//                        .field("type", "custom")
+//                        .field("tokenizer", "standard")
+//                        .field("filter", new String[]{"lowercase", "autocomplete_filter"})
+//                        .endObject()
+//                        .endObject()
+//                        .startObject("filter")
+//                        .startObject("autocomplete_filter")
+//                        .field("type", "edge_ngram")
+//                        .field("min_gram", "1")
+//                        .field("max_gram", "20")
+//                        .endObject()
+//                        .endObject()
+//                        .endObject()
 
                         .endObject();
     }
@@ -133,15 +145,15 @@ public class DocumentIndexer {
                         .startObject("fileName")
                         .field("type", "text")
                         .field("index", true)
-                        .field("analyzer", "autocomplete")
-                        .field("search_analyzer", "standard")
+//                        .field("analyzer", "autocomplete")
+//                        .field("search_analyzer", "standard")
                         .endObject()
 
                         .startObject("content")
                         .field("type", "text")
                         .field("index", true)
-                        .field("analyzer", "autocomplete")
-                        .field("search_analyzer", "standard")
+//                        .field("analyzer", "autocomplete")
+//                        .field("search_analyzer", "standard")
                         .endObject()
 
                         .startObject("file")
@@ -160,15 +172,15 @@ public class DocumentIndexer {
                         .startObject("descriptorKey")
                         .field("type", "text")
                         .field("index", true)
-                        .field("analyzer", "autocomplete")
-                        .field("search_analyzer", "standard")
+//                        .field("analyzer", "autocomplete")
+//                        .field("search_analyzer", "standard")
                         .endObject()
 
                         .startObject("descriptorValue")
                         .field("type", "text")
                         .field("index", true)
-                        .field("analyzer", "autocomplete")
-                        .field("search_analyzer", "standard")
+//                        .field("analyzer", "autocomplete")
+//                        .field("search_analyzer", "standard")
                         .endObject()
 
                         .endObject()

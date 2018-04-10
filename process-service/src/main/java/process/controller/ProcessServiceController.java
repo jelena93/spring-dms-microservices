@@ -17,6 +17,7 @@ import process.messaging.output.dto.DocumentMessagingOutputDto;
 import process.service.ActivityService;
 import process.service.ProcessService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,25 +78,20 @@ public class ProcessServiceController {
     public ProcessDto showProcess(@PathVariable long id, OAuth2Authentication oAuth2Authentication) throws Exception {
         Process process = processService.findOne(id);
         checkUser(process.getOwnerId(), oAuth2Authentication);
-        if (process == null) {
-            throw new Exception("There is no process with id " + id);
-        }
         return processMapper.mapToModel(process);
     }
 
     @PostMapping(path = "/process")
-    public Process addProcess(@RequestBody ProcessCmd processCmd) {
+    public ProcessDto addProcess(@RequestBody @Valid ProcessCmd processCmd) {
         System.out.println("addProcess " + processCmd);
-        return processService.save(processMapper.mapToEntity(processCmd));
+        return processMapper.mapToModel(processService.save(processMapper.mapToEntity(processCmd)));
     }
 
     @PutMapping(path = "/process/{id}")
-    public Process editProcess(@PathVariable Long id, @RequestBody ProcessCmd processCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
+    public ProcessDto editProcess(@PathVariable Long id, @RequestBody @Valid ProcessCmd processCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         Process process = processService.findOne(id);
+        if (process == null) throw new Exception("There is no process with id " + id);
         checkUser(process.getOwnerId(), oAuth2Authentication);
-        if (process == null) {
-            throw new Exception("There is no process with id " + id);
-        }
         List<Long> documentIds = new ArrayList<>();
         if (processCmd.isPrimitive() && !process.isPrimitive()) {
             deleteChildren(process, processService.findByParent(process), documentIds, true);
@@ -106,11 +102,11 @@ public class ProcessServiceController {
                     .collect(Collectors.toList()));
         }
         processMapper.updateEntityFromModel(processCmd, process);
-        processService.update(processCmd, process);
+        process = processService.update(processCmd, process);
         if (!documentIds.isEmpty()) {
             documentMessagingService.sendDeleteDocuments(new DocumentMessagingOutputDto(documentIds));
         }
-        return process;
+        return processMapper.mapToModel(process);
     }
 
 
@@ -119,33 +115,30 @@ public class ProcessServiceController {
         Activity activity = activityService.findOne(id);
         checkUser(activity.getProcess().getOwnerId(), oAuth2Authentication);
         System.out.println(activity);
-        if (activity == null) {
-            throw new Exception("There is no activity with id " + id);
-        }
         return activityMapper.mapToModel(activity);
     }
 
     @PostMapping(path = "/activity")
-    public Process addActivity(@RequestBody ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
+    public ActivityDto addActivity(@RequestBody @Valid ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         System.out.println("addActivity " + activityCmd);
         Process process = processService.findOne(activityCmd.getProcessId());
+        if (process == null) throw new Exception("Process is required");
         checkUser(process.getOwnerId(), oAuth2Authentication);
         Activity activity = activityMapper.mapToEntity(activityCmd);
         process.getActivityList().add(activity);
-        process = processService.save(process);
-        return process;
+        processService.save(process);
+        return activityMapper.mapToModel(activity);
     }
 
     @PutMapping(path = "/activity/{id}")
-    public Activity editActivity(@PathVariable Long id, @RequestBody ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
+    public ActivityDto editActivity(@PathVariable Long id, @RequestBody @Valid ActivityCmd activityCmd, OAuth2Authentication oAuth2Authentication) throws Exception {
         Activity activity = activityService.findOne(id);
         if (activity == null) {
             throw new Exception("There is no activity with id " + id);
         }
         checkUser(activity.getProcess().getOwnerId(), oAuth2Authentication);
         activityMapper.updateEntityFromModel(activityCmd, activity);
-        activityService.save(activity);
-        return activity;
+        return activityMapper.mapToModel(activityService.save(activity));
     }
 
     private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {

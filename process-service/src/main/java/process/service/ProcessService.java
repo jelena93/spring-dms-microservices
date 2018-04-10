@@ -15,7 +15,7 @@ public interface ProcessService {
 
     List<Process> findByOwnerId(long ownerId);
 
-    void update(ProcessCmd processCmd, Process process);
+    Process update(ProcessCmd processCmd, Process process);
 
     List<Process> findByParent(Process parent);
 

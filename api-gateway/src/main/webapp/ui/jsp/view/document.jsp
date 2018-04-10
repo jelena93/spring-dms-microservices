@@ -7,13 +7,13 @@
             <div class="col-lg-10">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="inputOutput" id="optionsRadios1" value="input" checked>
+                        <input type="radio" name="inputOutput" id="inputOption" value="input" checked>
                         Input
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="inputOutput" id="optionsRadios2" value="output">
+                        <input type="radio" name="inputOutput" id="outputOption" value="output">
                         Output
                     </label>
                 </div>

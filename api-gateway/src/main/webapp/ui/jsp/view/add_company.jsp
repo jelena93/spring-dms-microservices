@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>            
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
@@ -32,7 +32,7 @@
                         </div>
                         <input type="hidden"  name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
+                            <div class="col-lg-offset-10 col-lg-2">
                                 <button class="btn btn-primary" type="button" onclick="saveCompany()">${title}</button>
                             </div>
                         </div>

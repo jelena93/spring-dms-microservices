@@ -15,9 +15,8 @@ public interface ProcessMapper {
     @Mapping(target = "parent", ignore = true)
     Process mapToEntity(ProcessCmd processCmd);
 
-    @Mapping(target = "parent", ignore = true)
     @Mapping(target = "ownerId", ignore = true)
-    void updateEntityFromModel(ProcessCmd locationCmd, @MappingTarget Process process);
+    void updateEntityFromModel(ProcessCmd processCmd, @MappingTarget Process process);
 
     ProcessDto mapToModel(Process process);
 }

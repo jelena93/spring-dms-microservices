@@ -26,10 +26,10 @@ public abstract class UserMapperDecorator implements UserMapper {
         if (userCmd.getRoles().size() == 1 && userCmd.getRoles().contains(Role.ADMIN)) {
             company = null;
         } else {
+            if (userCmd.getCompanyId() == null) throw new Exception("Company is required");
             company = companyService.findOne(userCmd.getCompanyId());
-            if (company == null) {
-                throw new Exception("There is no company with id: " + userCmd.getCompanyId());
-            }
+            if (company == null) throw new Exception("There is no company with id: " + userCmd.getCompanyId());
+
         }
         user.setCompany(company);
         user.setPassword(passwordEncoder.encode(userCmd.getPassword()));

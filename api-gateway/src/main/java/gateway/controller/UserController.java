@@ -20,11 +20,16 @@ public class UserController {
     }
 
     @GetMapping(path = "/add")
-    public ModelAndView addCompany() {
+    public ModelAndView addUser() {
         ModelAndView mv = new ModelAndView("add_user");
         mv.addObject("roles", auth2RestTemplate.getForObject("http://company-service/roles", List.class));
         mv.addObject("companies", auth2RestTemplate.getForObject("http://company-service/all", List.class));
         return mv;
     }
-    
+
+    @GetMapping(path = "/search")
+    public String searchUsers() {
+        return "search_users";
+    }
+
 }

@@ -1,30 +1,18 @@
 package descriptor.domain;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
 @Entity
-@Table(name = "descriptor", indexes = { @Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value"),
+@Table(name = "descriptor", indexes = {@Index(columnList = "NUMBER_VALUE", name = "idx_param_number_value"),
         @Index(columnList = "DOUBLE_VALUE", name = "idx_param_double_value"),
         @Index(columnList = "DATE_VALUE", name = "idx_param_date_value"),
-        @Index(columnList = "STRING_VALUE", name = "idx_param_string_value") })
+        @Index(columnList = "STRING_VALUE", name = "idx_param_string_value")})
 public class Descriptor implements Serializable {
 
     private static final long serialVersionUID = -2308547543297844947L;
@@ -32,13 +20,16 @@ public class Descriptor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false, updatable = false)
     private Long id;
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "document_type", nullable = false)
     private DocumentType documentType;
+
     @Column(name = "descriptor_key")
     @NotNull
     private String descriptorKey;
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "descriptor_type", nullable = false)
     private DescriptorType descriptorType;
@@ -161,8 +152,9 @@ public class Descriptor implements Serializable {
     }
 
     public void setValue(Object value) {
+        Class paramClass = descriptorType.getParamClass();
+        System.out.println("paramClass " + paramClass);
         try {
-            Class paramClass = descriptorType.getParamClass();
             if (value == null) {
                 longValue = null;
                 doubleValue = null;

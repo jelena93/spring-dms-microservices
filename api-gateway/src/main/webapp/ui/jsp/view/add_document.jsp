@@ -19,4 +19,4 @@
         </section>
     </div>
 </div>
-<script src="<c:url value="/resources/js/processes-tree-add-documents.js" />"></script>
+<script src="<c:url value="/resources/js/documentAdd.js" />"></script>

@@ -1,42 +1,35 @@
 package process.command;
 
-public class ProcessCmd {
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
+public class ProcessCmd {
+    @NotEmpty(message = "{validation.process.name.empty}")
+    @NotNull(message = "{validation.process.name.null}")
     private String name;
-    private long ownerId;
+
+    @NotNull(message = "{validation.process.ownerId.null}")
+    private Long ownerId;
+
     private Long parentId;
+
     private boolean primitive;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
-    }
-
-    public void setOwnerId(long ownerId) {
-        this.ownerId = ownerId;
     }
 
     public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
     public boolean isPrimitive() {
         return primitive;
-    }
-
-    public void setPrimitive(boolean primitive) {
-        this.primitive = primitive;
     }
 
     @Override

@@ -61,9 +61,14 @@
         <put-attribute name="search_companies" value="/ui/jsp/view/search_companies_set_user.jsp" cascade="true"/>
         <put-attribute name="content" value="/ui/jsp/view/add_user.jsp"/>
     </definition>
-
+    
+    <definition name="search_users" extends="home">
+        <put-attribute name="title" value="Search users"/>
+        <put-attribute name="content" value="/ui/jsp/view/search_users.jsp"/>
+    </definition>
+    
     <definition name="add_process" extends="home">
-        <put-attribute name="title" value="Add process"/>
+        <put-attribute name="title" value="Add process / activity"/>
         <put-attribute name="label_name" value="Parent" cascade="true"/>
         <put-attribute name="input_name" value="parent" cascade="true"/>
         <put-attribute name="process_tree" value="/ui/jsp/view/process_tree.jsp" cascade="true"/>

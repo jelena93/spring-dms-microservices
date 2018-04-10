@@ -1,5 +1,7 @@
 package company.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,20 +18,28 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "company_id")
     private Long id;
-    @Column(name = "name")
+
+    @Column(name = "name", unique = true)
     @NotNull
+    @NotEmpty
     private String name;
-    @Column(name = "pib")
+
+    @Column(name = "pib", unique = true)
     @NotNull
+    @NotEmpty
     private String pib;
-    @Column(name = "identification_number")
+
+    @Column(name = "identification_number", unique = true)
     @NotNull
+    @NotEmpty
     private String identificationNumber;
-    @Column(name = "headquarters")
+
+    @Column(name = "headquarters", unique = true)
     @NotNull
+    @NotEmpty
     private String headquarters;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "company_id")
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
     private List<User> userList = new ArrayList<>();
 
     public Company() {
