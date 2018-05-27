@@ -69,7 +69,7 @@ function addUser() {
                 companyId: selectedCompanyId
             }),
             success: function (data) {
-                showSuccessMessage("User successfully added");
+                window.location = "/user/search";
             },
             error: function (request) {
                 console.log(request);

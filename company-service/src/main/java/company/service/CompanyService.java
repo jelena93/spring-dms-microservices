@@ -13,4 +13,8 @@ public interface CompanyService {
     List<Company> search(String searchTerm);
 
     Company findOne(long id);
+
+    List<Company> findByPib(String pib);
+
+    List<Company> findByIdentificationNumber(String identificationNumber);
 }

@@ -25,7 +25,7 @@ public class Process implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     @NotEmpty
     private String name;
 

@@ -1,5 +1,6 @@
 package company.messaging;
 
+import company.command.UserCmd;
 import company.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +14,8 @@ public class UserMessagingService {
     @Qualifier(UserOutputChannel.USER_ADDED_OUTPUT)
     private MessageChannel userAddedMessageChannel;
 
-    public void sendUserAdded(User user) {
-        System.out.println("sendUserAdded " + user);
-        userAddedMessageChannel.send(MessageBuilder.withPayload(user).build());
+    public void sendUserAdded(UserCmd userCmd) {
+        System.out.println("sendUserAdded " + userCmd);
+        userAddedMessageChannel.send(MessageBuilder.withPayload(userCmd).build());
     }
 }

@@ -19,4 +19,6 @@ public interface ProcessService {
 
     List<Process> findByParent(Process parent);
 
+    List<Process> findByNameAndOwnerId(String name, long ownerId);
+
 }

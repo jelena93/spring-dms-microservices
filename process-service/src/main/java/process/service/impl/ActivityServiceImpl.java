@@ -6,6 +6,8 @@ import process.domain.Activity;
 import process.repository.ActivityRepository;
 import process.service.ActivityService;
 
+import java.util.List;
+
 @Service
 public class ActivityServiceImpl implements ActivityService {
     @Autowired
@@ -20,4 +22,10 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity findOne(Long id) {
         return activityRepository.findOne(id);
     }
+
+    @Override
+    public List<Activity> findByNameAndProcessOwnerId(String name, long ownerId) {
+        return activityRepository.findByNameAndProcessOwnerId(name, ownerId);
+    }
+
 }

@@ -14,5 +14,6 @@ public interface UserService {
 
     List<User> search(String searchTerm);
 
+    List<User> findByUsername(String username);
 
 }

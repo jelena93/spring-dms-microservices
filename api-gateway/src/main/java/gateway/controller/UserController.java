@@ -1,6 +1,11 @@
 package gateway.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Controller;
@@ -20,6 +25,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/add")
+//    @HystrixCommand(fallbackMethod = "addUserFallback")
     public ModelAndView addUser() {
         ModelAndView mv = new ModelAndView("add_user");
         mv.addObject("roles", auth2RestTemplate.getForObject("http://company-service/roles", List.class));
@@ -32,4 +38,10 @@ public class UserController {
         return "search_users";
     }
 
+    public ModelAndView addUserFallback() {
+        ModelAndView mv = new ModelAndView("add_user");
+        mv.addObject("roles", Arrays.asList(new String[]{"ADMIN", "USER", "UPLOADER"}));
+        mv.addObject("companies", new ArrayList());
+        return mv;
+    }
 }

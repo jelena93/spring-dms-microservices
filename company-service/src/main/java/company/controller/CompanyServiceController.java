@@ -12,6 +12,8 @@ import company.mapper.UserMapper;
 import company.messaging.UserMessagingService;
 import company.service.CompanyService;
 import company.service.UserService;
+import company.validator.CompanyValidator;
+import company.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,16 +34,20 @@ public class CompanyServiceController {
     private final UserMessagingService userMessagingService;
     private final CompanyMapper companyMapper;
     private final UserMapper userMapper;
+    private final CompanyValidator companyValidator;
+    private final UserValidator userValidator;
 
     @Autowired
     public CompanyServiceController(CompanyService companyService, UserService userService,
                                     UserMessagingService userMessagingService, CompanyMapper companyMapper,
-                                    UserMapper userMapper) {
+                                    UserMapper userMapper, CompanyValidator companyValidator, UserValidator userValidator) {
         this.companyService = companyService;
         this.userService = userService;
         this.userMessagingService = userMessagingService;
         this.companyMapper = companyMapper;
         this.userMapper = userMapper;
+        this.companyValidator = companyValidator;
+        this.userValidator = userValidator;
     }
 
     @GetMapping("/all")
@@ -68,8 +74,9 @@ public class CompanyServiceController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CompanyDto addCompany(@RequestBody @Valid CompanyCmd companyCmd) {
+    public CompanyDto addCompany(@RequestBody @Valid CompanyCmd companyCmd) throws Exception {
         System.out.println("addCompany " + companyCmd);
+        companyValidator.validate(companyCmd);
         return companyMapper.mapToModel(companyService.save(companyMapper.mapToEntity(companyCmd)));
     }
 
@@ -104,8 +111,9 @@ public class CompanyServiceController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserDto addUser(@RequestBody @Valid UserCmd userCmd) throws Exception {
         System.out.println("addUserToCompany " + userCmd);
+        userValidator.validate(userCmd);
         User user = userService.save(userMapper.mapToEntity(userCmd));
-        userMessagingService.sendUserAdded(user);
+        userMessagingService.sendUserAdded(userCmd);
         return userMapper.mapToModel(user);
     }
 

@@ -1,5 +1,6 @@
 package gateway.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import gateway.dto.CompanyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -31,18 +32,19 @@ public class CompanyController {
     }
 
     @GetMapping(path = "/{companyId}")
+//    @HystrixCommand(fallbackMethod = "showCompanyFallback")
     public ModelAndView showCompany(@PathVariable long companyId) {
         ModelAndView mv = new ModelAndView("company");
-        try {
-            CompanyDto companyDto = auth2RestTemplate.getForObject("http://company-service/" + companyId, CompanyDto.class);
-            if (companyDto == null) {
-                return new ModelAndView("redirect:/company/search");
-            }
-            mv.addObject("company", companyDto);
-        } catch (Exception e) {
+        CompanyDto companyDto = auth2RestTemplate.getForObject("http://company-service/" + companyId, CompanyDto.class);
+        if (companyDto == null) {
             return new ModelAndView("redirect:/company/search");
         }
+        mv.addObject("company", companyDto);
         return mv;
     }
 
+    public ModelAndView showCompanyFallback(@PathVariable long companyId) {
+        ModelAndView mv = new ModelAndView("redirect:/company/search");
+        return mv;
+    }
 }

@@ -141,45 +141,46 @@ function displayActivityInfo(activity) {
     console.log(activity)
     for (var i = 0; i < activity.inputList.length; i++) {
         inputList += '<div class="panel-group" id="accordion">' +
-                '<div class="panel panel-default">' +
-                '<div class="panel-heading">' +
-                '<h4 class="panel-title">' +
-                '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.inputList[i]].id + '">' + documents[activity.inputList[i]].fileName + '</a>' +
-                '</h4>' +
-                '</div>' +
-                '<div id="colapse' + documents[activity.inputList[i]].id + '" class="panel-collapse collapse">' +
-                '<div class="panel-body">';
+            '<div class="panel panel-default">' +
+            '<div class="panel-heading">' +
+            '<h4 class="panel-title">' +
+            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.inputList[i]].id + '">' + documents[activity.inputList[i]].fileName + '</a>' +
+            '</h4>' +
+            '</div>' +
+            '<div id="colapse' + documents[activity.inputList[i]].id + '" class="panel-collapse collapse">' +
+            '<div class="panel-body">';
         for (var j = 0; j < documents[activity.inputList[i]].descriptors.length; j++) {
             inputList += '<p><strong>' + documents[activity.inputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
-                    documents[activity.inputList[i]].descriptors[j].descriptorValue + '</p>';
+                documents[activity.inputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         inputList += "</div><div class='panel-footer clearfix'>";
-        inputList += "<a class='btn btn-default' target='_blank' href='/api/document/1/" + documents[activity.inputList[i]].id
-                + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
-                "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.inputList[i]].id +
-                "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
+        inputList += "<a class='btn btn-default' target='_blank' href='/api/document/" + company + "/" + documents[activity.inputList[i]].id
+            + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
+            "<a class='btn btn-default pull-right' download href='/api/document/download/" + company + "/" + documents[activity.inputList[i]].id +
+            "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
         inputList += '</div></div></div></div> ';
     }
     $('#inputList').html(inputList);
     var outputList = "";
     for (var i = 0; i < activity.outputList.length; i++) {
         outputList += '<div class="panel-group" id="accordion">' +
-                '<div class="panel panel-default">' +
-                '<div class="panel-heading">' +
-                '<h4 class="panel-title">' +
-                '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.outputList[i]].id + '">' + documents[activity.outputList[i]].fileName + '</a>' +
-                '</h4>' +
-                '</div>' +
-                '<div id="colapse' + documents[activity.outputList[i]].id + '" class="panel-collapse collapse">' +
-                '<div class="panel-body">';
+            '<div class="panel panel-default">' +
+            '<div class="panel-heading">' +
+            '<h4 class="panel-title">' +
+            '<a data-toggle="collapse" data-parent="#accordion" href="#colapse' + documents[activity.outputList[i]].id + '">' + documents[activity.outputList[i]].fileName + '</a>' +
+            '</h4>' +
+            '</div>' +
+            '<div id="colapse' + documents[activity.outputList[i]].id + '" class="panel-collapse collapse">' +
+            '<div class="panel-body">';
         for (var j = 0; j < documents[activity.outputList[i]].descriptors.length; j++) {
             outputList += '<p><strong>' + documents[activity.outputList[i]].descriptors[j].descriptorKey + '</strong>: ' +
-                    documents[activity.outputList[i]].descriptors[j].descriptorValue + '</p>';
+                documents[activity.outputList[i]].descriptors[j].descriptorValue + '</p>';
         }
         outputList += "</div><div class='panel-footer'>";
-        outputList += "<a target='_blank' href='/api/document/1/" + documents[activity.outputList[i]].id + "'>View file </a>" +
-                "<a class='btn btn-default pull-right' download href='/api/document/download/1/" + documents[activity.outputList[i]].id +
-                "' title='Download'><span class='icon_cloud-download'></span> Download file</a>";
+        outputList += "<a class='btn btn-default' target='_blank' href='/api/document/" + company + "/" + documents[activity.outputList[i]].id
+            + "' title='View file'><span class='icon_folder-open'></span> View file </a>" +
+            "<a class='btn btn-default pull-right' download href='/api/document/download/" + company + "/" + documents[activity.outputList[i]].id +
+            "' title='Download'><span class='icon_folder_download'></span> Download file</a>";
         outputList += '</div></div></div></div> ';
     }
     inputListDocumentTypes = activity.inputListDocumentTypes;
@@ -204,18 +205,18 @@ function showDescriptors(descriptors) {
             if (descriptors[i].descriptorValue === null) {
                 if (descriptors[i].paramClass === 'java.util.Date') {
                     html = '<div class="form-group">' +
-                            '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
-                            + '<span class="required"> *</span></label><div class="col-lg-8">' +
-                            '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
-                            + '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey
-                            + ' in format DD.MM.YYYY" required></div></div>';
+                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey
+                        + '<span class="required"> *</span></label><div class="col-lg-8">' +
+                        '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey
+                        + '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey
+                        + ' in format DD.MM.YYYY" required></div></div>';
                 } else {
                     html = '<div class="form-group">' +
-                            '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
-                            ' <span class="required">*</span></label><div class="col-lg-8">' +
-                            '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey +
-                            '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
-                            '</div></div>';
+                        '<label for="' + descriptors[i].descriptorKey + '" class="control-label col-lg-4">' + descriptors[i].descriptorKey +
+                        ' <span class="required">*</span></label><div class="col-lg-8">' +
+                        '<input type="text" class="form-control descriptors" name="' + descriptors[i].descriptorKey +
+                        '" id="' + descriptors[i].descriptorKey + '" placeholder="Enter ' + descriptors[i].descriptorKey + '" required>' +
+                        '</div></div>';
                 }
                 $("#descriptors").append(html);
             }
@@ -283,6 +284,7 @@ function saveDocument() {
     });
 //    } 
 }
+
 function reset(data) {
     $("#activity-info").hide();
     $("#form-document").hide();

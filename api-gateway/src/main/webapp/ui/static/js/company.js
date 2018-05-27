@@ -2,26 +2,26 @@ var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 var canEdit = false;
 
-function getCompany(url) {
-    $.ajax({
-        type: "GET",
-        url: "/api" + url,
-        success: function (data) {
-            fillForm(data);
-        },
-        error: function (request) {
-            console.log(request);
-            showErrorMessage(request.responseText);
-        }
-    });
-}
+//function getCompany(url) {
+//    $.ajax({
+//        type: "GET",
+//        url: "/api" + url,
+//        success: function (data) {
+//            fillForm(data);
+//        },
+//        error: function (request) {
+//            console.log(request);
+//            showErrorMessage(request.responseText);
+//        }
+//    });
+//}
 
 function editCompany() {
     if (canEdit) {
         if ($("#register_form").valid()) {
             $.ajax({
                 type: "PUT",
-                url: "/api/company/" + company,
+                url: "/api/company/" + $("#id").val(),
                 contentType: "application/json",
                 dataType: 'json',
                 data: JSON.stringify({

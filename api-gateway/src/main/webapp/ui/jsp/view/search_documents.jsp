@@ -13,9 +13,9 @@
         <div class="panel-body">
             <div id="documents">
             </div>
-            <div class="text-center">
-                <ul id="pagination-demo" class="pagination-sm"></ul>
-            </div>
+            <%--<div class="text-center">--%>
+                <%--<ul id="pagination-demo" class="pagination-sm"></ul>--%>
+            <%--</div>--%>
         </div>
     </div>
 </section>

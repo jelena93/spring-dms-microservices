@@ -18,7 +18,7 @@ public class ApplicationStartup implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         documentIndexer.createIndex();
-//        documentIndexer.deleteAll();
+        documentIndexer.deleteAll();
     }
 
 }

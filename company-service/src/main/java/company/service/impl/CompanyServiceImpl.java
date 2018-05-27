@@ -25,12 +25,23 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company save(Company company) {
+        System.out.println("save " + company.getId());
         return companyRepository.save(company);
     }
 
     @Override
     public Company findOne(long id) {
         return companyRepository.findOne(id);
+    }
+
+    @Override
+    public List<Company> findByPib(String pib) {
+        return companyRepository.findByPib(pib);
+    }
+
+    @Override
+    public List<Company> findByIdentificationNumber(String identificationNumber) {
+        return companyRepository.findByIdentificationNumber(identificationNumber);
     }
 
     public List<Company> search(String searchTerm) {

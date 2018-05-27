@@ -32,7 +32,7 @@ public abstract class UserMapperDecorator implements UserMapper {
 
         }
         user.setCompany(company);
-        user.setPassword(passwordEncoder.encode(userCmd.getPassword()));
+        userCmd.setPassword(passwordEncoder.encode(userCmd.getPassword()));
         return user;
     }
 

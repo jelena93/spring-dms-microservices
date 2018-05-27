@@ -27,7 +27,7 @@ public class Activity implements Serializable {
 
     @NotNull
     @NotEmpty
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
     @ElementCollection(fetch = FetchType.EAGER)

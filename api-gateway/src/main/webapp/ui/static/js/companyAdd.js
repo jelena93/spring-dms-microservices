@@ -18,7 +18,7 @@ function saveCompany() {
                 request.setRequestHeader(header, token);
             },
             success: function (data) {
-                showSuccessMessage("Company successfully added");
+                window.location = "/company/" + data.id;
             },
             error: function (request) {
                 console.log(request);

@@ -1,6 +1,8 @@
 package gateway.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import gateway.dto.DocumentTypeDto;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -21,15 +23,17 @@ public class ProcessController {
     }
 
     @GetMapping(path = "/add")
+//    @HystrixCommand(fallbackMethod = "addProcessFallback")
     public ModelAndView addProcess() {
         ModelAndView mv = new ModelAndView("add_process");
-        try {
-            List<DocumentTypeDto> list = auth2RestTemplate.getForObject("http://descriptor-service/document-type/all", List.class);
-            mv.addObject("documentTypes", list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<DocumentTypeDto> list = auth2RestTemplate.getForObject("http://descriptor-service/document-type/all", List.class);
+        mv.addObject("documentTypes", list);
+        return mv;
+    }
 
+    public ModelAndView addProcessFallback() {
+        ModelAndView mv = new ModelAndView("add_process");
+        mv.addObject("documentTypes", new ArrayList<>());
         return mv;
     }
 

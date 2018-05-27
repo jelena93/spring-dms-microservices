@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS user;
 CREATE TABLE user (
   username         VARCHAR(50) NOT NULL PRIMARY KEY,
   password         VARCHAR(500),
-  activated        BOOLEAN     DEFAULT FALSE,
+  activated        BOOLEAN     DEFAULT TRUE,
   company_id       BIGINT(20)
 );
 

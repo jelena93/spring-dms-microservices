@@ -19,7 +19,7 @@ public class Company implements Serializable {
     @Column(name = "company_id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     @NotNull
     @NotEmpty
     private String name;
@@ -34,7 +34,7 @@ public class Company implements Serializable {
     @NotEmpty
     private String identificationNumber;
 
-    @Column(name = "headquarters", unique = true)
+    @Column(name = "headquarters")
     @NotNull
     @NotEmpty
     private String headquarters;

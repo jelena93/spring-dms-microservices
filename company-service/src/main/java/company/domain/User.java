@@ -17,10 +17,7 @@ public class User implements Serializable {
     @Column(name = "username", unique = true)
     @NotNull
     private String username;
-    @Column(name = "password")
-    @NotNull
 
-    private String password;
     @NotNull
     @Column(name = "name")
     private String name;
@@ -44,11 +41,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String surname, String username, String password, Company company, List<Role> roles) {
+    public User(String name, String surname, String username, Company company, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.username = username;
-        this.password = password;
         this.company = company;
         this.roles = roles;
     }
@@ -75,14 +71,6 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Company getCompany() {
@@ -122,8 +110,13 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", name='" + name + '\''
-                + ", surname='" + surname + '\'' + ", company=" + company + ", roles=" + roles + '}';
+        return "User{" +
+                "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", company=" + company +
+                ", roles=" + roles +
+                '}';
     }
 }
 

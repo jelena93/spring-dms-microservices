@@ -57,8 +57,8 @@ public class DocumentService {
                 .actionGet();
     }
 
-    public SearchResponse searchDocumentsForOwner(Long ownerId, String query, int limit, int page) {
-        int offset = (page - 1) * limit;
+    public SearchResponse searchDocumentsForOwner(Long ownerId, String query) {
+        System.out.println(query);
         BoolQueryBuilder boolQuery = boolQuery();
         boolQuery.must(termQuery("ownerId", ownerId));
         if (query != null && !query.isEmpty()) {
@@ -70,7 +70,7 @@ public class DocumentService {
         }
         System.out.println(boolQuery);
         return elasticSearchClient.prepareSearch(elasticsearchIndexName).setTypes(elasticsearchTypeName).setQuery(boolQuery)
-                .setFrom(offset).setSize(limit).execute().actionGet();
+                .execute().actionGet();
     }
 
     public SearchResponse findByName(Long ownerId, String fileName) {

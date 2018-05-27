@@ -72,6 +72,10 @@ h4 {
     font-weight: 800;
 }
 
+.roles {
+    color: #f4f9ec !important;
+    font-weight: 600;
+}
 
 html {
     position: relative;

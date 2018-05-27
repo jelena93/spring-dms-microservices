@@ -51,13 +51,11 @@ public class DocumentServiceController {
 
     @GetMapping("/search")
     public Map<String, Object> search(@RequestParam Long ownerId, @RequestParam(required = false) String query,
-                                      @RequestParam int limit,
-                                      @RequestParam int page,
                                       OAuth2Authentication oAuth2Authentication) throws Exception {
-        checkUser(ownerId, oAuth2Authentication);
+//        checkUser(ownerId, oAuth2Authentication);
         Map<String, Object> map = new HashMap<>();
         try {
-            SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query, limit, page);
+            SearchResponse searchResponse = documentService.searchDocumentsForOwner(ownerId, query);
             List<DocumentDto> dtos = ElasticSearchMapper.mapToDocumentList(searchResponse);
             map.put("documents", dtos);
             map.put("total", searchResponse.getHits().getTotalHits());
@@ -148,7 +146,7 @@ public class DocumentServiceController {
     private static void checkUser(Long ownerId, OAuth2Authentication oAuth2Authentication) throws Exception {
         Map<String, Object> details = (Map<String, Object>) oAuth2Authentication.getUserAuthentication().getDetails();
         Map<String, Object> principal = (Map<String, Object>) details.get("principal");
-        System.out.println(principal.get("companyId"));
+        System.out.println(principal.get("companyId") + "-" + ownerId);
         if (ownerId != Long.valueOf(principal.get("companyId").toString())) {
             throw new Exception("Not allowed");
         }

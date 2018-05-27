@@ -7,7 +7,7 @@ public class UserCmd {
     private String password;
     private String name;
     private String surname;
-    private boolean activated = true;
+    private Long companyId;
     private List<String> roles;
 
     public String getUsername() {
@@ -42,12 +42,12 @@ public class UserCmd {
         this.surname = surname;
     }
 
-    public boolean isActivated() {
-        return activated;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public List<String> getRoles() {
@@ -60,7 +60,13 @@ public class UserCmd {
 
     @Override
     public String toString() {
-        return "UserCmd{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", name='" + name + '\''
-                + ", surname='" + surname + '\'' + ", activated=" + activated + ", roles=" + roles + '}';
+        return "UserCmd{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", companyId=" + companyId +
+                ", roles=" + roles +
+                '}';
     }
 }

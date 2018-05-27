@@ -4,7 +4,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import process.domain.Activity;
 import process.domain.Process;
 import process.service.ProcessService;
 
@@ -25,7 +24,7 @@ public class ApplicationStartup implements InitializingBean {
         if (addToDb) {
             Process prodaja = new Process("Prodaja", null, false, 1);
             Process nabavka = new Process("Nabavka", null, false, 1);
-            Process skladistenje = new Process("Skladistenje i oprema", null, false, 1);
+            Process skladistenje = new Process("Skladistenje i otprema", null, false, 1);
             Process finansije = new Process("Regulisanje finansija", null, false, 1);
 
             prodaja = processService.save(prodaja);
@@ -34,15 +33,15 @@ public class ApplicationStartup implements InitializingBean {
             finansije = processService.save(finansije);
 
             Process katalog = new Process("Formiranje i slanje kataloga", prodaja, true, 1);
-            Activity activity = new Activity("Formiranje kataloga");
-            activity.getInputListDocumentTypes().add(1L);
-            activity.getOutputListDocumentTypes().add(2L);
-            katalog.getActivityList().add(activity);
+//            Activity activity = new Activity("Formiranje kataloga");
+//            activity.getInputListDocumentTypes().add(1L);
+//            activity.getOutputListDocumentTypes().add(2L);
+//            katalog.getActivityList().add(activity);
 
-            activity = new Activity("Slanje kataloga");
-            activity.getInputListDocumentTypes().add(1L);
-            activity.getOutputListDocumentTypes().add(2L);
-            katalog.getActivityList().add(activity);
+//            activity = new Activity("Slanje kataloga");
+//            activity.getInputListDocumentTypes().add(1L);
+//            activity.getOutputListDocumentTypes().add(2L);
+//            katalog.getActivityList().add(activity);
             processService.save(katalog);
 
             Process narudzbenica = new Process("Prijem narudzbenice", prodaja, false, 1);

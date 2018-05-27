@@ -16,6 +16,7 @@ import process.messaging.output.DocumentMessagingService;
 import process.messaging.output.dto.DocumentMessagingOutputDto;
 import process.service.ActivityService;
 import process.service.ProcessService;
+import process.validator.ProcessValidator;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -32,16 +33,20 @@ public class ProcessServiceController {
     private final DocumentMessagingService documentMessagingService;
     private final ProcessMapper processMapper;
     private final ActivityMapper activityMapper;
+    private final ProcessValidator processValidator;
+    private final ActivityValidator activityValidator;
 
     @Autowired
     public ProcessServiceController(ProcessService processService, ActivityService activityService,
                                     DocumentMessagingService documentMessagingService,
-                                    ProcessMapper processMapper, ActivityMapper activityMapper) {
+                                    ProcessMapper processMapper, ActivityMapper activityMapper, ProcessValidator processValidator, ActivityValidator activityValidator) {
         this.processService = processService;
         this.activityService = activityService;
         this.documentMessagingService = documentMessagingService;
         this.processMapper = processMapper;
         this.activityMapper = activityMapper;
+        this.processValidator = processValidator;
+        this.activityValidator = activityValidator;
     }
 
     @GetMapping(path = "/all/{ownerId}")
@@ -82,8 +87,11 @@ public class ProcessServiceController {
     }
 
     @PostMapping(path = "/process")
-    public ProcessDto addProcess(@RequestBody @Valid ProcessCmd processCmd) {
+    public ProcessDto addProcess(@RequestBody @Valid ProcessCmd processCmd) throws Exception {
         System.out.println("addProcess " + processCmd);
+
+        processValidator.validate(processCmd);
+
         return processMapper.mapToModel(processService.save(processMapper.mapToEntity(processCmd)));
     }
 
@@ -92,6 +100,9 @@ public class ProcessServiceController {
         Process process = processService.findOne(id);
         if (process == null) throw new Exception("There is no process with id " + id);
         checkUser(process.getOwnerId(), oAuth2Authentication);
+
+        processValidator.validate(processCmd);
+
         List<Long> documentIds = new ArrayList<>();
         if (processCmd.isPrimitive() && !process.isPrimitive()) {
             deleteChildren(process, processService.findByParent(process), documentIds, true);
@@ -123,7 +134,11 @@ public class ProcessServiceController {
         System.out.println("addActivity " + activityCmd);
         Process process = processService.findOne(activityCmd.getProcessId());
         if (process == null) throw new Exception("Process is required");
+
+        activityValidator.validate(activityCmd);
+
         checkUser(process.getOwnerId(), oAuth2Authentication);
+
         Activity activity = activityMapper.mapToEntity(activityCmd);
         process.getActivityList().add(activity);
         processService.save(process);
